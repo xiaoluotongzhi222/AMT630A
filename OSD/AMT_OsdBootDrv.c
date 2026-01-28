@@ -1,30 +1,30 @@
   //'Space'  ''      ''      ''      ''       ''        ''      ''        ''      ''       ''  		   		  		  		 '-'			   		 			   		  		  					  
 /*******************************************************************************
-*Copyright (C) 2005 ���ڰ��ƴ������޹�˾��ƷӦ��һ��
+*Copyright (C) 2005 ÉîÛÚ°¬¿Æ´´ÐÂÓÐÏÞ¹«Ë¾²úÆ·Ó¦ÓÃÒ»²¿
 * All rights reserved.
 
-*File name: �� AMT_0sdBootDrv.c	  
+*File name: ¡¡ AMT_0sdBootDrv.c	  
 *Version:      1.0
 *update:       2011-12-06
 *Description:
-  		  AMT OSD�ײ�������
+  		  AMT OSDµ×²ãÇý¶¯¡£
 	   
 *History:  yshuizhou   2011/12/19    1.0    build  this  moudle
 ******************************************************************************/
 #include "AMT_Mcu.h"
 #include "Flash.h"
 
-#define RedColor       	0x000f //��ɫ:
-#define GreenColor     	0x00f0 //��ɫ:
-#define BlueColor      	0x0f00 //��ɫ: 
-#define YellowColor    	0x00ff //��ɫ:
-#define Red1Color      	0x0f0f //Ʒ��:
-#define GrayColor      	0x0888 //��ɫ: 
-#define WhiteColor     	0x0fff //��ɫ: 
-#define CyanColor      	0x0ff0 //��ɫ:
-#define OrangeColor    	0x008f //��ɫ:
-#define PurpleColor    	0x0f08 //��ɫ:
-#define MalachiteColor 	0x08f0 //����:
+#define RedColor       	0x000f //ºìÉ«:
+#define GreenColor     	0x00f0 //ÂÌÉ«:
+#define BlueColor      	0x0f00 //À¶É«: 
+#define YellowColor    	0x00ff //»ÆÉ«:
+#define Red1Color      	0x0f0f //Æ·ºì:
+#define GrayColor      	0x0888 //»ÒÉ«: 
+#define WhiteColor     	0x0fff //°×É«: 
+#define CyanColor      	0x0ff0 //ÇàÉ«:
+#define OrangeColor    	0x008f //³ÈÉ«:
+#define PurpleColor    	0x0f08 //×ÏÉ«:
+#define MalachiteColor 	0x08f0 //ÂÌÇà:
 
 static UCHAR XDATA g_ucCurOsdBlockId = 0;
 OsdCtrlerType  XDATA g_OsdContrller;
@@ -40,7 +40,7 @@ static UINT CODE  ASCIIMap[256] =
 //(1,18-16)  (1,19-17) (1,20-18)   (1,21-19)  (1,22-20)  (1,23-21)   (1,24-22)   (1,25-23)  (1,26-24) (1,27-25)  (1,28-26)   (1,29-27)   (1,30-28)  (1,31-29)  (1,32-30)    (1,33-31)
   0X1F5,    0X1F6,   0X1F7,    0X1F8,    0X1F9,    0X1FA,     0X1FB,    0X1FC,    0X1FD,   0X1FE,    0X1FF,     0X200,    0X201,    0X202,    0X203,      0X204,
 
-  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 ��         (2,18-47)
+  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 ¡£         (2,18-47)
   0X1C0,    0X210,   0X205,    ' ',        0X208,   0X209,      ' ',       0X20B,    0X20C,   0X242,	  0X206,    0X241,    0X051,    0X052,    0X20D,		 0X058,
 
   //0          1        2           3          4          5            6          7          8         9          :          (2,19-59)     <        (2,27-61)     >           ?
@@ -76,7 +76,7 @@ static UINT CODE  ASCIIMap[256] =
 //(1,18-16)  (1,19-17) (1,20-18)   (1,21-19)  (1,22-20)  (1,23-21)   (1,24-22)   (1,25-23)  (1,26-24) (1,27-25)  (1,28-26)   (1,29-27)   (1,30-28)  (1,31-29)  (1,32-30)    (1,33-31)
   0X035,    0X036,   0X037,    0X038,    0X039,    0X03A,     0X03B,    0X03C,    0X03D,   0X03E,    0X03F,     0X040,    0X041,    0X042,    0X043,      0X044,
 
-  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 ��         (2,18-47)
+  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 ¡£         (2,18-47)
   0X000,    0X135,   0X045,    ' ',        0X048,   0X049,      ' ',       0X04B,    0X04C,   0X04F,    0x046,     0X050,    0X051,    0X052,    0X10C,      0X058,
 
   //0          1        2           3          4          5            6          7          8         9          :          (2,19-59)     <        (2,27-61)     >           ?
@@ -114,25 +114,25 @@ static UINT CODE  ASCIIMap[256] =
 static UINT CODE  AsianMap[256] = 
 {
 #if(ICON_SIZE == SIZE_12X16)
-  //(ɫ-0)   (��-1)   (׼-2)     (��-3)   (��-4)    (ʾ-5)     (Ĭ-6)    (��-7)     (ϵ-8)     (ͳ-9)     (��-10)    (��-11)    (��-12)     (��-13)    (��-14)   (��-15)
+  //(É«-0)   (ÎÂ-1)   (×¼-2)     (¶È-3)   (ÏÔ-4)    (Ê¾-5)     (Ä¬-6)    (ÈÏ-7)     (Ïµ-8)     (Í³-9)     (»­-10)    (ÖÊ-11)    (µ÷-12)     (Õû-13)    (Óï-14)   (ÑÔ-15)
   0X243,   0X064,   0X065,   0x257,  0x067,   0X068,	   0X069,   0X06A,    0X06B,   0X06C,    0X06D,    0X06E,    0X24F,    0X070,   0X249,    0X24A,
 
- //(ѡ-16)  (��-17)   (��-18)    (��-19)  (��-20)   (��-21)    (˯-22)   (��-23)    (��-24)    (��-25)    (��-26)    (��-27)    (��-28)     (��-29)   (��-30)    (��-31) 
+ //(Ñ¡-16)  (Ôñ-17)   (¿ª-18)    (¹Ø-19)  (¶Ô-20)   (±È-21)    (Ë¯-22)   (Ãß-23)    (Ïñ-24)    (¶¨-25)    (Êä-26)    (Èë-27)    (»Ö-28)     (¸´-29)   (ºÍ-30)    (ËÑ-31) 
   0X073,   0X074,   0X075,   0X076,  0X245,   0X246,	   0X079,   0X07A,    0X07B,   0X07C,    0X07D,    0X07E,    0X07F,    0X255,   0X081,    0X082,
 
- //(��-32)  (��-33)   (��-34)    (��-35)  (��-36)   (��-37)    (��-38)   (һ-39)     (��-40)   (��-41)    (��-42)    (��-43)    (��-44)    (��-45)   (ģ-46)     (ʽ-47) 
+ //(Äê-32)  (ÔÂ-33)   (ÈÕ-34)    (·Ö-35)  (Ãë-36)   (ÐÇ-37)    (ÆÚ-38)   (Ò»-39)     (¶þ-40)   (Èý-41)    (ËÄ-42)    (Îå-43)    (Áù-44)    (´ó-45)   (Ä£-46)     (Ê½-47) 
   0X083,   0X084,   0X085,   0X086,  0X087,   0X088,    0X089,  0X08A,     0X08B,   0X08C,    0X08D,   0X08E,    0X08F,    0X090,   0X250,    0X251,
 
- //(��-48)  (��-49)   (��-50)    (ֵ-51)  (С-52)   (��-53)    (��-54)   (��-55)     (ת-56)    (��-57)   (��-58)    (��-59)    (��-60)    (��-61)   (��-62)     (��-63)
+ //(½µ-48)  (Ôë-49)   (Èá-50)    (Öµ-51)  (Ð¡-52)   (¸½-53)    (¼þ-54)   (·­-55)     (×ª-56)    (ÉÏ-57)   (ÏÂ-58)    (×ó-59)    (ÓÒ-60)    (ÖÆ-61)   (Éù-62)     (ÖÃ-63)
   0X093,   0X094,   0X095,   0X096,  0X097,	0X098,    0X099,  0X247,     0X248,   0X09C,    0X09D,    0X09E,   0X09F,    0X0A0,   0X0A1,  	 0X0A2,
 
- //(��-64)  (��-65)   (��-66)    (��-67)  (Դ-68)   (��-69)    (��-70)   (��-71)     (��-72)    (̨-73)   (��-74)    (��-75)    (��-76)    (λ-77)   (Ƶ-78)     (��-79)
+ //(ºÅ-64)  (ÎÞ-65)   (°é-66)    (Ìå-67)  (Ô´-68)   (×Ö-69)    (Ãæ-70)   (Àö-71)     (´æ-72)    (Ì¨-73)   (ÊÖ-74)    (×Ô-75)    (¶¯-76)    (Î»-77)   (Æµ-78)     (µÀ-79)
   0X24B,   0X252,	  0X0A5,   0X254,  0X258,   0X0A8,    0X0A9,  0X0AA,     0X0AB,   0X0AC,    0X0AD,    0X0AE,    0X0AF,   0X256,   0X0B1,     0X0B2, 
 
-//(��-80)   (��-81)   (��-82)    (��-83)  (��-84) 	(��-85)    (��-86)   (ʱ-87)     (��-88)    (��-89)    (��-90)    (��-91)    (��-92)    (Խ-93)  (ͼ-94)      (Ԥ-95)
+//(¶Î-80)   (±£-81)   (²Ê-82)    (Çå-83)  (Îú-84) 	(¾²-85)    (Òô-86)   (Ê±-87)     (¼ä-88)    (¼ò-89)    (ÖÐ-90)    (ÎÄ-91)    (Ìø-92)    (Ô½-93)  (Í¼-94)      (Ô¤-95)
   0X0B3,   0X0B4,   0X262,   0X0B6,  0X0B7,   0X0B8,    0X0B9,  0X0BA,     0X0BB,   0X24C,    0X24D,    0X24E,    0X0BF,    0X0C0,  0X0C1,     0X0C2,
 
-//(��-96)   (ȷ-97)   (��-98)    (��-99)  (��-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
+//(Éè-96)   (È·-97)   (ÐÅ-98)    (Á¿-99)  (ÁÁ-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
   0X0C3,   0X0C4,   0X253,   0X0C6,  0X244,   0X260,    0X0C9,   0X0CA,    0X0CB,    0X267,    0X0CD,    0X25D,   0X25E,    0X25F,  0X261,   0X25B,
 
 //(6,1-112) (6,4-113) (6,5-114)  (6,6-115) (6,7-116) (6,8-117) (6,9-118)  (6,10-119) (6,11-120) (6,12-121)  (6,13-122) (6,14-123) (6,15-124) (6,16-125) (6,17-126) (6,18-127)
@@ -162,25 +162,25 @@ static UINT CODE  AsianMap[256] =
 //(11,18-240) (11,19-241) (11,20-242) (11,21-243)  (11,22-244) (11,26-245) (11,27-246) (11,28-247)  (11,29-248)
 0X193,      0X194,      0X195,     0X196,     0X197,    0X19B,      0X19C,     0X19D,      0X19E,
 #elif(ICON_SIZE == SIZE_16X22)
-  //(ɫ-0)   (��-1)   (׼-2)     (��-3)   (��-4)    (ʾ-5)     (Ĭ-6)    (��-7)     (ϵ-8)     (ͳ-9)     (��-10)    (��-11)    (��-12)     (��-13)    (��-14)   (��-15)
+  //(É«-0)   (ÎÂ-1)   (×¼-2)     (¶È-3)   (ÏÔ-4)    (Ê¾-5)     (Ä¬-6)    (ÈÏ-7)     (Ïµ-8)     (Í³-9)     (»­-10)    (ÖÊ-11)    (µ÷-12)     (Õû-13)    (Óï-14)   (ÑÔ-15)
   0X063,   0X064,   0X065,   0x066,  0x067,   0X068,	   0X069,   0X06A,    0X06B,   0X06C,    0X06D,    0X06E,    0X06F,    0X070,   0X071,    0X072,
 
- //(ѡ-16)  (��-17)   (��-18)    (��-19)  (��-20)   (��-21)    (˯-22)   (��-23)    (��-24)    (��-25)    (��-26)    (��-27)    (��-28)     (��-29)   (��-30)    (��-31) 
+ //(Ñ¡-16)  (Ôñ-17)   (¿ª-18)    (¹Ø-19)  (¶Ô-20)   (±È-21)    (Ë¯-22)   (Ãß-23)    (Ïñ-24)    (¶¨-25)    (Êä-26)    (Èë-27)    (»Ö-28)     (¸´-29)   (ºÍ-30)    (ËÑ-31) 
   0X073,   0X074,   0X075,   0X076,  0X077,   0X078,	   0X079,   0X07A,    0X07B,   0X07C,    0X07D,    0X07E,    0X07F,    0X080,   0X081,    0X082,
 
- //(��-32)  (��-33)   (��-34)    (��-35)  (��-36)   (��-37)    (��-38)   (һ-39)     (��-40)   (��-41)    (��-42)    (��-43)    (��-44)    (��-45)   (ģ-46)     (ʽ-47) 
+ //(Äê-32)  (ÔÂ-33)   (ÈÕ-34)    (·Ö-35)  (Ãë-36)   (ÐÇ-37)    (ÆÚ-38)   (Ò»-39)     (¶þ-40)   (Èý-41)    (ËÄ-42)    (Îå-43)    (Áù-44)    (´ó-45)   (Ä£-46)     (Ê½-47) 
   0X083,   0X084,   0X085,   0X086,  0X087,   0X088,    0X089,  0X08A,     0X08B,   0X08C,    0X08D,   0X08E,    0X08F,    0X090,   0X091,    0X092,
 
- //(��-48)  (��-49)   (��-50)    (ֵ-51)  (С-52)   (��-53)    (��-54)   (��-55)     (ת-56)    (��-57)   (��-58)    (��-59)    (��-60)    (��-61)   (��-62)     (��-63)
+ //(½µ-48)  (Ôë-49)   (Èá-50)    (Öµ-51)  (Ð¡-52)   (¸½-53)    (¼þ-54)   (·­-55)     (×ª-56)    (ÉÏ-57)   (ÏÂ-58)    (×ó-59)    (ÓÒ-60)    (ÖÆ-61)   (Éù-62)     (ÖÃ-63)
   0X093,   0X094,   0X095,   0X096,  0X097,	0X098,    0X099,  0X09A,     0X09B,   0X09C,    0X09D,    0X09E,   0X09F,    0X0A0,   0X0A1,  	 0X0A2,
 
- //(��-64)  (��-65)   (��-66)    (��-67)  (Դ-68)   (��-69)    (��-70)   (��-71)     (��-72)    (̨-73)   (��-74)    (��-75)    (��-76)    (λ-77)   (Ƶ-78)     (��-79)
+ //(ºÅ-64)  (ÎÞ-65)   (°é-66)    (Ìå-67)  (Ô´-68)   (×Ö-69)    (Ãæ-70)   (Àö-71)     (´æ-72)    (Ì¨-73)   (ÊÖ-74)    (×Ô-75)    (¶¯-76)    (Î»-77)   (Æµ-78)     (µÀ-79)
   0X0A3,   0X0A4,	  0X0A5,   0X0A6,  0X0A7,   0X0A8,    0X0A9,  0X0AA,     0X0AB,   0X0AC,    0X0AD,    0X0AE,    0X0AF,   0X0B0,   0X0B1,     0X0B2, 
 
-//(��-80)   (��-81)   (��-82)    (��-83)  (��-84) 	(��-85)    (��-86)   (ʱ-87)     (��-88)    (��-89)    (��-90)    (��-91)    (��-92)    (Խ-93)  (ͼ-94)      (Ԥ-95)
+//(¶Î-80)   (±£-81)   (²Ê-82)    (Çå-83)  (Îú-84) 	(¾²-85)    (Òô-86)   (Ê±-87)     (¼ä-88)    (¼ò-89)    (ÖÐ-90)    (ÎÄ-91)    (Ìø-92)    (Ô½-93)  (Í¼-94)      (Ô¤-95)
   0X0B3,   0X0B4,   0X0B5,   0X0B6,  0X0B7,   0X0B8,    0X0B9,  0X0BA,     0X0BB,   0X0BC,    0X0BD,    0X0BE,    0X0BF,    0X0C0,  0X0C1,     0X0C2,
 
-//(��-96)   (ȷ-97)   (��-98)    (��-99)  (��-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
+//(Éè-96)   (È·-97)   (ÐÅ-98)    (Á¿-99)  (ÁÁ-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
   0X0C3,   0X0C4,   0X0C5,   0X0C6,  0X0C7,   0X0C8,    0X0C9,   0X0CA,    0X0CB,    0X0CC,    0X0CD,    0X0CE,    0X0CF,    0X0D0,    0X0D1,   0X0D2,
 
 //(6,1-112) (6,4-113) (6,5-114)  (6,6-115) (6,7-116) (6,8-117)   (6,9-118) (6,10-119) (6,11-120) (6,12-121)  (6,13-122) (6,14-123) (6,15-124) (6,16-125) (6,17-126) (6,18-127)
@@ -220,13 +220,85 @@ static UINT CODE  FontRamMap[256] =
    //0        1       2       3       4       5       6       7       8        9       10       11     12      13      14      15
   0X26A, 0X26B, 0X26C, 0X26D,0X26E, 0X26F, 0X270, 0X271, 0X272, 0X273, 0X274, 0X275, 0X276, 0X277, 0X278, 0X279, 
 #elif(ICON_SIZE == SIZE_16X22)
-  //0        1       2       3       4       5       6       7       8        9       10       11     12      13      14      15
-  0X1C0, 0X1C1, 0X1C2, 0X1C3,0X1C4, 0X1C5, 0X1C6, 0X1C7, 0X1C8, 0X1C9, 0X1CA, 0X1CB, 0X1CC, 0X1CD, 0X1CE, 0X1CF, 
+  // --- 0 ~ 15 ---
+  0X1C0, 0X1C1, 0X1C2, 0X1C3, 0X1C4, 0X1C5, 0X1C6, 0X1C7, 0X1C8, 0X1C9, 0X1CA, 0X1CB, 0X1CC, 0X1CD, 0X1CE, 0X1CF, 
+  // --- 16 ~ 31 ---
+  0X1D0, 0X1D1, 0X1D2, 0X1D3, 0X1D4, 0X1D5, 0X1D6, 0X1D7, 0X1D8, 0X1D9, 0X1DA, 0X1DB, 0X1DC, 0X1DD, 0X1DE, 0X1DF, 
+  // --- 32 ~ 47 ---
+  0X1E0, 0X1E1, 0X1E2, 0X1E3, 0X1E4, 0X1E5, 0X1E6, 0X1E7, 0X1E8, 0X1E9, 0X1EA, 0X1EB, 0X1EC, 0X1ED, 0X1EE, 0X1EF, 
+  // --- 48 ~ 63 ---
+  0X1F0, 0X1F1, 0X1F2, 0X1F3, 0X1F4, 0X1F5, 0X1F6, 0X1F7, 0X1F8, 0X1F9, 0X1FA, 0X1FB, 0X1FC, 0X1FD, 0X1FE, 0X1FF, 
+  // --- 64 ~ 79 ---
+  0X200, 0X201, 0X202, 0X203, 0X204, 0X205, 0X206, 0X207, 0X208, 0X209, 0X20A, 0X20B, 0X20C, 0X20D, 0X20E, 0X20F, 
+  // --- 80 ~ 95 ---
+  0X210, 0X211, 0X212, 0X213, 0X214, 0X215, 0X216, 0X217, 0X218, 0X219, 0X21A, 0X21B, 0X21C, 0X21D, 0X21E, 0X21F, 
+  // --- 96 ~ 111 (接着原来的 0x223 继续) ---
+  0X220, 0X221, 0X222, 0X223, 0X224, 0X225, 0X226, 0X227, 0X228, 0X229, 0X22A, 0X22B, 0X22C, 0X22D, 0X22E, 0X22F, 
+  // --- 112 ~ 127 ---
+  0X230, 0X231, 0X232, 0X233, 0X234, 0X235, 0X236, 0X237, 0X238, 0X239, 0X23A, 0X23B, 0X23C, 0X23D, 0X23E, 0X23F,
+  // --- 128 ~ 143 ---
+  0X240, 0X241, 0X242, 0X243, 0X244, 0X245, 0X246, 0X247, 0X248, 0X249, 0X24A, 0X24B, 0X24C, 0X24D, 0X24E, 0X24F,
+  // --- 144 ~ 159 ---
+  0X250, 0X251, 0X252, 0X253, 0X254, 0X255, 0X256, 0X257, 0X258, 0X259, 0X25A, 0X25B, 0X25C, 0X25D, 0X25E, 0X25F,
+  // --- 160 ~ 175 ---
+  0X260, 0X261, 0X262, 0X263, 0X264, 0X265, 0X266, 0X267, 0X268, 0X269, 0X26A, 0X26B, 0X26C, 0X26D, 0X26E, 0X26F,
+  // --- 176 ~ 191 ---
+  0X270, 0X271, 0X272, 0X273, 0X274, 0X275, 0X276, 0X277, 0X278, 0X279, 0X27A, 0X27B, 0X27C, 0X27D, 0X27E, 0X27F,
+  // --- 192 ~ 207 (实际上只用到 199, 即 0x287) ---
+  0X280, 0X281, 0X282, 0X283, 0X284, 0X285, 0X286, 0X287, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000,
 #endif
 };
+code UCHAR BigNum_Table[10][6] = {
+// 数字 0 (0x24 - 0x29)
+    {0x24, 0x25, 0x26, 0x27, 0x28, 0x29},
 
+    // 数字 1 (0x2A - 0x2F)
+    {0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F},
 
-//===================================�����Ǻ�OSD BLOCK �޹ص�============================
+    // 数字 2 (0x30 - 0x35)
+    {0x30, 0x31, 0x32, 0x33, 0x34, 0x35},
+
+    // 数字 3 (0x36 - 0x3B)
+    {0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B},
+
+    // 数字 4 (0x3C - 0x41)
+    {0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41},
+
+    // 数字 5 (0x42 - 0x47)
+    {0x42, 0x43, 0x44, 0x45, 0x46, 0x47},
+
+    // 数字 6 (0x48 - 0x4D)
+    {0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D},
+
+    // 数字 7 (0x4E - 0x53)
+    {0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53},
+
+    // 数字 8 (0x54 - 0x59)
+    {0x54, 0x55, 0x56, 0x57, 0x58, 0x59},
+
+    // 数字 9 (0x5A - 0x5F)
+    {0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F}
+};
+code UCHAR Radar_Wave_Table_Correct[8][4] = {
+// Front 3 (Far) -> 原0x6E -> 现0x61
+    {0x61, 0x63, 0x65, 0x67},
+    
+    // Front 2 (Mid) -> 原0x76 -> 现0x69
+    {0x69, 0x6B, 0x6D, 0x6F},
+    
+    // Front 1 (Near) -> 原0x7E -> 现0x71
+    {0x71, 0x73, 0x75, 0x77},
+
+    // Rear 1 (Near) -> 原0x86 -> 现0x79
+    {0x79, 0x7B, 0x7D, 0x7F},
+    
+    // Rear 2 (Mid) -> 原0x8E -> 现0x81
+    {0x81, 0x83, 0x85, 0x87},
+    
+    // Rear 3 (Far) -> 原0x96 -> 现0x89
+    {0x89, 0x8B, 0x8D, 0x8F}
+};
+//===================================ÒÔÏÂÊÇºÍOSD BLOCK ÎÞ¹ØµÄ============================
 void OsdCofigPalette(void)
 {
 	ICON_CR1_L = RedColor&0xff;	
@@ -243,7 +315,7 @@ void OsdCofigPalette(void)
 	ICON_CR6_H = WhiteColor>>8;
 }
 
-//����λͼ��ɫ��
+//ÅäÖÃÎ»Í¼µ÷É«°å
 void OsdConfigBitmapPalette(UCHAR *paletColor)     
 {
 	UCHAR XDATA i=0;
@@ -254,7 +326,6 @@ void OsdConfigBitmapPalette(UCHAR *paletColor)
 		XBYTE[0xFB36+2*i+1] = paletColor[2*i];
 	}
 }
-
 
 
 UINT OsdConfigBlockIndexStarAddr(UCHAR blockId,UINT starAddr)
@@ -320,7 +391,7 @@ UINT OsdGetStartIndexAddr(void)
 }
 
 
-//����OSD Block���ڴ�С  ���С
+//ÉèÖÃOSD Block´°¿Ú´óÐ¡  ¿é´óÐ¡
 void OsdConfigWndSize(BYTE width, BYTE height)
 {
      //printfStr("OsdConfigWndSize");
@@ -455,27 +526,35 @@ void OsdClear(void)
 
 void OsdBlockClear(UCHAR ucOsdBlockId)
 {
-	UINT XDATA wcIndexAddr = 0;
-	UINT XDATA wcWinSize = 0;
-		
-	OsdBlockEnable(ucOsdBlockId);
-	wcIndexAddr = OsdGetStartIndexAddr();
-	wcWinSize = OsdGetBlockSize();
+    UINT XDATA wcIndexAddr = 0;
+    UINT XDATA wcWinSize = 0;
+    UINT XDATA EndAddr = 0;
+    UINT XDATA curAddr = wcIndexAddr;
+    OsdBlockEnable(ucOsdBlockId);
+    wcIndexAddr = OsdGetStartIndexAddr();
+    wcWinSize = 2048; 
+    EndAddr = wcIndexAddr + wcWinSize;
+     
+    
+    for(; curAddr < EndAddr; curAddr++)
+    {   
+        INDEX_RAM_ADD_H = (curAddr >> 8);
+        INDEX_RAM_ADD_L = (curAddr & 0xff);
 
-	//printf("wcWinSize = %x", wcWinSize);
+        INDEX_RAM_DATA_H = 0;
+        INDEX_RAM_DATA_L = 0;
+    }
 
-	wcWinSize += wcIndexAddr;
-	
-	INDEX_RAM_ADD_H =(wcIndexAddr>>8);
-	INDEX_RAM_ADD_L = (wcIndexAddr&0xff);
-	
-	for(;wcIndexAddr<wcWinSize;wcIndexAddr++)
-	{   
-	    INDEX_RAM_ADD_H =(wcIndexAddr>>8);
-		INDEX_RAM_DATA_H=0;
-		INDEX_RAM_DATA_L = 0;
-	}
- }
+    curAddr = wcIndexAddr; 
+    
+    for(; curAddr < EndAddr; curAddr++)
+    {
+        INDEX_RAM_ADD_H = (curAddr >> 8);
+        INDEX_RAM_ADD_L = (curAddr & 0xff);
+        
+        EACH_ICON_COLOR = 0x00; 
+    }
+}
 
 
 void OsdWndClear(UCHAR starRow,UCHAR starLine,UCHAR endRow,UCHAR endLine)
@@ -487,7 +566,7 @@ void OsdWndClear(UCHAR starRow,UCHAR starLine,UCHAR endRow,UCHAR endLine)
 	 for(yIndex=starRow;yIndex<=(starRow+(endRow-starRow));yIndex++)
 	 {
 	     wcStartIndexAddr = OsdGetStartIndexAddr();
-         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row ��   line ��
+         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row ÐÐ   line ÁÐ
 	     wcStartIndexAddr = wcStartIndexAddr + ucIndexOffset;
 		 
 		 INDEX_RAM_ADD_H =(wcStartIndexAddr>>8);
@@ -571,7 +650,7 @@ void OsdConfigDispMode(UCHAR dispMode,UCHAR  mirrorMode)
 }
 
 
-// ������ʾ�����ɫ
+// ÅäÖÃÏÔÊ¾¿éµÄÑÕÉ«
 void OsdConfigBlockColor(UCHAR fbColor)
 {
 	UINT XDATA wcIndexAddr = 0;
@@ -592,7 +671,7 @@ void OsdConfigBlockColor(UCHAR fbColor)
  }
 
 
-//���ÿ��λ�� ���߷ֱ��ʲ�ͬ������ͬ
+//ÉèÖÃ¿éµÄÎ»ÖÃ ¸ü¾ß·Ö±æÂÊ²»Í¬ÓÐËù²»Í¬
 void OsdConfigWndPosition(UINT xPos, UINT yPos)
 {  
     //printfStr("OsdConfigWndPosition");
@@ -634,6 +713,177 @@ void OsdConfigWndPosition(UINT xPos, UINT yPos)
 	}  
 }
 
+void Draw_Big_Number(UCHAR startRow, UCHAR startLine, UCHAR num,UCHAR color)
+{
+    UCHAR r, c;
+    UINT wcStartIndexAddr;
+    UINT rowAddr;
+    UCHAR wndWidth;
+    UINT charData;
+    UCHAR tileIndex; 
+    if(num > 9) return;
+
+    wndWidth = OsdGetWndWidth();
+    wcStartIndexAddr = OsdGetStartIndexAddr();
+    wcStartIndexAddr = wcStartIndexAddr + (startRow * wndWidth) + startLine;
+    for(r = 0; r < 3; r++)
+    {
+        rowAddr = wcStartIndexAddr + (r * wndWidth);
+        INDEX_RAM_ADD_H = (rowAddr >> 8);
+        INDEX_RAM_ADD_L = (rowAddr & 0xff);
+        for(c = 0; c < 2; c++)
+        {
+            tileIndex = BigNum_Table[num][r*2 + c];
+            charData = FontRamMap[tileIndex];
+            //charData = (UINT)tileIndex; // <--- 直接用索引当地址 (0x000 + Index)
+            INDEX_RAM_DATA_H = charData >> 8;
+            INDEX_RAM_DATA_L = charData & 0xff;
+        }
+        INDEX_RAM_ADD_H = (rowAddr >> 8);
+        INDEX_RAM_ADD_L = (rowAddr & 0xff);
+        
+        for(c = 0; c < 2; c++)
+        {
+            EACH_ICON_COLOR = color; 
+        }
+    }
+}
+void Draw_Big_Dot(UCHAR startRow, UCHAR startLine,UCHAR color)
+{   
+		UINT wcStartIndexAddr;
+    UINT rowAddr;
+    UCHAR wndWidth;
+    UINT charData;
+    UCHAR tileIndex; 	
+		wndWidth = OsdGetWndWidth();
+    wcStartIndexAddr = OsdGetStartIndexAddr();
+    wcStartIndexAddr = wcStartIndexAddr + (startRow * wndWidth) + startLine;
+		charData = FontRamMap[0x60];
+		INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
+    INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
+	//charData = (UINT)tileIndex; // <--- 直接用索引当地址 (0x000 + Index)
+		INDEX_RAM_DATA_H = charData >> 8;
+		INDEX_RAM_DATA_L = charData & 0xff;
+			
+		INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
+    INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
+		
+		EACH_ICON_COLOR = color; 
+}
+void Draw_Radar_Segment(UCHAR row_idx, UCHAR seg_idx, UCHAR color, UCHAR screen_row, UCHAR screen_col_start)
+{
+    UCHAR i;
+    UINT wcStartIndexAddr;
+    UCHAR wndWidth;
+    UINT charData;
+    UCHAR tileIndex;      // 当前字的逻辑索引
+    UCHAR tileIndex_Base; // 当前段的起始索引
+    UCHAR current_col;
+
+    // 安全检查
+    if(row_idx > 7 || seg_idx > 3) return;
+
+    wndWidth = OsdGetWndWidth();
+    wcStartIndexAddr = OsdGetStartIndexAddr();
+
+    // 1. 获取基准字库索引 (从我们定义的二维数组里取)
+    tileIndex_Base = Radar_Wave_Table_Correct[row_idx][seg_idx];
+
+    // 2. 计算屏幕列位置 (每个段占2列)
+    current_col = screen_col_start + (seg_idx * 2);
+
+    // 3. 计算显存起始地址
+    wcStartIndexAddr = wcStartIndexAddr + (screen_row * wndWidth) + current_col;
+
+    // 4. 设置写地址 (写数据)
+    INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
+    INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
+
+    // --- 循环写 2 个 Tile 的数据 ---
+    for(i = 0; i < 2; i++)
+    {
+        if(color == 0) 
+        {
+            // 如果颜色是0，直接写空数据清屏，不需要查表
+            charData = 0x00; 
+        }
+        else
+        {
+            // 1. 计算当前块的逻辑索引 (基准 + 偏移)
+            tileIndex = tileIndex_Base + i;
+            
+            // 2. 【关键修改】这里加上了 FontRamMap 查表！
+            // 严格仿照 Draw_Big_Number 的写法
+            charData = FontRamMap[tileIndex]; 
+        }
+
+        // 写入数据
+        INDEX_RAM_DATA_H = charData >> 8;
+        INDEX_RAM_DATA_L = charData & 0xff;
+    }
+
+    // 5. 重新设置地址 (因为写完Data地址会自动后移，写Color需要拉回来)
+    INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
+    INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
+
+    // --- 循环写 2 个 Tile 的颜色 ---
+    for(i = 0; i < 2; i++)
+    {
+        // 写颜色属性
+        EACH_ICON_COLOR = color; 
+    }
+}
+// =========================================================================
+// 新增: 暴力擦除半个屏幕 (0=左半屏, 1=右半屏)
+// 左屏范围: 0-17列, 右屏范围: 18-35列
+// =========================================================================
+void Clear_Half_Screen(UCHAR half,UCHAR color)
+{
+    UCHAR r, c;
+    UCHAR c_start, c_end;
+    UINT wcStartIndexAddr;
+    UCHAR wndWidth = OsdGetWndWidth();
+    UINT startAddr = OsdGetStartIndexAddr();
+
+    // 1. 界定范围
+    if(half == 0) // 左半边
+    {
+        c_start = 0; c_end = 15; // 建议改成17，防止中间有缝隙
+    }
+    else // 右半边
+    {
+        c_start = 16; c_end = 32;
+    }
+
+    // 2. 循环填充红色
+    for(r = 0; r < 17; r++)
+    {
+        wcStartIndexAddr = startAddr + (r * wndWidth) + c_start;
+        
+        for(c = c_start; c <= c_end; c++)
+        {
+            // --- 第一步：写字库索引 (形状) ---
+            INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
+            INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
+
+            // 【关键】这里不能写 0x00！0x00是透明的！
+            // 你需要填入一个“实心方块”的字库索引。
+            // 如果你没有，暂时填 0x61 (波纹) 试试效果，之后在字库里加一个全0xFF的字。
+	        INDEX_RAM_DATA_H = FontRamMap[0x91] >> 8;  
+					INDEX_RAM_DATA_L = FontRamMap[0x91] & 0xff; 
+
+            // --- 第二步：写颜色属性 (红色) ---
+            // 写完数据后地址会自动+1，所以必须重新把地址拉回来！
+            INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
+            INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
+            
+            EACH_ICON_COLOR = color; // 0x01 = 红色 (COL_RED)
+
+            // 地址自增准备画下一个
+            wcStartIndexAddr++; 
+        }
+    }
+}
 void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str)
 {
      UINT XDATA wcStartIndexAddr;
@@ -668,7 +918,7 @@ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str)
 	 while(str[strOffset] != '\0')
 	 { 
 	    INDEX_RAM_ADD_H =(wcStartIndexAddr>>8);
-	    if(str[strOffset] == ASIAN)//��������
+	    if(str[strOffset] == ASIAN)//ÑÇÖÞÎÄ×Ö
 	    {   
 		   	strOffset++;
 	        INDEX_RAM_DATA_H = AsianMap[str[strOffset]] >> 8;  
@@ -678,18 +928,18 @@ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str)
 			//printf("AsianMap[str[strOffset]] = %x", AsianMap[str[strOffset]]);
 
 	    }
-		else if(str[strOffset] == FONTRAM) //Font Ram ��̬����
+		else if(str[strOffset] == FONTRAM) //Font Ram ¶¯Ì¬ÔØÈë
 		{   
 	    
 		   	strOffset++;
 	        INDEX_RAM_DATA_H = FontRamMap[str[strOffset]] >> 8;  
 			INDEX_RAM_DATA_L = FontRamMap[str[strOffset]] & 0xff; 
 		   
-            //printf("str[strOffset] = %x", str[strOffset]);
-			//printf("FontRamMap[str[strOffset]] = %x", FontRamMap[str[strOffset]]);
+        printf("str[strOffset] = %x", str[strOffset]);
+			  printf("FontRamMap[str[strOffset]] = %x", FontRamMap[str[strOffset]]);
 
 	    }
-	 	else//��ĸ��
+	 	else//×ÖÄ¸±í
 	 	{
 	 	    INDEX_RAM_DATA_H = ASCIIMap[str[strOffset]] >> 8;
 			INDEX_RAM_DATA_L = ASCIIMap[str[strOffset]] & 0xff;
@@ -775,7 +1025,7 @@ void OsdDrawIcon(UCHAR starRow,UCHAR starLine,UCHAR xSize,UCHAR ySize,UCHAR Back
 	 for(yIndex=starRow;yIndex<(starRow+ySize);yIndex++)
 	 {
 	     wcStartIndexAddr = OsdGetStartIndexAddr();
-         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row ��   line ��
+         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row ÐÐ   line ÁÐ
 	     wcStartIndexAddr = wcStartIndexAddr + ucIndexOffset;
 		 //printf("wcStartIndexAddr = %x", wcStartIndexAddr);
 		 INDEX_RAM_ADD_H =(wcStartIndexAddr>>8);
@@ -855,46 +1105,43 @@ void OsdWriteCharToFontram(BYTE indexAddr, UCHAR *pCharData)
 }
 
 
-void LoadMulCharToFontram(BYTE indexAddr, UCHAR Size,UCHAR *pCharData)
+
+void LoadMulCharToFontram(UINT indexAddr, UCHAR Size, UCHAR *pCharData)
 {   
-    UCHAR XDATA i,j;
-	UCHAR XDATA IconSize;
-	UCHAR XDATA Size_X,Size_Y;
+    UCHAR XDATA i, j;
+    UCHAR XDATA IconSize;
+    UCHAR XDATA Size_X, Size_Y;
+    UINT  XDATA AbsoluteAddr;
 	
-	if(pCharData == NULL)
-	{
-	     return;
-	}
+    if(pCharData == NULL) return;
 
-	Size_X=CHAR_SIZE_X;
-	Size_Y=CHAR_SIZE_Y;
+    Size_X = 16;
+    Size_Y = 22;
 
-	if(Size_X <= 16)
-	{
-	  IconSize=Size_Y;	
-	}
-	else if((Size_Y%2)==0)
-	{
-	  IconSize=(3*Size_Y)/2;
-	}
-	else
-	{
-      IconSize=(3*Size_Y)/2+1;
-	}
-	
-    FONT_RAM_ADD_L = (UCHAR)((IconSize*(indexAddr))&0XFF);
+    if(Size_X <= 16) IconSize = Size_Y;	
+    else if((Size_Y%2)==0) IconSize = (3*Size_Y)/2;
+    else IconSize = (3*Size_Y)/2+1;
+    
+    AbsoluteAddr = (UINT)indexAddr * IconSize;
 
-    for(i=0;i<Size;i++)
+    printf("Write: Idx=%x\n", indexAddr); 
+		 printf(" AbsAddr=%x\n", AbsoluteAddr); 
+    
+    // 写低位 (只写一次)
+    FONT_RAM_ADD_L = (UCHAR)(AbsoluteAddr & 0xFF);
+
+    for(i = 0; i < Size; i++)
     {
-		for(j=0;j<IconSize;j++)
-	    {
-	        FONT_RAM_ADD_H = ( IconSize*indexAddr+j)>>8; 
-		    FONT_RAM_DATA_H= *(pCharData+2*j);
-	        FONT_RAM_DATA_L = *(pCharData+2*j+1);
-	    }
-		pCharData+= 2*IconSize;
-	    indexAddr+=1;
-	 }
+        for(j = 0; j < IconSize; j++)
+        {
+            FONT_RAM_ADD_H = (AbsoluteAddr + j) >> 8; 
+            
+            FONT_RAM_DATA_H = *(pCharData + 2*j);
+            FONT_RAM_DATA_L = *(pCharData + 2*j + 1);
+        }
+        pCharData += 2 * IconSize;
+        AbsoluteAddr += IconSize; 
+    }
 }
 
 
@@ -1042,8 +1289,8 @@ void OsdDrawHex(UCHAR starRow,UCHAR starLine,UCHAR fbColor,SWORD value)
 }
 
 
-// ������״������
-//input starRow:��  starLine:��   length:�������ĳ���        value:�������Ŀ���
+// »æÖÆÌõ×´½ø¶ÈÌõ
+//input starRow:ÐÐ  starLine:ÁÐ   length:½ø¶ÈÌõµÄ³¤¶È        value:½ø¶ÈÌõµÄ¿í¶È
 //return: void
 void OsdDrawGuage(UCHAR starRow, UCHAR starLine, UCHAR length,UCHAR fbColor, UCHAR value)
 {    

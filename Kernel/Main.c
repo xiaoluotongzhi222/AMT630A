@@ -1,17 +1,3 @@
-/***********************************************************************
-*Copyright (C) 2005 深圳艾科创新有限公司产品应用一部
-* All rights reserved.
-
-*File name: 　 Main.c
-*Version:    　Ver-2.0
-*Author:       cjinzong
-*update:       2010-05-27
-
-*Description:
-               这个是系统的整个运行框架。
-*History:  
-   
-************************************************************************/
 #define _MAIN_C_
 
 #include "DataType.h"
@@ -34,130 +20,257 @@
 #include "ConfigLcdPara.h"
 #include "Buzzer.h"
 
-UINT16 BattVol;
-UINT16 UpdataBattVol(void)
+#define FONTRAM_PREFIX  '&' 
+#define WAVE_START_COL 4  
+#define COL_RED     0x01
+#define COL_YELLOW  0x04
+#define COL_GREEN   0x02
+
+
+extern void Draw_Big_Number(UCHAR startRow, UCHAR startLine, UCHAR num,UCHAR color);
+extern void Draw_Radar_Segment(UCHAR row_idx, UCHAR seg_idx, UCHAR color, UCHAR screen_row, UCHAR screen_col_start);
+extern void Clear_Half_Screen(UCHAR half,UCHAR color);
+extern void Draw_Big_Dot(UCHAR startRow, UCHAR startLine,UCHAR color);
+
+UCHAR g_last_int = 0xFF;
+UCHAR g_last_dec = 0xFF;
+
+void Radar_Set_Segment(UCHAR r, UCHAR s, UCHAR state)
 {
-	return BattVol;
+    UCHAR color;
+    UCHAR screen_row;
+
+
+    if(r > 5 || s > 3) return;
+
+
+    if(r == 0 || r == 5)      color = COL_GREEN;
+    else if(r == 2 || r == 3) color = COL_RED;
+    else                      color = COL_YELLOW;
+
+
+    if(state == 0)
+    {
+        color = 0x00; 
+    }
+
+    switch(r)
+    {
+
+        case 0: screen_row = 0; break; // F3 (Far)
+        case 1: screen_row = 1; break; // F2
+        case 2: screen_row = 2; break; // F1
+
+
+        case 3: screen_row = 9;  break; // R1
+        case 4: screen_row = 10; break; // R2
+        case 5: screen_row = 11; break; // R3
+    }
+
+
+    Draw_Radar_Segment(r, s, color, screen_row, WAVE_START_COL);
 }
 
-void main(void)																 										   
+
+void Update_Radar_Logic(UCHAR dist_val, char angle, UCHAR blink_state)
 {
-	UINT16 draw_osd_loop_count = 0;
-	UINT16 batt_updata_loop_count = 0;
-	UINT8 Low_voltage_warning_loop_count = 0;
+    UCHAR r, s;
+    UCHAR is_target_row;
+    UCHAR is_target_seg;
+    
+
+    for(r = 0; r < 6; r++)
+    {
+
+        is_target_row = 0;
+        
+        if (dist_val > 6) 
+        {
+            if (r == 0 || r == 5) is_target_row = 1;
+        }
+        else if (dist_val >= 2) 
+        {
+            if (r == 1 || r == 4) is_target_row = 1;
+        }
+        else 
+        {
+            if (r == 2 || r == 3) is_target_row = 1;
+        }
+
+
+        for(s = 0; s < 4; s++)
+        {
+
+            is_target_seg = 0;
+
+
+            if (angle > 30 &&s == 3)
+            {
+							is_target_seg = 1;
+            }
+            else if(angle>0&&angle<=30&&s==2)
+            {
+							is_target_seg = 1;
+            }
+            else if(angle<=0&&angle>=-30&&s==1)
+            {
+							is_target_seg = 1;
+            }
+						else if(angle<-30&&s==0)
+            {
+							is_target_seg = 1;
+            }
+            if (is_target_row && is_target_seg)
+            {
+                Radar_Set_Segment(r, s, blink_state);
+            }
+            else
+            {
+                Radar_Set_Segment(r, s, 1);
+            }
+        }
+    }
+}
+
+
+
+void Update_Radar_Distance(UCHAR dist_int, UCHAR dist_dec,UCHAR color)
+{
+
+        Draw_Big_Number(4, 20, dist_int,color);
+				Draw_Big_Dot(6, 22,color);
+        Draw_Big_Number(4, 23, dist_dec,color);
+}
+
+
+void Draw_All_Radar_Demo(void)
+{
+    UCHAR r, s;
+    UCHAR color;
+    UCHAR screen_row;
+
+
+    for(r = 0; r < 6; r++)
+    {
+        if(r == 0 || r == 5)      color = COL_GREEN; 
+        else if(r == 2 || r == 3) color = COL_RED;
+        else                      color = COL_YELLOW;
+
+        switch(r)
+        {
+            case 0: screen_row = 0; break; 
+            case 1: screen_row = 1; break; 
+            case 2: screen_row = 2; break; 
+            case 3: screen_row = 9; break; 
+            case 4: screen_row = 10; break; 
+            case 5: screen_row = 11; break; 
+        }
+
+        for(s = 0; s < 4; s++)
+        {
+            Draw_Radar_Segment(r, s, color, screen_row, WAVE_START_COL);
+        }
+    }
+}
+
+void ShowRadarDemo(void)
+{
+    OSD_MIRROR_SET = 0x00; 
+    OsdBlockEnable(1); 
+    OsdConfigWndSize(32, 16); 
+    OsdConfigWndPosition(0, 12); 
+    OsdBlockClear(1); 
+    XBYTE[0xFB76] = 16;
+    XBYTE[0xFB77] = 22;
+    
+    {
+        //car
+        UCHAR R1[] = {'&', 0x00, '&', 0x01, '&', 0x02, '&', 0x03, '&', 0x04, '&', 0x05, 0x00};
+        UCHAR R2[] = {'&', 0x06, '&', 0x07, '&', 0x08, '&', 0x09, '&', 0x0A, '&', 0x0B, 0x00};
+        UCHAR R3[] = {'&', 0x0C, '&', 0x0D, '&', 0x0E, '&', 0x0F, '&', 0x10, '&', 0x11, 0x00};
+        UCHAR R4[] = {'&', 0x12, '&', 0x13, '&', 0x14, '&', 0x15, '&', 0x16, '&', 0x17, 0x00};
+        UCHAR R5[] = {'&', 0x18, '&', 0x19, '&', 0x1A, '&', 0x1B, '&', 0x1C, '&', 0x1D, 0x00};
+        UCHAR R6[] = {'&', 0x1E, '&', 0x1F, '&', 0x20, '&', 0x21, '&', 0x22, '&', 0x23, 0x00};
+        OsdDrawStr(3, 5, 0x01, R1);
+        OsdDrawStr(4, 5, 0x01 ,R2);
+        OsdDrawStr(5, 5, 0x01, R3);
+        OsdDrawStr(6, 5, 0x01, R4);
+        OsdDrawStr(7, 5, 0x01, R5);
+        OsdDrawStr(8, 5, 0x01, R6);
+        Draw_All_Radar_Demo();
+        OsdBlockShow(1); 
+    }
+}
+
+
+void main(void)
+{
+    UINT i = 0;
+	  UINT j = 0;
+    char sim_angle = 0;
+    char angle_dir = 1; 
+    UCHAR blink = 0;
+    UCHAR time_slice = 0; 
+    UCHAR is_alarm = 0;
     DisableWatchdog();
-		
-	InitSystem();  
-	//SetPWM1(800,50);
-	printfStr("<<<<<<<<<<<<<<  Welcom to ARK >>>>>>>>>>>>\n");
-	
-	MenuProcessKey(COMD_SelPowerOnMode);
-	
-	printfStr("<<<<<<<<<<<<<<  Enter main loop >>>>>>>>>>>>\n");	
-	printfStr("test ADC TP3_KEY :   \n");
-	BRIGHT_REG    =  DataCurve(BRIGHT_MIN,g_ucbrightness,BRIGHT_MAX, 60,MAX_VALUE);                 //亮度
-	CONTRAST_REG  =  DataCurve(CONTRAST_MIN,g_ucContrast,CONTRAST_MAX,50,MAX_VALUE);                //对比度
-	SATURATION_REG=  DataCurve(SATURATION_MIN,g_ucSaturation,SATURATION_MAX,50,MAX_VALUE);          //色度
-	TINT_REG      =  TintCurve(50,MAX_VALUE);                                                       //色调 
-	while(1)
-	{   
-	    MSG curMsg;
+		InitSystem(); 
+    XBYTE[0xFD00] = 0x00;
+    XBYTE[0xFD0D] = 0xE0; 
+    CHAR_SIZE_X = 16;
+    CHAR_SIZE_Y = 22; 
+    InitOSD(); 
+    
+    ShowRadarDemo(); 
+    SetP0_4(0);
+    while(1) { 
+        WDT_CLR = 0xbb; 
+        WDT_CLR = 0x44;
+        WDT_CLR = 0x00;
 
-		POS_ClearWatchDog();	 
-	    /**********SPI驱动屏的VCOM调节*********/
-		#ifdef SpiInitPannelEn
-	    #ifdef SpiAdjRegEn 
-		ES = ON;
-		POS_AdjustSpiReg();
-		#endif
-		#endif
-		
-        /**********用户输入消息处理*********/
-		curMsg = POS_GetUserInputMsg(g_bGetUserInputFlg); 
-		if(curMsg != MSG_NULL)
-		{
-			OsdMsgHandle(curMsg);
-			curMsg = MSG_NULL;
-		}
-		
-		/**********输入信号消息处理*********/
-		curMsg = POS_GetSignalMsg(g_bGetSignalFlg);
-        if(curMsg != MSG_NULL)
-		{
-			SignalMsgHandle(curMsg);
-			curMsg = MSG_NULL;
-		}
+				is_alarm = (j < 2) ? 1 : 0; 
+        if(is_alarm && blink == 0) 
+        {
 
-		/**********图像制式消息处理*********/
-		curMsg = POS_GetColorSysMsg(g_bGetColorSysFlg);
-        if(curMsg != MSG_NULL)
-		{
-			ColorSysMsgHandle(curMsg);
-			curMsg = MSG_NULL;
-		}
-		
-		/**********时间消息处理*********/
-		curMsg = POS_GetTimeMsg(g_bGetTimeFlg);
-        if(curMsg != MSG_NULL)
-		{
-			TimeMsgHandle(curMsg); 
-			curMsg = MSG_NULL;
-		}         
-		
-		/**********电池ADC消息处理*********/
-        curMsg = POS_GetBatteryAdcMsg(g_bGetBatteryAdcFlg);
-		if(curMsg != MSG_NULL)
-		{
-			BatteryAdcMsgHandle(curMsg);
-			curMsg = MSG_NULL;
-		}
-		
-		/*********用户自定义消息处理********/
-		curMsg = POS_GetUserDefinedMsg(g_bGetUserDefFlg); 
-		if(curMsg != MSG_NULL)
-		{
-			UserDefinedMsgHandle(curMsg);
-			curMsg = MSG_NULL;
-		}
+            Update_Radar_Distance(j, i,0x01); 
+					   Update_Radar_Logic(j, sim_angle, blink);
+					    SetP0_4(1);
+        }
+        else 
+        {
+            Update_Radar_Distance(j, i,0x06); 
+					    SetP0_4(0);
+            Update_Radar_Logic(j, sim_angle, blink);
+        }
 
-		/**********BT消息处理*********/
-        curMsg = POS_GetBTMsg(g_bGetBTFlg);
-		if(curMsg != MSG_NULL)
-		{
-			BTMsgHandle(curMsg);
-			curMsg = MSG_NULL;
-		}
-		
-	    /**********无法分类消息处理*********/
-		curMsg = POS_GetMiscMsg(g_bGetMiscFlg); 
-		if(curMsg != MSG_NULL)
-		{
-			MiscMsgHandle(curMsg);
-			curMsg = MSG_NULL;
-		}
-		draw_osd_loop_count++;
-		batt_updata_loop_count++;
-		
-		if(batt_updata_loop_count > 2000)
-		{
-			BattVol = GetBatteryVol();
-			//需要调用#include "ConfigLcdPara.h"
-			Low_voltage_warning_loop_count++;
-			if(Low_voltage_warning_loop_count > 8)
-			{
-				if(BattVol < 357)
-				{
-					BuzzerOn(2);								                                                                                                 
-				}
-				Low_voltage_warning_loop_count = 0;
-			}
-			batt_updata_loop_count = 0;
-		}
-		if(draw_osd_loop_count > 200)
-		{
-			FpvOsdUpdata();
-			draw_osd_loop_count = 0;
-		}
-	}
-	return;
+        DelayMs(100); 
+
+        blink = !blink;
+
+        time_slice++;
+        if(time_slice >= 6)
+        {
+            time_slice = 0;
+
+            i++;
+            if(i > 9) 
+						{
+							i = 0;
+							j++;
+							if(j>9)
+							{
+								j=0;
+							}
+						}
+
+            sim_angle += (angle_dir * 20);
+            if(sim_angle >= 60) {
+                sim_angle = 60;
+                angle_dir = -1; 
+            }
+            else if(sim_angle <= -60) {
+                sim_angle = -60;
+                angle_dir = 1; 
+            }
+        }
+    }
 }

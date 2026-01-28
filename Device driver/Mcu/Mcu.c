@@ -78,7 +78,7 @@ void InitialPPort(void)
     #endif
    
     #ifdef BuzzerEn
-    hw_turnOffBuzzer();
+    //hw_turnOffBuzzer();
     #endif
 
     #ifdef AudioCtrlEn
@@ -156,11 +156,8 @@ void SetT2BaudRate(ULONG Brate)
 {
     T2CON   = 0x30;      	 //27MHZ  TF2,EXF2,RCLK,TCLK,EXEN2,TR2,C/T2,CP/RL2  
     SCON    = 0x50;
-
-	#ifdef MCU_CLOCK_27M
-	RCAP2H  = (UCHAR)(((65536-(MCU_CLK/(Brate*32)))>>8)&0xff);
-	RCAP2L  = (UCHAR)((65536-(MCU_CLK/(Brate*32)))& 0xff);
-	#endif
+		RCAP2H  = 0xFF;
+		RCAP2L  = 0xF1;
 }
 
 /***********************************************************
@@ -346,7 +343,7 @@ void InitMcu(void)
 	InitialPPort();
 	InitialTimer();
 	InitialSerialPort();
-	InitialWatchDog();
+	//InitialWatchDog();
 	InitialExtInterrupt();
-	printfStr("Mcu init ok!\n");
+	//printfStr("Mcu init ok!\n");
 }

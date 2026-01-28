@@ -1213,10 +1213,6 @@ void MenuProcessKey(BYTE OpratComd)
 
 
 
-//========================================================
-//               Draw Menu functions
-//========================================================
-
 void InitOsdBlock(void)
 {
     ConfigOsdBlockStarIndexAddr();
@@ -1232,11 +1228,8 @@ void InitOSD(void)
 	OsdConfigAlpha(DISABLE,OSD_BLENDING,0);
 	OsdConfigBitmapStarIndex(ICONBITMAP_SATRT_INDEX);	
 	OsdConfigBright(7);
-	#if(ICON_SIZE == SIZE_12X16)
-	DMALoadFontRam((ULONG)AMT630FontLib&0X000FFFF,0<<4,5440);  // 170
-	LoadMulCharToFontram(170,3,AMT630Font_Char);
-	#elif(ICON_SIZE == SIZE_16X22)
-	LoadMulCharToFontram(0,3,FontRam_Char);
+	#if(ICON_SIZE == SIZE_16X22)
+	LoadMulCharToFontram(0,180,FontRam_Char);
 	//OsdWriteCharToFontram(0, FontRam_Char);
 	#endif   
 }

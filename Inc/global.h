@@ -508,7 +508,7 @@ _GLOBAL_EXTERN_  UCHAR XDATA g_ucStableTime;
 #define Uart_RXD()              	{SelBOOTUART &=~(_BIT4|_BIT3);SelRXD &= ~(_BIT6|_BIT5);SelRXD|= _BIT4;}     
 #define Uart_TXD()              	{SelTXD &= ~(_BIT2|_BIT1);SelTXD|= _BIT0;}
 #define I2C_SCL()               	{SelRXD &= ~(_BIT6|_BIT4);SelRXD|= _BIT5;}
-#define I2C_SDA()               	{SelTXD &= ~(_BIT2|_BIT0);SelTXD|= _BIT1;}
+#define I2C_SDA()               	
 
 #define hw_SelChannelToCVBS1()   	{VIDEO_CH_D0 &=(~_BIT5);VIDEO_CH_D0 &=(~_BIT4);}          
 #define hw_SelChannelToCVBS2()   	{VIDEO_CH_D0 &=(~_BIT5);VIDEO_CH_D0 |=(_BIT4); }

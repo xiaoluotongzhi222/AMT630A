@@ -33,9 +33,10 @@ void putSIOChar(unsigned char sendData)
 
 void putchar(UCHAR ucVal)
 {
-	TI = 0;
-	SBUF = ucVal; 
-	while(!TI);
+//	TI = 0;
+//	SBUF = ucVal; 
+//	while(!TI);
+	return ;
 }
 
 void IrqPutstr(UCHAR *pFmt)

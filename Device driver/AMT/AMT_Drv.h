@@ -132,7 +132,7 @@ AMTDRV_EXTERN_ void OsdConfigWndPosition(UINT xPos, UINT yPos);
 AMTDRV_EXTERN_ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str);
 AMTDRV_EXTERN_ void OsdDrawIcon(UCHAR starRow,UCHAR starLine,UCHAR xSize,UCHAR ySize,UCHAR BackColor,UINT *pIconStr);
 AMTDRV_EXTERN_ void OsdWriteCharToFontram(BYTE indexAddr, UCHAR *pCharData);
-AMTDRV_EXTERN_ void LoadMulCharToFontram(BYTE indexAddr, UCHAR Size,UCHAR *pCharData);
+AMTDRV_EXTERN_ void LoadMulCharToFontram(UINT indexAddr, UCHAR Size,UCHAR *pCharData);
 AMTDRV_EXTERN_ void OsdDrawNum(UCHAR starRow,UCHAR starLine,UCHAR fbColor,SWORD value);
 AMTDRV_EXTERN_ void OsdDrawGuage(UCHAR starRow, UCHAR starLine, UCHAR length,UCHAR fbColor, UCHAR value);
 AMTDRV_EXTERN_ void OsdDrawHex(UCHAR starRow,UCHAR starLine,UCHAR fbColor,SWORD value);

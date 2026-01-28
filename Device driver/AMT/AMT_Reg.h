@@ -103,7 +103,7 @@
 #define OSD_BLINK2_Y_STOP		    	XBYTE[0xFB86]
 #define OSD_BLINK2_X_START		    XBYTE[0xFB87]
 #define OSD_BLINK2_X_STOP		    	XBYTE[0xFB88]
-
+#define OSD_HE_CTRL               XBYTE[0xFB96]
 #define OSD_COLOR		        		XBYTE[0xFB2A]
 
 #define	OSD_V_SCALE_L_BK0				XBYTE[0xFB2B]

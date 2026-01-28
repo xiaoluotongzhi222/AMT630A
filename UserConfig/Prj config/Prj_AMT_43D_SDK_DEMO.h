@@ -54,10 +54,10 @@
 <<<<<<<<<<<<<<<<<<<<<<   屏显示配置>>>>>>>>>>>>>>>>>>>>>>
 =========================================================*/   
 //[LCD pannel parameter list]  
-#define P_SAT043CM40DMY0_AMT630A_STD_20141202_EN   	DISABLE
+#define P_SAT043CM40DMY0_AMT630A_STD_20141202_EN   	ENABLE
 #define P_4D3_DHV_AMT630A_HMKJ_20200513_EN   	    DISABLE
 #define P_4D3_DHV_AMT630A_HMKJ_4D3_20200513_EN      DISABLE
-#define P_4D3_DHV_AMT630A_XUEHUAPING_20200514_EN    ENABLE
+#define P_4D3_DHV_AMT630A_XUEHUAPING_20200514_EN    DISABLE
 #define P_4D3_DHV_AMT630A_YINYAN_20200514_EN        DISABLE
 
 //[VcomDC type]
@@ -134,13 +134,15 @@
 #define BacklightEn          		//背光控制使能开关
 
 #ifdef BacklightEn
-#define BACKLIGHT_CTRL_MODE     DC_PWM0_CTRL // DC_PWM0_CTRL、DC_PWM1_CTRL、DC_PWM2_CTRL、DC_PWM3_CTRL、GPIO_CTRL 
+#define BACKLIGHT_CTRL_MODE     GPIO_CTRL  // DC_PWM0_CTRL、DC_PWM1_CTRL、DC_PWM2_CTRL、DC_PWM3_CTRL、GPIO_CTRL 
 
 #if BACKLIGHT_CTRL_MODE == GPIO_CTRL  
-#define hw_setBacklight()    	SetP3_5(1)
-#define hw_clrBacklight()    	SetP3_5(0)
-#define hw_setBIASEn()    		SetP3_6(1)
-#define hw_clrBIASEn()        	SetP3_6(0)      
+// AMT630A ????????,???? P3.5 ?? P1.5
+// ????????,????????????,????
+#define hw_setBacklight()    	{SetP3_5(1); SetP1_5(1); SetP0_4(1);} 
+#define hw_clrBacklight()    	{SetP3_5(0); SetP1_5(0); SetP0_4(0);}
+#define hw_setBIASEn()    		// ??
+#define hw_clrBIASEn()        	// ??
 #endif
 
 #if BACKLIGHT_CTRL_MODE == DC_PWM0_CTRL

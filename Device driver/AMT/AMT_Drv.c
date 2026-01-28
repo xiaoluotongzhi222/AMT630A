@@ -165,7 +165,7 @@ void SetI2CDebug(void)
 void SetUartPrint(void)
 {
    Uart_RXD();
-   Uart_TXD();
+   //Uart_TXD();
 }
 #endif
 

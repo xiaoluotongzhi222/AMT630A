@@ -52,9 +52,10 @@ UINT8 FpvOsdUpdata(void)
 void DrawFPVOsdWind(void)
 {
 	OsdBlockEnable(0);                 //使能选择的块
-	OsdConfigWndSize(0x14,0x0E);       //设置块大小	
-	OsdConfigBlockColor(BLACK);
-	OsdConfigWndPosition(260,100);     //设置块的位置
+	OsdConfigWndSize(30,14);       //设置块大小	
+	OsdConfigWndPosition(40,30);     //设置块的位置
+			OsdBlockClear(0); 
+    OsdBlockShow(0); 
 	OsdDrawStr(0,0,COLOR(WHITE,BLACK),"                     ");
 	OsdDrawStr(1,1,COLOR(WHITE,BLACK),"BAND:");
 	OsdDrawStr(1,8,COLOR(WHITE,BLACK)," ");

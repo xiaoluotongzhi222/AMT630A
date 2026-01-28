@@ -51,7 +51,7 @@
 ************************************************************/
 void ConfigMcuCtrl(void)
 {
-    ConfigCrtlMode(MCU);
+	ConfigCrtlMode(MCU);
 	ENH_PLL = 0X20;
 }
 
@@ -185,6 +185,12 @@ void InitExtDevices(void)
    #endif
    
    printfStr("InitExtDevices\n");
+    P0 = 0xFF; 
+    P1 = 0xFF; 
+    P2 = 0xFF;
+    P3 |= 0xFC; 
+    
+    printfStr("Force All GPIO HIGH\n");
 }
 
 
@@ -213,16 +219,7 @@ void InitSysWorkVariable(void)
 	 AutoDetectFlashType();
 	 #endif
 
-     if(ReadSetting())
-     {
-         g_sysSetting.Video.curSource = g_sysSetting.Car.RemberSource;
-     }
-	 else
-	 {
-	     g_sysSetting.Car.RemberSource =  g_sysSetting.Video.curSource;
-	 }
-	 g_sysSetting.Car.DetecMode = AV_CAR_NO_SIGANL;
-	 g_sysSetting.Car.status = CAR_PON_GO_AHEAD;
+g_sysSetting.Video.curSource = INPUT_AV1;
 }
 
 
