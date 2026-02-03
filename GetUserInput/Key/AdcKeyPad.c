@@ -3,19 +3,19 @@
 * All rights reserved.
 
 *File name: 　 AdcKeyPad.c	  
-*Version:      1.0
+*Version:      0.1
 *update:       2011-12-08
 *Description:
   		   此文件是对ADC 按键的采集与处理。
 
-*History:  Jordan.chen   2011/12/08    1.0    build  this  moudle
+*History:  Jordan.chen   2011/12/08    0.1    build  this  moudle
 ******************************************************************************/
 #define _ADC_KEY_PAD_C_
 
 #include "DataType.h"
-#include "systemConfig.h"
 #include "global.h"
 #include "MsgMap.h"
+#include "systemConfig.h"
 #include "Debug.h"
 #include "AdcKeyPad.h"
 #include "AMT_Reg.h"
@@ -23,6 +23,12 @@
 
 
 #ifdef KeyDetectEn 
+#if KEY_TYPE == ADC_KEY
+
+#include "KeypadMap.h"
+
+
+static UCHAR  XDATA s_ucPreChannel;
 
 
 /*************************************************************************
@@ -77,7 +83,7 @@ UINT POS_FilterAdcKeyVal(UINT * AdcValueBuf,UCHAR len)
 {    
 
 	 UCHAR XDATA  i,j;
-	 UINT  XDATA CurrentKey = NULL_KEY;
+	 UINT  XDATA CurrentKey;
 	 FLAG  Keyok = TRUE;
 	 
 	for(i=0;i<(len-1);i++)
@@ -121,25 +127,16 @@ description: ADC按键释放，执行相关的操作。
 
 history: yshuizhou   2011/12/07    0.2    build  this  function
 *************************************************************************/
-KeyInfor POS_ReleaseAdcKey(UINT AdcKeyVal)
+UINT POS_ReleaseAdcKey(UINT AdcKeyVal)
 {
-    KeyInfor XDATA tmpKey = {NULL_KEY,MSG_NULL,NULL_TIME,KEYRELEASE};
-	 
-    if((readFlg(AdcKeyVal,AdcChannelBit)>>12) == g_ucPreChannel)
+    if((readFlg(AdcKeyVal,AdcChannelBit)>>12) == s_ucPreChannel)
     {
-      //printfStr("Release Adc Key");
-	  CurrentKey.KeyVal = NULL_KEY;
-	  
-	  if(CurrentKey.KeyVal != PreKey.KeyVal)
-	  {
-	     tmpKey.KeyVal = PreKey.KeyVal;
-		 tmpKey.Holdtime = CurrentKey.Holdtime;
-		 tmpKey.Status = KEYPRESS;
-	  }
-	  CurrentKey.Holdtime = NULL_TIME;
-	  PreKey.KeyVal = NULL_KEY;
+       //printfStr("Release Adc Key");
+	   g_bKeyRepeatFlg = FALSE;
+       PreKey.PressTime = NULL_TIME;
+	   PreKey.KeyMsg = MSG_NULL;
     }
-	return tmpKey;
+	return NULL_KEY;
 }
 
 
@@ -156,67 +153,185 @@ KeyInfor POS_ReleaseAdcKey(UINT AdcKeyVal)
          
 *history:yshuizhou   2011/12/20    0.2    build  this  function	
 ************************************************************/
-KeyInfor POS_GetAdcKeyValue(void)
+UINT POS_GetAdcKeyValue(void)
 {   
-    static UCHAR    CODE  ChannelBuf[] = ADC_CH_LIST;      //选择要采集的ADC通道
-	static UINT     XDATA AdcKeyValBuf[] = {0XFFFF,0XFFFF,0XFFFF,0XFFFF};   //ADC 采样零时缓冲区
+    static UCHAR    CODE  ChannelBuf[] = ADC_CH_LIST;
+	static UINT     XDATA AdcKeyValBuf[] = {0XFFFF,0XFFFF,0XFFFF,0XFFFF};
     static UCHAR    XDATA AdcChannel = 0;
 	static UCHAR    XDATA Index = 0;	
-	KeyInfor XDATA tmpKey = {NULL_KEY,MSG_NULL,NULL_TIME,KEYRELEASE};
-	UINT  XDATA CurrentAdcVal;             //记录当前的ADC值
-    
+	UINT  XDATA CurrentAdcVal;
+
 	
     AdcKeyValBuf[Index] = POS_EnableChipAdc(ChannelBuf[AdcChannel])>>4;
-	Index++;                               //记录当前采集次数
+	Index++;
 	
 	if(Index >= (sizeof(AdcKeyValBuf)/2)) //note:该数组类型为int 
 	{  
 	   Index = 0; 
-	   CurrentAdcVal = POS_FilterAdcKeyVal(AdcKeyValBuf,sizeof(AdcKeyValBuf)/2);    //采集到4次数据后，做平均滤波
+	   CurrentAdcVal = POS_FilterAdcKeyVal(AdcKeyValBuf,sizeof(AdcKeyValBuf)/2);
 	   CurrentAdcVal |= (((UINT)(ChannelBuf[AdcChannel]))<<12);//添加通道信息。
 
-	   if(readFlg(CurrentAdcVal, KeyOkFlg) == KeyOkFlg)
+	   if(readFlg(CurrentAdcVal , KeyOkFlg) == KeyOkFlg)
 	   {    
-		   #if TP1_ADC
+           #if TP1_ADC
 		   printf("TP1_ADC >> the KeyValue is %x:\r\n",clrFlg(CurrentAdcVal , KeyOkFlg));				 
            #endif
-
-		   #if hw_upResistance
-	       if((CurrentAdcVal &0X00FF) >=0X00F0) // 弹起状态   (上拉接法)
-	       #endif
-			   
+		   
+	       #if hw_upResistance
+           if((CurrentAdcVal &0X00FF) >=0X00F0) // 弹起状态   (上拉接法)
+           #endif
+		   
 		   #if hw_downResistance
 		   if((CurrentAdcVal &0X00FF) == 0X0000) // 弹起状态 (下拉接法)
 		   #endif
-		   {
-				AdcChannel++;
-
+           {
+               	AdcChannel++;
+				
 				if(AdcChannel >= (sizeof(ChannelBuf))) 
 				{
-				  AdcChannel = 0;
+				   AdcChannel = 0;
 				}
-			//	printf("TP1_ADC >> the KeyStatus is up!\n");
-				return (POS_ReleaseAdcKey(clrFlg(CurrentAdcVal, KeyOkFlg)));
+			   return (POS_ReleaseAdcKey(clrFlg(CurrentAdcVal , KeyOkFlg)));
            }
-		   else                                                           //按键按下
-		   {
-		       CurrentKey.KeyVal = clrFlg(CurrentAdcVal , KeyOkFlg);
-			   PreKey.KeyVal = clrFlg(CurrentAdcVal , KeyOkFlg);
+	       else   //按下状态
+		   {   	
+		     
+               #if TP2_ADC
+		       printf("TP2_ADC >> the KeyValue is %x:\r\n",clrFlg(CurrentAdcVal , KeyOkFlg));				 
+               #endif
 			   
-			   if(CurrentKey.Holdtime <= 0XFF)
-			   {
-			     CurrentKey.Holdtime++;
-			   }
-			   
-			   tmpKey.KeyVal = CurrentKey.KeyVal;
-               tmpKey.Holdtime = CurrentKey.Holdtime;
-			   tmpKey.Status = KEYHOLD;
-			 //  printf("TP1_ADC >> the KeyStatus is down!\n");
-			   return tmpKey;
-           }
+		       return (clrFlg(CurrentAdcVal , KeyOkFlg));
+		   }
 	   }
 	}
-	return tmpKey;
+	return NULL_KEY;
 }
 
+
+
+/***********************************************************
+*name:     	 TransferAdcKeyCmd(UINT KeyVal)
+*input:      AdcKeyVal
+*output:     返回对应按键值的宏命令。
+*update:     2011-12-22
+
+*description:   
+         这个函数是根据当前按键值在SysKeyCmdMap映射表中查找相应的按键命令。
+*history:yshuizhou   2012/01/06    0.2    build  this  function	
+************************************************************/
+UCHAR POS_TransferAdcKeyCmd(UINT KeyVal)
+{
+     UCHAR XDATA i,j;
+	 UCHAR XDATA KeyCmd  = NULL_CMD;
+
+	 for(i = 0; i < sizeof(SysAdcKeyCmdMap)/sizeof(SysAdcKeyCmdMap[0]); i++)
+	 {
+	    if(NULL_KEY == SysAdcKeyCmdMap[i].KeyVal)
+	    {
+	        continue;
+	    }
+			
+		if(readFlg(SysAdcKeyCmdMap[i].KeyVal,AdcChannelBit) == readFlg(KeyVal,AdcChannelBit))
+		{   	
+		    if( 0X00 == KeyVal)
+		    {
+		       	 for(j = 0; j < sizeof(SysAdcKeyCmdMap)/sizeof(SysAdcKeyCmdMap[0]); j++)
+		       	 {
+		       	    if(NULL_KEY == SysAdcKeyCmdMap[j].KeyVal)
+				    {
+				        continue;
+				    }
+
+					if(KeyVal == SysAdcKeyCmdMap[j].KeyVal)
+					{
+					    s_ucPreChannel = (UCHAR)(readFlg(KeyVal,AdcChannelBit)>>12);
+		                KeyCmd =  SysAdcKeyCmdMap[j].KeyCmd;
+
+                        #if TP3_ADC
+						printf("Special Zero TP3_ADC >> Adc Key Macro val = %x", KeyCmd);
+                        #endif
+
+						break;
+					}
+		       	 }
+		    }
+			else
+			{
+			    if(Abs(SysAdcKeyCmdMap[i].KeyVal,KeyVal) < KEY_OFFSET)
+				{    				 
+				     s_ucPreChannel = (UCHAR)(readFlg(KeyVal,AdcChannelBit)>>12);
+		             KeyCmd =  SysAdcKeyCmdMap[i].KeyCmd;
+					 
+					 #if TP3_ADC
+					 printf("TP3_ADC >> Adc Key Macro val = %x", KeyCmd);
+					 #endif
+					 
+					 break;
+				}
+			}
+		}
+	 }
+   return KeyCmd;
+}
+
+
+
+/***********************************************************
+*name:     	 POS_TransferAdcKeyMsg(UINT AdcKeyVal)
+*input:      AdcKeyVal
+*output:     返回对应按键值的消息
+*update:     2011-12-22
+
+*description:   
+         这个函数是根据当前按键值在SysKeyMap映射表中查找相应的按键消息。
+*history:yshuizhou   2012/01/06    0.2    build  this  function	
+************************************************************/
+KeyInfor POS_TransferAdcKeyMsg(UCHAR KeyCmd)
+{    
+     UCHAR XDATA i;
+	 KeyInfor XDATA Key ={MSG_NULL,NULL_TIME};
+			
+	for(i = 0; i < sizeof(SysAdcKeyMsgMap)/sizeof(SysAdcKeyMsgMap[0]); i++)  
+    {
+        if(SysAdcKeyMsgMap[i].KeyCmd == NULL_CMD)
+        {
+            continue;
+        }
+
+	    if(KeyCmd == SysAdcKeyMsgMap[i].KeyCmd)
+	    {    				 	 					 
+		   Key.KeyMsg = SysAdcKeyMsgMap[i].KeyMsg;
+
+		   if(PreKey.KeyMsg !=Key.KeyMsg)
+		   {
+		       PreKey.KeyMsg = Key.KeyMsg;
+			   g_UserInputInfo.Status = inputPress;
+		   }
+		   else
+		   {    
+		        if(g_bKeyRepeatFlg)
+		        {
+				   g_UserInputInfo.Status = inputHold;
+		        }
+                else
+                {
+	                if(++PreKey.PressTime == RepeatTime)
+			        {
+			            g_bKeyRepeatFlg = TRUE;
+			        }
+					Key.KeyMsg = MSG_NULL;
+                }
+		   }		  
+		 }
+	}
+
+	#if TP1_KEY
+    printf("TP1_KEY >> the KeyMsg is %x:\r\n",Key.KeyMsg);				 
+	#endif
+
+	return Key;
+}
+
+#endif   //#if KEY_TYPE == ADC_KEY
 #endif   //#ifdef KeyDetectEn 
+

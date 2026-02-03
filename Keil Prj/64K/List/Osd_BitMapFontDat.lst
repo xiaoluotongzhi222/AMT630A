@@ -1,0 +1,37 @@
+C51 COMPILER V9.60.7.0   OSD_BITMAPFONTDAT                                                 02/03/2026 10:50:05 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_BITMAPFONTDAT
+OBJECT MODULE PLACED IN ..\Hex\Osd_BitMapFontDat.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE ..\..\..\OSD\Osd_BitMapFontDat.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\O
+                    -SD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Pannel
+                    -s;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\E2
+                    -prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..\..\
+                    -..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\..\.
+                    -.\Debug) DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\Osd_BitMapFontDat.lst) TABS(2) OBJECT(..\Hex\Osd_BitMapFontDat.obj)
+
+line level    source
+
+   1          /*
+   2          系统所有的ICON资源数据
+   3          */
+C51 COMPILER V9.60.7.0   OSD_BITMAPFONTDAT                                                 02/03/2026 10:50:05 PAGE 2   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

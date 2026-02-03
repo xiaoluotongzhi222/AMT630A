@@ -23,16 +23,21 @@
 
 /*<<<<<<<<<<<<<<<<<<<<< video channel define >>>>>>>>>>>>>>>>>>>>>*/
 #define CVBS1               			0
-#define CVBS2                          	1
-#define CVBS3                          	2
-#define CVBS4                        	3
-
+#define CVBS3                          	1
 
 
 /*<<<<<<<<<<<<<<<<<<<<< icon size define >>>>>>>>>>>>>>>>>>>>>*/
 #define SIZE_12X16             		0
 #define SIZE_16X22              		1
 
+
+/*<<<<<<<<<<<<<<<<<<<<<<<<< E2p define>>>>>>>>>>>>>>>>>>>>>*/
+#define _NULL_E2PROM_                 	0
+#define _E2P_24C02_                   	1
+#define _E2P_24C04_                   	2
+#define _E2P_24C08_                   	3
+#define _E2P_24C16_                   	4
+#define _E2P_24C32_                   	5
 
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<RGB data format define>>>>>>>>>>>>>>*/
@@ -48,54 +53,24 @@
 #define _24BIT_RGB_DEN    				9
 
 
-
-/*<<<<<<<<<<<<<<<<<<<<<<<<<Ir data format define>>>>>>>>>>>>>>*/
-#define _8BIT_WITH         			0
-#define _16BIT_WITH        			1
-#define _24BIT_WITH        			2
-#define _32BIT_WITH        			3
-
-
-
-/*<<<<<<<<<<<<<<<<<<<<<<<<IR   define>>>>>>>>>>>>>>>>>>>>>*/
-#define CR2025_6KEY              		1
-#define CR2025_18KEY             		2
-
-
 /*<<<<<<<<<<<<<<<<<<<<<<<<Key type define >>>>>>>>>>>>>>>>*/
-#define ADC_KEY                   		0
-#define IIC_KEY                   		1
+#define ADC_KEY                  		1
+#define DIANWEIQI_KEY           		2
+#define GPIO_KEY                   	3
 
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<KeyPad define>>>>>>>>>>>>>>>>>>*/
-#define KP_ARK_DEBUG_V01   	   		1
-#define KP_ZYD_909K_V10         		2
-
-
-/*<<<<<<<<<<<<<<<<<<<<<<<<<fm chip define>>>>>>>>>>>>>>>>>>>>>*/
-#define NULL_FMCHIP              		0
-#define KT0803l                  		1
+#define KP_ARK_SDK_V01            		1
+#define KP_XXXX                   		2
 
 
 
-/*<<<<<<<<<<<<<<<<<<<<<<<<PWM  type  define>>>>>>>>>>>>>>>>>>*/
-#define PWM0                       		0
-#define PWM1                       		1
-#define PWM2                         	2
-#define PWM3                           	3
-#define NULL_PWM            	        4 
+
+/*<<<<<<<<<<<<<<<<<<<<<<Battery define>>>>>>>>>>>>>>>>>>>>*/
+#define _NULL_BATTERY_             	0
+#define BATTERY_CHANGE              	1
 
 
-/*<<<<<<<<<<<<<<<<<<<<<<<<Volume define>>>>>>>>>>>>>>>>>>>*/
-#define _NULL_VOLUME_               	0
-#define VOLUME_PT2259_CTRL          	1
-#define VOLUME_PT2337_CTRL          	2
-#define VOLUME_PWM_CTRL             	3
-
-
-/*<<<<<<<<<<<<<<<<<<<<<<<<<Bt module define>>>>>>>>>>>>>>>>>>>>>*/
-#define NULL_BTMODULE               0
-#define BlueSoleil_i50e             1  
 
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<Back Light>>>>>>>>>>>>>>>>>>>>>>*/
@@ -107,13 +82,10 @@
 #define GPIO_CTRL                 		5
 
 
-/*<<<<<<<<<<<<<<<<<<<<<<<<OSD style >>>>>>>>>>>>>>>>>>>>>>*/
-#define OSD_STYLE_ARK               	0  //ARK OSD ·ç¸ñ
-
-
 /*<<<<<<<<<<<<<<<<<<<<<<LOGO disp mode >>>>>>>>>>>>>>>>>>>*/
-#define POWER_ON_DISP_LOGO         	0
-#define NOSIGNAL_DISP_LOGO         	1
+#define POWER_ON_DISP_LOGO     		0
+#define NOSIGNAL_DISP_LOGO     		1
+
 
 #endif
 

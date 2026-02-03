@@ -22,7 +22,7 @@
 设置说明:
 Release_Ver:表示软件发布版本，主要使用于客户生产时应用。
 ==============================================================*/
-//#define Release_Ver  
+//#define Release_Ver    
 
 
 
@@ -48,15 +48,15 @@ ARK-DEBUG 工具使能开关，如果此开关使能，那么可以通过上位机工具
 说明: 我们应该每个客户的每个案子都应该进行配置相应的配置文件。
       这样方便我们对项目的管理，和维护。
 ===============================================================*/
-#define PRJ_AMT_43D_SDK_DEMO   
-//#define PRJ_AMT_7D_SDK_DEMO
-
+//#define PRJ_AMT_43D_SDK_DEMO   
+#define PRJ_AMT_7D_SDK_DEMO
 	 
-#ifdef PRJ_AMT_43D_SDK_DEMO 
+
+#ifdef PRJ_AMT_43D_SDK_DEMO
 #include "Prj_AMT_43D_SDK_DEMO.h"
 #endif
 
-#ifdef PRJ_AMT_7D_SDK_DEMO 
+#ifdef PRJ_AMT_7D_SDK_DEMO
 #include "Prj_AMT_7D_SDK_DEMO.h"
 #endif
 

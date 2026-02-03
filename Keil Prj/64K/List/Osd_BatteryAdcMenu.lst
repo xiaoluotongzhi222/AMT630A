@@ -1,0 +1,730 @@
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_BATTERYADCMENU
+OBJECT MODULE PLACED IN ..\Hex\Osd_BatteryAdcMenu.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE ..\..\..\OSD\Osd_BatteryAdcMenu.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\
+                    -OSD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Panne
+                    -ls;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\E
+                    -2prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..\..
+                    -\..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\..\
+                    -..\Debug) DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\Osd_BatteryAdcMenu.lst) TABS(2) OBJECT(..\Hex\Osd_BatteryAdcMenu.obj)
+
+line level    source
+
+   1          #include "DataType.h"
+   2          #include "SystemConfig.h"
+   3          #include "Global.h"
+   4          #include "MsgMap.h"
+   5          #include "sysWorkPara.h"
+   6          #include "sysPower.h" 
+   7          #include "videoProc.h"
+   8          #include "configLCDPara.h"
+   9          #include "Debug.h"
+  10          #include "Delay.h"
+  11          #include "AMT_Reg.h"
+  12          #include "AMT_Drv.h"
+  13          #include "AMT_Mcu.h"
+  14          #include "Osd_Menu.h"
+  15          #include "Osd_MenuPage.h"
+  16          #include "Osd_BitMapFontDat.h"
+  17          
+  18          
+  19          
+  20          #ifdef LowBaterryDetecEn 
+              /*****************************************************************
+                                          Text
+              *****************************************************************/
+              UCHAR* CODE BatteryAdcStr[]=
+              {
+                "\x0F0\x0F1\x0F5",
+                "\x0F0\x0F2\x0F5",
+                "\x0F0\x0F3\x0F5",
+                "\x0F0\x0F4\x0F5",
+              };
+              
+              /*****************************************************************
+                                          String
+              *****************************************************************/
+              UCHAR * CODE BatteryAdcMenuStr(void)
+              {     
+                    return BatteryAdcStr[g_ucBatteryAdcLev];  
+              }
+              
+              /*****************************************************************
+                                         Function
+              *****************************************************************/
+              AdjustType BatteryAdcMenu_CheckCondition (void)
+              {
+                AdjustType XDATA adjust={0,0,0};
+                adjust.Flags |= osdVisible;
+                return adjust;
+              }
+              
+              
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 2   
+
+              BOOL AdjustBatteryAdc(UCHAR opratComd)
+              {
+                  if(opratComd == COMD_BatteryAdc)
+                {
+                    #ifdef LowBaterryDetecEn 
+                  if(g_ucBatteryAdcVal < BatterVolteAdcVal(BatterLowVolte))
+                  {
+                    g_ucBatteryAdcLev = BatterAdc_Lev0;
+                  }
+                    else if(g_ucBatteryAdcVal < BatterVolteAdcVal(BatterMidVolte))
+                  {
+                    g_ucBatteryAdcLev = BatterAdc_Lev1;
+                  }
+                    else if(g_ucBatteryAdcVal < BatterVolteAdcVal(BatterMaxVolte))
+                  {
+                    g_ucBatteryAdcLev = BatterAdc_lev2;
+                    }
+                  else 
+                  {
+                     g_ucBatteryAdcLev = BatterAdc_Lev3;
+                  }
+                      #endif //#ifdef LowBaterryDetecEn 
+                }     
+                return 1;
+              }
+              
+              
+              /*****************************************************************
+                                        Item value table
+              *****************************************************************/
+              DrawOptionType CODE Option_BatteryAdc[]=
+              {
+                {0,0,GREEN,TRANSPARENCE,GREEN,TRANSPARENCE, NULL,BatteryAdcMenuStr,osdEnd},
+              };
+              
+              ItemValueType CODE BatteryAdcMenuItemVal_BatteryAdc[]=
+              {
+                   {
+                      NULL,
+                      NULL,
+                      Option_BatteryAdc,   
+                      osdEnd,
+                   },
+              };
+              
+              
+              /*****************************************************************
+                                        Item Icon table
+              *****************************************************************/
+              
+              
+              
+              /*****************************************************************
+                                       Item  Titel table
+              *****************************************************************/
+              
+              
+              
+              /*****************************************************************
+                                        Menu Icon table
+              *****************************************************************/
+              
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 3   
+
+              
+              
+              /*****************************************************************
+                                       Menu  Titel table
+              *****************************************************************/
+              
+              
+              
+              /*****************************************************************
+                                         Item table
+              *****************************************************************/
+              
+              
+              /*****************************************************************
+                                         Menu 
+              *****************************************************************/
+              #endif
+ 130          
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 4   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_CtrlMode. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+P0 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0080H  1
+COMD_BlockLeft . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+P1 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0090H  1
+KEY_MENU . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_LogoID. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ALL_INPUT_SOURCE . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_RedrawLogo. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_SelPowerOnMode. . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CHINESE. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+P2 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A0H  1
+INPUT_YPBPR. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+COMD_ClearLogo . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WHITE. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+P3 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B0H  1
+Osd_LOGO1Menu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_SIGNAL_OK. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PVOID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  VOID_PTR -----  3
+Osd_LOGO2Menu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ITALIAN. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_NULL . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+ProtocolData0. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SLONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+COMD_RedrawMenu. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_LOGO3Menu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ProtocolData1. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_FM . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+COMD_OsdStorage. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_LOGO4Menu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KEY_NULL . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_NO_SIGNAL. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+ULONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+Osd_LOGO5Menu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_ITU656 . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+Osd_BatteryAdcMenu . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TRANSPARENCE . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_UPK_CONTRAST . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+ENGLISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWT_FullText . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_BlockDown . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
+PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 5   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+COMD_DecValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+AdjustType . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0001H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
+MSG_NOSIGNALPOWEROFF . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_Power . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_UPK_BRIGHTNESS . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BULGARIAN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SPANISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MIN_LAG. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_UPK_RIGHT. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+COMD_IncValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+DrawGuageType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 6   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  Length . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  GetValue . . . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
+fpGetMaxValue. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DrawNumberType . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  GetValue . . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
+INT8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+COMD_Brightness. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_MacroKeyVal . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+ColorType. . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+Osd_QuicklyBrightnessMenu. . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RUSSIAN. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_OSD_STORAGE. . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BLUE . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_UPK_SATURATION . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_UPK_POWER. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BatterAdc_Lev0 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  DrawTitelMethod. . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
+ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_OvpBackLight. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWT_Nothing. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CYAN . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 7   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+fpSetMaxValue. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+IconType . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  XSize. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  YSize. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  DispalyIcon. . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
+MSG_BATTERYADC . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+DrawOptionType . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  14
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  GetValue . . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+  DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0009H  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000CH  2
+COMD_BrightnessDec . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_GREEN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+GRAY . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+SCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+DISP_EXT0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
+_VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
+  DrawNumber . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
+  DrawGuage. . . . . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
+  DrawOption . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
+OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 8   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MenuPageIndexType. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+FRENCH . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_QuicklySaturationMenu. . . . . . .  E_CONST  -----  U_CHAR   -----  1
+NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+DrawTitelType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+OsdBlockType . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MenuPageType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+  MenuName . . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0003H  2
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0005H  2
+  XSize. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  YSize. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+  ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0009H  1
+  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  OsdBlockId . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000BH  1
+  PrevPage . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000CH  1
+  CurrentPage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
+  NextPage . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000EH  1
+  CheckCondition . . . . . . . . . . .  MEMBER   -----  PTR      000FH  3
+  DrawMenuStyle. . . . . . . . . . . .  MEMBER   -----  PTR      0012H  3
+  MenuIcons. . . . . . . . . . . . . .  MEMBER   -----  PTR      0015H  3
+  MenuTitels . . . . . . . . . . . . .  MEMBER   -----  PTR      0018H  3
+  MenuItems. . . . . . . . . . . . . .  MEMBER   -----  PTR      001BH  3
+  ItemCount. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   001EH  1
+  ExecFunction . . . . . . . . . . . .  MEMBER   -----  PTR      001FH  3
+  TimeOut. . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0022H  2
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0024H  2
+COMD_PrevMenu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+GERMAN . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KEY_CONTRAST . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+CH1. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_TurnOffBackLight. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+fpDisplayIcon. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+COMD_NextMenu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+Osd_BrightnessMenu . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 9   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+COMD_BrightnessInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+MSG_CONFIG_COLOR_SYS . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_SaturationDec . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MacroKeyVal. . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+OsdBlock0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_RootMenu . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_UPK_LEFT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+fpAdjustValue. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+OsdBlock1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_MaxMenu. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TURK . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+TIME_500MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
+  cConditions. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Comd . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Msg. . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
+  Source . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+_CommandType . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+OsdBlock2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_COLOR. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+KEY_BRIGHTNESS . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+COMD_OsdExit . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdBlock3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdBlock4. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+JAPANESE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KEY_RIGHT. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 10  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_OSD_EXIT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+Osd_PowerOffMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MenuItemType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  32
+  ItemName . . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  CheckCondition . . . . . . . . . . .  MEMBER   -----  PTR      0005H  3
+  DrawItemStyle. . . . . . . . . . . .  MEMBER   -----  PTR      0008H  3
+  ItemIcons. . . . . . . . . . . . . .  MEMBER   -----  PTR      000BH  3
+  ItemTitels . . . . . . . . . . . . .  MEMBER   -----  PTR      000EH  3
+  ItemValue. . . . . . . . . . . . . .  MEMBER   -----  PTR      0011H  3
+  AdjustFunction . . . . . . . . . . .  MEMBER   -----  PTR      0014H  3
+  ExecFunction . . . . . . . . . . . .  MEMBER   -----  PTR      0017H  3
+  KeyComdMap . . . . . . . . . . . . .  MEMBER   -----  PTR      001AH  3
+  ComdCount. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   001DH  1
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    001EH  2
+MSG_UPK_MENU . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+Osd_SaturationMenu . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+POLISH . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+COMD_SaturationInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
+_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+COMD_Contrast. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 11  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+KEY_SATURATION . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+KEY_POWER. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+fpDisplayText. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+Osd_QuicklyContrastMenu. . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RED. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+DWT_CenterText . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_TURNOFF_BACKLIGHT. . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+COMD_TurnOnBackLight . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BLACK. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+YELLOW . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+EIP. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
+BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+COMD_Nothing . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+DWT_None . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+fpItemIndex. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+PUTOYA . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
+_LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+fpCheckCondition . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+COMD_ContrastDec . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 12  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_sysMsg. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_LANG . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+fpExecFunc . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+COMD_BatteryAdc. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_PowerOnMenu. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
+GREEN. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_ContrastMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MultLanguageType . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+COMD_BlockRight. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_ContrastInc . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+KEY_LEFT . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+DWT_Text . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+fpGetValue . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DUTCH. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
+fpDrawStyle. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+
+
+C51 COMPILER V9.60.7.0   OSD_BATTERYADCMENU                                                02/03/2026 10:50:09 PAGE 13  
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

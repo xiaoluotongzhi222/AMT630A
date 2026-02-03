@@ -1,7 +1,6 @@
 /*
 E2prom的头文件
 */
-
 #ifndef _E2P_H__
 #define _E2P_H__
 
@@ -31,3 +30,4 @@ _E2P_EXTERN_ void ReadE2promMultiple(ULONG subAddr, UCHAR * dataPt, UINT rdNum);
 _E2P_EXTERN_ BOOL VerifyE2promDate(ULONG stAddr);
 
 #endif
+

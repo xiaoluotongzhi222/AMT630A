@@ -5,7 +5,6 @@
 #include "Osd_Menu.h" 
 #include "Osd_MenuPage.h" 
 #include "Osd_LogoFontDat.h"
-
 UINT CODE LOGO1LogoMenuIcon[]=
 {
    LogoIndexAddr_LOGO1

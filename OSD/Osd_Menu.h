@@ -10,30 +10,29 @@
 #define _OSD_MENU_EXTERN_  extern
 #endif
 
-
 #define FONT_RAM_INDEX_STAR_ADDR 0X2E0
-#define ICONBITMAP_SATRT_INDEX   0
-#define LOGOBITMAP_SATRT_INDEX   0
+#define ICONBITMAP_SATRT_INDEX  40
+#define LOGOBITMAP_SATRT_INDEX  0
 
 
 typedef enum 
 {
 	ENGLISH  = 0,         
 	FRENCH,   
-	ITALIAN,   
+	ITALIAN ,   
 	SPANISH,	
 	GERMAN,      
 	PUTOYA,
 	DUTCH, 		 
 	RUSSIAN, 
-	CHINESE,    
+	CHINESE ,    
 	JAPANESE,  
 	BULGARIAN,	//保加利亚语
-	POLISH,	  //波兰语
-	TURK,    //土耳其语
+	POLISH	,	//波兰语
+	TURK   ,    //土耳其语
 	
 	MIN_LAG = ENGLISH,
-	MAX_LANG = JAPANESE,
+	MAX_LANG = TURK,
 }MultLanguageType;
 
 typedef enum
@@ -43,7 +42,8 @@ typedef enum
 	GREEN,          
 	CYAN ,         
 	YELLOW ,            
-	GRAY ,  
+	GRAY , 
+	BLUE,	
 	WHITE,     
 	BLACK,
 	MAX_COLOR = -1,
@@ -56,41 +56,18 @@ typedef enum
 	Osd_RootMenu, 
 	
 	/*一下是用户自定义菜单*/
-	Osd_LOGO1Menu,
+    Osd_LOGO1Menu,
     Osd_LOGO2Menu,
     Osd_LOGO3Menu,
     Osd_LOGO4Menu,
     Osd_LOGO5Menu,
-    
-    Osd_BatteryAdcMenu,
-    Osd_NoSignalMenu,
-    Osd_BTMenu,
-    Osd_BTCallerMenu,
-	Osd_QuicklySource,
-	Osd_QuicklyMute,
-	Osd_QuicklyVolume,
-    Osd_QuicklyMode,
-    Osd_QuicklySys,
-    
-    Osd_QuicklyBrightness,
-    Osd_QuicklyContrast,
-    Osd_QuicklySaturation,
-    
+	Osd_QuicklyBrightnessMenu,
+    Osd_QuicklyContrastMenu,
+    Osd_QuicklySaturationMenu,
     Osd_BrightnessMenu,
     Osd_ContrastMenu,
     Osd_SaturationMenu,
-    Osd_TintMenu,
-    Osd_VolumeMenu,
-    Osd_ModeMenu,
-    Osd_SysMenu, 
-    Osd_LanguageMenu, 
-    Osd_IRABMenu, 
-    Osd_RadioFreqMenu, 
-    Osd_ResetMenu,
-
-    Osd_FactoryMenu,
-    Osd_FactoryPicMenu,
-    Osd_FactorySwitchMenu,
+    Osd_BatteryAdcMenu,
 	Osd_MaxMenu
 } MenuPageIndexType;
 
@@ -104,62 +81,37 @@ typedef enum
 }OsdBlockType;
 
 
-
-
 typedef enum  _CommandType
 { 
   COMD_Nothing,
-
   COMD_NextMenu,	
   COMD_PrevMenu, 
-  COMD_PrevItem,
-  COMD_NextItem,
-  COMD_FactoryPreItem,
-  COMD_FactoryNextItem,
-  COMD_EnterFactoryItem,
-  
-  COMD_OsdExit, 
-  COMD_OsdStorage,
   COMD_IncValue, 
   COMD_DecValue,
-  COMD_LEFT,
-  COMD_RIGHT,
-
-  COMD_ExecFunc,
-  COMD_InvIncValue,
-  COMD_InvDecValue,
-  COMD_RedrawMenu,
-  COMD_RedrawFactoryMenu,
-  COMD_SelReset,
-  COMD_SelSource,
-  COMD_ShowSource,
-  COMD_SelPowerOnMode,
-  COMD_Power, 
-  COMD_TurnOffBacklight,
-  COMD_TurnOnBacklight,
-  COMD_SelMuteOnOff,
-  COMD_ShowMuteOnOff,
-  COMD_SelMode,
-  COMD_Mode,
-  COMD_SelSys,
-  COMD_Sys,
   COMD_Brightness,
+  COMD_BrightnessInc,
+  COMD_BrightnessDec,
   COMD_Contrast,
+  COMD_ContrastInc,
+  COMD_ContrastDec,
   COMD_Saturation,
-  COMD_IncVolume,
-  COMD_DecVolume,
-  COMD_FactoryMenu,
-  COMD_ExitFactoryMenu,
-  COMD_ClearNoSignal,
+  COMD_SaturationInc,
+  COMD_SaturationDec,
+  COMD_OsdExit,  
+  COMD_OsdStorage,
+  COMD_RedrawMenu,
+  COMD_SelPowerOnMode,
+  COMD_Power,
   COMD_RedrawLogo,
   COMD_ClearLogo,
-  COMD_RedrawSnow,
   COMD_BatteryAdc,
-  COMD_BTConn,
-  COMD_BTDisc,
-  COMD_BTCallerID,
-  COMD_BTCallAnswer,
-  COMD_BTCallerDrop,
+  COMD_TurnOnBackLight,
+  COMD_TurnOffBackLight,
+  COMD_OvpBackLight,
+  COMD_BlockTurn,
+  COMD_BlockDown,
+  COMD_BlockLeft,
+  COMD_BlockRight,
 } ComdType;
 
 #define osdInvisible    _BIT0
@@ -171,7 +123,6 @@ typedef enum  _CommandType
 #define osdSel          _BIT6
 #define osdDraw         _BIT7
 
-
 typedef struct
 {
     UCHAR Flags; 
@@ -182,7 +133,7 @@ typedef UCHAR* (*fpDisplayText)(void);
 typedef BOOL (*fpExecFunc)(void);
 typedef BYTE (*fpItemIndex)(void);
 typedef BOOL (*fpAdjustValue)(ComdType opratComd);
-typedef SINT (*fpGetValue)(void);
+typedef UINT (*fpGetValue)(void);
 typedef UINT (*fpGetMaxValue)(void);
 typedef UINT (*fpSetMaxValue)(void);
 typedef UINT* (*fpDisplayIcon)(void);
@@ -320,33 +271,26 @@ typedef struct
 
 _OSD_MENU_EXTERN_ BYTE XDATA g_ucMenuPageIndex;
 _OSD_MENU_EXTERN_ BYTE XDATA g_ucMenuItemIndex;
-_OSD_MENU_EXTERN_ BYTE XDATA g_ucFactoryMenuItemIndex;
+
 
 _OSD_MENU_EXTERN_ UCHAR KeyMsgProcess(MSG curMsg);
 _OSD_MENU_EXTERN_ void  MenuProcessKey(BYTE OpratComd);
 
 //===============================================================
 _OSD_MENU_EXTERN_ void  DrawOsdMenu(void);
-_OSD_MENU_EXTERN_ void  DrawSpecialOsdMenu(void);
+_OSD_MENU_EXTERN_ void  LoadIconToFontRam(UCHAR Index,UCHAR IconXSize,UCHAR IconYSize,UCHAR*IconBuf[]);
 _OSD_MENU_EXTERN_ void  DrawOsdMenuItemValue(ItemValueType* pItemValue,UINT status);
-_OSD_MENU_EXTERN_ UCHAR GetPrevItem(void);
-_OSD_MENU_EXTERN_ UCHAR GetNextItem(void);
 _OSD_MENU_EXTERN_ UCHAR GetPreMenu(void);
 _OSD_MENU_EXTERN_ UCHAR GetNextMenu(void);
 _OSD_MENU_EXTERN_ void  DrawOsdMenuItem(MenuItemType *pMenuItem,UINT status) reentrant;
-_OSD_MENU_EXTERN_ void DrawOsdTitel(TitelType *pTitel,UINT status)reentrant;
-_OSD_MENU_EXTERN_ void DrawOsdMenuItemOption(DrawOptionType *pOptionItem,UINT status);
+_OSD_MENU_EXTERN_ void DrawOsdTitel(TitelType *pTitel,UINT status);
 _OSD_MENU_EXTERN_ UCHAR FindMenuPageIndex(UCHAR menuPage);
 _OSD_MENU_EXTERN_ void  ConfigOsdBlockStarIndexAddr(void);
 _OSD_MENU_EXTERN_ UCHAR FindComdInCurMenuItem(MSG curMsg);
 _OSD_MENU_EXTERN_ void HideMenu(void);
 _OSD_MENU_EXTERN_ void ResetMenuIndex(void);
 _OSD_MENU_EXTERN_ void SetMenuIndex(UCHAR menuPage);
+_OSD_MENU_EXTERN_ void DMALoadFontRam(ULONG SrcAddr,UINT DstAddr,UINT numOper);
 _OSD_MENU_EXTERN_ BOOL ExectComd(ComdType OpratComd);
-
-bit get_menu_status(void);
-UINT8 getFreNumber(void);
-
-
 
 #endif

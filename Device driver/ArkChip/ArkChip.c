@@ -13,17 +13,15 @@
 ************************************************************************/
 
 #include "DataType.h"
-#include "SystemConfig.h"
-#include "Global.h"
-#include "Mcu.h"
+#include "systemConfig.h"
+#include "global.h"
+#include "mcu.h"
 #include "Debug.h"
-#include "IrMap.h"
 #include "ConfigLcdPara.h"
 #include "MsgMap.h"
 #include "Osd_Menu.h"
 #include "Osd_MenuPage.h"
-#include "Ir.h"
-#include "Delay.h"
+#include "delay.h"
 
 
 

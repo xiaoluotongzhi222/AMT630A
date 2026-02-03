@@ -22,14 +22,13 @@
 
 
 //此定时器为5ms 为一个基准。
-#define Is5ms(timer)   ((timer%TIME_5MS) == 0)
+#define Is5ms(timer)  ((timer%TIME_5MS) == 0)
 #define Is10ms(timer)  ((timer%TIME_10MS) == 0)
 #define Is15ms(timer)  ((timer%TIME_15MS) == 0)
 #define Is20ms(timer)  ((timer%TIME_20MS) == 0)
 #define Is25ms(timer)  ((timer%TIME_25MS) == 0)
 #define Is30ms(timer)  ((timer%TIME_30MS) == 0)
 #define Is35ms(timer)  ((timer%TIME_35MS) == 0) 
-#define Is50ms(timer)  ((timer%TIME_50MS) == 0) 
 #define Is100ms(timer) ((timer%TIME_100MS)== 0)
 #define Is110ms(timer) ((timer%TIME_110MS)== 0)
 #define Is160ms(timer) ((timer%TIME_160MS)== 0)
@@ -44,15 +43,14 @@
 #define Is640ms(timer) ((timer%TIME_640MS)== 0)
 #define Is15s(timer)   ((timer%TIME_15S)  == 0)  
 
-_IRQ_EXTERN_ UCHAR XDATA g_ucColorSys;
+_IRQ_EXTERN_ UCHAR XDATA g_ucColorSys ;
 _IRQ_EXTERN_ UCHAR XDATA g_ucPreColorSys;
 _IRQ_EXTERN_ FLAG   g_bGetUserInputFlg;
-_IRQ_EXTERN_ FLAG   g_bGetSignalFlg;
 _IRQ_EXTERN_ FLAG   g_bGetColorSysFlg;
 _IRQ_EXTERN_ FLAG   g_bGetTimeFlg;
 _IRQ_EXTERN_ FLAG   g_bGetBatteryAdcFlg;
 _IRQ_EXTERN_ FLAG   g_bGetUserDefFlg;
-_IRQ_EXTERN_ FLAG   g_bGetBTFlg;
-_IRQ_EXTERN_ FLAG   g_bGetMiscFlg;
+_IRQ_EXTERN_ FLAG   g_bGetSignalFlg;
 _IRQ_EXTERN_ FLAG   g_bVideoChSelOk;
+
 #endif

@@ -19,9 +19,10 @@
 #include "global.h"
 #include "E2prom.h"
 #include "debug.h"
-#include "AMT_REG.h"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_MCU.h"
+#include "AMT_Mcu.h"
+
 
 
 

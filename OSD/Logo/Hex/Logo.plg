@@ -3,7 +3,63 @@
 <pre>
 <h1>礦ision Build Log</h1>
 <h2>Project:</h2>
-F:\AMT客户程序(F盘存档)\ARK_SDK_DEBUG_BOARD\车载\AMT_CAR_V1.9_130514\OSD\Logo\Prj\Logo.uvproj
+E:\AMT客户程序\SDK\车载\AMT_CAR_V1.4_120910\OSD\Logo\Prj\Logo.uvproj
 Project File Date:  07/19/2012
 
 <h2>Output:</h2>
+Build target 'Logo'
+compiling Osd_LogoFontDat.c...
+..\Osd_LogoFontDat.c(4885): warning C323: newline expected, extra characters found
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?OSD_LOGOFONTDAT
+*** WARNING L10: CANNOT DETERMINE ROOT SEGMENT
+Program Size: data=0.0 xdata=0 code=10353
+creating hex file from "..\Hex\Logo"...
+"..\Hex\Logo" - 0 Error(s), 3 Warning(s).
+Build target 'Logo'
+compiling Osd_LogoFontDat.c...
+..\Osd_LogoFontDat.c(4885): warning C323: newline expected, extra characters found
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?OSD_LOGOFONTDAT
+*** WARNING L10: CANNOT DETERMINE ROOT SEGMENT
+Program Size: data=0.0 xdata=0 code=10353
+creating hex file from "..\Hex\Logo"...
+"..\Hex\Logo" - 0 Error(s), 3 Warning(s).
+Build target 'Logo'
+compiling Osd_LogoFontDat.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?OSD_LOGOFONTDAT
+*** WARNING L10: CANNOT DETERMINE ROOT SEGMENT
+Program Size: data=0.0 xdata=0 code=10353
+creating hex file from "..\Hex\Logo"...
+"..\Hex\Logo" - 0 Error(s), 2 Warning(s).
+Build target 'Logo'
+compiling Osd_LogoFontDat.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?OSD_LOGOFONTDAT
+*** WARNING L10: CANNOT DETERMINE ROOT SEGMENT
+Program Size: data=0.0 xdata=0 code=10353
+creating hex file from "..\Hex\Logo"...
+"..\Hex\Logo" - 0 Error(s), 2 Warning(s).
+Build target 'Logo'
+compiling Osd_LogoFontDat.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?OSD_LOGOFONTDAT
+*** WARNING L10: CANNOT DETERMINE ROOT SEGMENT
+Program Size: data=0.0 xdata=0 code=10353
+creating hex file from "..\Hex\Logo"...
+"..\Hex\Logo" - 0 Error(s), 2 Warning(s).
+Build target 'Logo'
+compiling Osd_LogoFontDat.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?OSD_LOGOFONTDAT
+*** WARNING L10: CANNOT DETERMINE ROOT SEGMENT
+Program Size: data=0.0 xdata=0 code=10353
+creating hex file from "..\Hex\Logo"...
+"..\Hex\Logo" - 0 Error(s), 2 Warning(s).

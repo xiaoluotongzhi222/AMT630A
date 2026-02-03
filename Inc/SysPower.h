@@ -27,18 +27,10 @@
 
 /*=========================电源管理==========================*/
 
-#define IsPowerOn() 		(g_sysSetting.Power.status== POWER_ON)
-#define IsPowerOff()		(g_sysSetting.Power.status == POWER_OFF)
-#define IsAllPowerOn() 	(g_sysSetting.Factory.powerswitch ==ON)
-#define IsAllPowerOff() 	(g_sysSetting.Factory.powerswitch ==OFF)
-#define IsPowerSave() 		(g_sysSetting.Factory.powerswitch ==SAVE)
-
-#define SetPowerOn() 		(g_sysSetting.Power.status = POWER_ON)
-#define SetPowerOff() 		(g_sysSetting.Power.status = POWER_OFF)
-#define SetAllPowerOn() 	(g_sysSetting.Power.status = POWER_OFF)
-#define SetAllPowerOff() 	(g_sysSetting.Power.status = POWER_ON)
-#define SetPowerSave()  	if(IsPowerOn()){SetPowerOff();}else if(IsPowerOff()){SetPowerOn();}
-
+#define IsPowerOn() (g_sysSetting.Power.status== POWER_ON)
+#define IsPowerOff()(g_sysSetting.Power.status == POWER_OFF)
+#define SetPowerOn() (g_sysSetting.Power.status = POWER_ON)
+#define SetPowerOff() (g_sysSetting.Power.status = POWER_OFF)
 
 _POWER_EXTERN_ BOOL PowerOnSystem(void);
 _POWER_EXTERN_ BOOL PowerOffSystem(void);

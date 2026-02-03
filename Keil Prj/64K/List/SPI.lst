@@ -1,0 +1,687 @@
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE SPI
+OBJECT MODULE PLACED IN ..\Hex\SPI.obj
+COMPILER INVOKED BY: D:\App SoftWare\Keil V4\C51\BIN\C51.EXE ..\..\..\LCD Pannels\SPI init\SPI.c BROWSE INCDIR(..\..\..\
+                    -OSD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Panne
+                    -ls;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\E
+                    -2prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..\..
+                    -\..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\..\
+                    -..\Debug) DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\SPI.lst) OBJECT(..\Hex\SPI.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          *Copyright (C) 2005 深圳艾科创新有限公司产品应用一部
+   3          * All rights reserved.
+   4          
+   5          *File name: 　 SPI.h      
+   6          *Version:      0.1
+   7          *update:       2012-05-09
+   8          *Description:
+   9                              SPI驱动屏初始化函数
+  10                            
+  11          *History:  yshuizhou  2012/05/09   0.1    build  this  moudle
+  12          ******************************************************************************/
+  13          #define _SPI_C_
+  14          
+  15          #include "DataType.h"
+  16          #include "Global.h"
+  17          #include "SPI.h"
+  18          #include "AMT_Drv.h"
+  19          #include "SystemConfig.h"
+  20          #include "Delay.h"
+  21          #include "Debug.h"
+  22          
+  23          
+  24          #ifdef SpiInitPannelEn
+              
+              
+              void DelaySpi(UINT DelayTime)
+              {
+                   while(--DelayTime);
+              }
+              
+              
+              void SetDout(UCHAR Data)
+              {
+              #define SPI_DELAY    0X05
+              
+                      UCHAR i;
+                      UCHAR  tmp;
+                      tmp = Data;
+                      DelaySpi(20);
+                      hw_setCs(0);
+                      for (i = 0; i < 8; i++)
+                      {
+                              hw_setClk(0);  
+                              if (tmp & 0x80) 
+                              {
+                                hw_setDout(1); 
+                          }
+                              else
+                              {
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 2   
+
+                                hw_setDout(0);
+                              }
+                              DelaySpi(SPI_DELAY);
+                              hw_setClk(1);
+                              tmp <<= 1;
+                              DelaySpi(SPI_DELAY);
+                          
+                      }
+                      DelaySpi(20);   
+              }
+              
+              
+              /***************** TM035KDH08 *****************/
+              #if TM035KDH08==ENABLE
+              
+              #define LCDCtrlRegWrite(address,data) hw_setCs(0);\
+                                                       SetDout((UCHAR)(address&0xff));\
+                                                       SetDout((UCHAR)(data&0xff));\
+                                                       hw_setCs(1);
+              
+              void Pannel_SPI_Write(void)
+              {
+                  LCDCtrlRegWrite((0x00 << 2) | 0x03, 0x07);
+                  LCDCtrlRegWrite((0x01 << 2) | 0x03, 0x00);
+                  LCDCtrlRegWrite((0x02 << 2) | 0x03, 0x03);
+                  LCDCtrlRegWrite((0x03 << 2) | 0x03, 0xcd);//24BIT DEN mode
+                  LCDCtrlRegWrite((0x04 << 2) | 0x03, 0x46);
+                  LCDCtrlRegWrite((0x05 << 2) | 0x03, 0x0d);
+                  LCDCtrlRegWrite((0x06 << 2) | 0x03, 0x00);
+                  LCDCtrlRegWrite((0x07 << 2) | 0x03, 0x00);
+                  LCDCtrlRegWrite((0x08 << 2) | 0x03, 0x08);
+                  LCDCtrlRegWrite((0x09 << 2) | 0x03, 0x40);
+                  LCDCtrlRegWrite((0x0a << 2) | 0x03, 0x88);
+                  LCDCtrlRegWrite((0x0b << 2) | 0x03, 0x88);
+                  LCDCtrlRegWrite((0x0c << 2) | 0x03, 0x20);
+                  LCDCtrlRegWrite((0x0d << 2) | 0x03, 0x20);
+                  LCDCtrlRegWrite((0x0e << 2) | 0x03, 0x6B); //修改VCOM值
+                  LCDCtrlRegWrite((0x0f << 2) | 0x03, 0x04);
+                  LCDCtrlRegWrite((0x10 << 2) | 0x03, 0x04);
+                  LCDCtrlRegWrite((0x11 << 2) | 0x03, 0x24);
+                  LCDCtrlRegWrite((0x12 << 2) | 0x03, 0x24);
+                  LCDCtrlRegWrite((0x1e << 2) | 0x03, 0x00);
+                  LCDCtrlRegWrite((0x20 << 2) | 0x03, 0x00);
+              }
+              #endif
+              
+              
+              
+              /***************  LQ035NC111 *****************/
+              #if LQ035NC111==ENABLE
+              
+              #define LCDCtrlRegWrite(address,data)  hw_setCs(0);\
+                                                       SetDout((UCHAR)(address&0xff));\
+                                                       SetDout((UCHAR)(data&0xff));\
+                                                       hw_setCs(1);
+              
+              
+              void Pannel_SPI_Write(void)
+              {  
+                      LCDCtrlRegWrite(0x02,0x07); 
+                  LCDCtrlRegWrite(0x06,0x00); 
+                      LCDCtrlRegWrite(0x0A,0x13); 
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 3   
+
+                  LCDCtrlRegWrite(0x0E,0xCC); 
+                  LCDCtrlRegWrite(0x12,0x46); 
+                  LCDCtrlRegWrite(0x16,0x0D); 
+                  LCDCtrlRegWrite(0x1A,0x00); 
+                  LCDCtrlRegWrite(0x1E,0x02); 
+                  LCDCtrlRegWrite(0x22,0x08); 
+                      LCDCtrlRegWrite(0x26,0x40); 
+                  LCDCtrlRegWrite(0x2A,0x88); 
+                  LCDCtrlRegWrite(0x2E,0x88); 
+                  LCDCtrlRegWrite(0x32,0x20); 
+                  LCDCtrlRegWrite(0x36,0x20); 
+                      LCDCtrlRegWrite(0x3A,0x65);     //修改VCOM 值0x65
+                  LCDCtrlRegWrite(0x3E,0xA4); 
+                  LCDCtrlRegWrite(0x42,0x04); 
+                  LCDCtrlRegWrite(0x46,0x24); 
+                  LCDCtrlRegWrite(0x4A,0x24); 
+                      LCDCtrlRegWrite(0x7A,0x00); 
+                  LCDCtrlRegWrite(0x82,0x00);         
+              }
+              
+              #endif
+              
+              
+              
+              
+              /***************  KD035G6_54NT_A1 *****************/
+              #if KD035G6_54NT_A1 ==ENABLE
+              
+              #define LCDCtrlRegWrite(address,data)  hw_setCs(0);\
+                                                        SetDout((UCHAR)(address&0xff));\
+                                                        SetDout((UCHAR)(data&0xff));\
+                                                        hw_setCs(1);
+              
+              
+              void Pannel_SPI_Write(void)
+              {   
+                      LCDCtrlRegWrite(0x02,0x07); 
+                  LCDCtrlRegWrite(0x06,0x00); 
+                      LCDCtrlRegWrite(0x0A,0x13); 
+                  LCDCtrlRegWrite(0x0E,0xCC); 
+                  LCDCtrlRegWrite(0x12,0x46); 
+                  LCDCtrlRegWrite(0x16,0x0D); 
+                  LCDCtrlRegWrite(0x1A,0x00); 
+                  LCDCtrlRegWrite(0x1E,0x02); 
+                  LCDCtrlRegWrite(0x22,0x08); 
+                      LCDCtrlRegWrite(0x26,0x40); 
+                  LCDCtrlRegWrite(0x2A,0x88); 
+                  LCDCtrlRegWrite(0x2E,0x88); 
+                  LCDCtrlRegWrite(0x32,0x20); 
+                  LCDCtrlRegWrite(0x36,0x20); 
+                      LCDCtrlRegWrite(0x3A,0x65); //修改VCOM 值  
+                  LCDCtrlRegWrite(0x3E,0xA4); 
+                  LCDCtrlRegWrite(0x42,0x04); 
+                  LCDCtrlRegWrite(0x46,0x24); 
+                  LCDCtrlRegWrite(0x4A,0x24); 
+                      LCDCtrlRegWrite(0x7A,0x00); 
+                  LCDCtrlRegWrite(0x82,0x00);         
+              }
+              #endif
+              
+              
+              
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 4   
+
+              
+              /***************  KD040G1_54NC_A2 *****************/
+              #if KD040G1_54NC_A2 ==ENABLE
+              
+              #define LCDCtrlRegWrite(address,data) hw_setCs(0);\
+                                                       SetDout(0x70);\
+                                                       SetDout((UCHAR)(address>>8));\
+                                                       SetDout((UCHAR)(address&0xff));\
+                                                       hw_setCs(1);\
+                                                       SetDout(0x72);\
+                                                       SetDout((UCHAR)(data>>8));\
+                                                       SetDout((UCHAR)(data&0xff));\
+                                                       hw_setCs(1);
+              
+              void Pannel_SPI_Write(void)
+              {
+                  LCDCtrlRegWrite(0x0005,0xA0D1);  //not 0xbc44 is 0xA0D1
+                      LCDCtrlRegWrite(0x0003,0x3532);
+                      LCDCtrlRegWrite(0x001e,0x00f5);
+                      LCDCtrlRegWrite(0x000e,0x1080);
+                      LCDCtrlRegWrite(0x0030,0x0000); 
+                      LCDCtrlRegWrite(0x0031,0x0407);
+                      LCDCtrlRegWrite(0x0032,0x0203);  
+                      LCDCtrlRegWrite(0x0033,0x0000);
+                      LCDCtrlRegWrite(0x0034,0x0505);
+                      LCDCtrlRegWrite(0x0035,0x0003);
+                      LCDCtrlRegWrite(0x0036,0x0707);
+                      LCDCtrlRegWrite(0x0037,0x0000);
+                      LCDCtrlRegWrite(0x003a,0x0c0b);  
+                      LCDCtrlRegWrite(0x003b,0x1304);  
+              }
+              
+              #endif
+              
+              
+              
+              /***************  XY20810350050003 *****************/
+              #if XY20810350050003 ==ENABLE
+              
+              #define LCDCtrlRegWrite(address,data) hw_setCs(0);\
+                                                       SetDout(0x70);\
+                                                       SetDout((UCHAR)(address>>8));\
+                                                       SetDout((UCHAR)(address&0xff));\
+                                                       hw_setCs(1);\
+                                                       SetDout(0x72);\
+                                                       SetDout((UCHAR)(data>>8));\
+                                                       SetDout((UCHAR)(data&0xff));\
+                                                       hw_setCs(1);
+              
+              
+              void Pannel_SPI_Write(void)
+              {               
+                  LCDCtrlRegWrite(0x0001,0x6300);  
+                      LCDCtrlRegWrite(0x0002,0x0200);
+                      LCDCtrlRegWrite(0x0003,0x6564);  
+                      LCDCtrlRegWrite(0x0004,0x04C7);  
+                      LCDCtrlRegWrite(0x0005,0xA0D1);  //function control not 0xA800 is 0xA0D1
+                      LCDCtrlRegWrite(0x0008,0x06FF);  
+                      LCDCtrlRegWrite(0x000A,0x4008);  
+                      LCDCtrlRegWrite(0x000B,0xD400);  
+                      LCDCtrlRegWrite(0x000D,0x3229);  
+                      LCDCtrlRegWrite(0x000E,0x1200);  
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 5   
+
+                      LCDCtrlRegWrite(0x000F,0x0000);  
+                      LCDCtrlRegWrite(0x0016,0x9F80); 
+                  LCDCtrlRegWrite(0x0017,0x2212); 
+                      LCDCtrlRegWrite(0x001E,0x00F8);  
+                      LCDCtrlRegWrite(0x0030,0x0000);
+                      LCDCtrlRegWrite(0x0031,0x0707);  
+                      LCDCtrlRegWrite(0x0032,0x0206);  
+                      LCDCtrlRegWrite(0x0033,0x0001);
+                  LCDCtrlRegWrite(0x0034,0x0105); 
+                      LCDCtrlRegWrite(0x0035,0x0000);
+                      LCDCtrlRegWrite(0x0036,0x0707); 
+                      LCDCtrlRegWrite(0x0037,0x0100);  
+                  LCDCtrlRegWrite(0x003A,0x0502);  
+                      LCDCtrlRegWrite(0x003B,0x0502); 
+              }
+              
+              #endif
+              
+              
+              
+              /***************  ILI9322 *****************/
+              #if ILI9322 ==ENABLE
+              
+              #define LCDCtrlRegWrite(address,data)  hw_setCs(0);\
+                                                        SetDout((UCHAR)(address&0xff));\
+                                                        SetDout((UCHAR)(data&0xff));\
+                                                                                                hw_setCs(1);
+              
+              void Pannel_SPI_Write(void)
+              {       
+                      //LCDCtrlRegWrite(0x01,0x17); //VCOM Amplitude
+                      LCDCtrlRegWrite(0x02,0x2f); //VCOM High Voltage
+                      //LCDCtrlRegWrite(0x03,0x09); //VREG1OUT Voltage        
+                  //LCDCtrlRegWrite(0x05,0x22); //Power Setting  
+                  //LCDCtrlRegWrite(0x06,0x5F); //Entry Control
+                  //LCDCtrlRegWrite(0x07,0xEF); //Power Control   
+                  //LCDCtrlRegWrite(0x08,0x11);//Vertical Back Porch    
+                  //LCDCtrlRegWrite(0x09,0x80); //Horizontal Back Porch   
+                  //LCDCtrlRegWrite(0x0A,0x49); //Polarity 
+                  //LCDCtrlRegWrite(0x0B,0x05); //interface control
+                  //LCDCtrlRegWrite(0x0C,0x44); //Power Control 1   
+                  //LCDCtrlRegWrite(0x0D,0x0A);//Power Control 2
+                  //LCDCtrlRegWrite(0x0E,0x08); //Contrast   
+                  //LCDCtrlRegWrite(0x0F,0x80); //Brightness Control
+                  //LCDCtrlRegWrite(0x30,0x09); //Power
+                  //LCDCtrlRegWrite(0x49,0x03); //Pre-buffer Control
+              }
+              #endif
+              
+              
+              
+              /*******************A035QN05 V0********************/
+              #if A035QN05_V0==ENABLE
+              
+              #define LCDCtrlRegWrite(address,data)    hw_setCs(0);\
+                                                       SetDout((UCHAR)(address&0xff));\
+                                                       SetDout((UCHAR)(data&0xff));\
+                                                       hw_setCs(1);
+              
+              
+              void Pannel_SPI_Write(void)
+              {   
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 6   
+
+              
+                              LCDCtrlRegWrite(0x00,0x31);
+                              DelayMs(200);
+                              LCDCtrlRegWrite(0x00,0x39);
+                              DelayMs(400);
+                              LCDCtrlRegWrite(0x10,0x39);
+                              LCDCtrlRegWrite(0x21,0x46);
+                              LCDCtrlRegWrite(0x30,0x21);//0x21
+                              LCDCtrlRegWrite(0x43,0xCB);
+                              LCDCtrlRegWrite(0x50,0x08);
+                              LCDCtrlRegWrite(0x60,0x40);
+                              LCDCtrlRegWrite(0x70,0x0B);
+                              LCDCtrlRegWrite(0x80,0xB5);
+                              LCDCtrlRegWrite(0x90,0x35);
+                              LCDCtrlRegWrite(0xA0,0x66);
+                              LCDCtrlRegWrite(0xB1,0xF3);
+                              LCDCtrlRegWrite(0xC1,0x77);
+                              LCDCtrlRegWrite(0xD0,0x2D);
+                              LCDCtrlRegWrite(0xE0,0x1A);
+                              LCDCtrlRegWrite(0x00,0x3D);
+                              
+                              
+              }       
+              #endif
+              
+              
+              void WriteCtrlReg(UINT RegAddr,UINT RegDat)
+              {
+                  LCDCtrlRegWrite(RegAddr,RegDat); 
+              }
+              
+              void Pannel_SPI_Reset(void)
+              {
+                  hw_setReset(1);  
+                      DelayMs(100); //note:若客户强调开机时间，此时间可以根据不同的SPI屏做相应的修改。
+                      hw_setReset(0);  
+                      DelayMs(100);  
+                      hw_setReset(1);  
+                      DelayMs(100);  
+              }
+              
+              
+              void Pannel_SPI_Initial(void)
+              {  
+                 printfStr("Inital Spi Pannel");
+              
+                 Pannel_SPI_Reset();
+                 Pannel_SPI_Write();
+              }
+              #endif
+ 349          
+ 350          
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 7   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_CtrlMode. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_LogoID. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ALL_INPUT_SOURCE . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_YPBPR. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+PVOID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  VOID_PTR -----  3
+ProtocolData0. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SLONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+ProtocolData1. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_FM . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+ULONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+INPUT_ITU656 . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  12
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0012H  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001BH  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001FH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
+TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 8   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+INT8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+BatterAdc_Lev0 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  vcomAC . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  vcomDC . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0009H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000BH  1
+InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+VDE_GREEN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CH1. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 9   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+_KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+_FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+TIME_500MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  12
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 10  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  vcomAC . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  vcomDC . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0009H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000BH  1
+TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+C51 COMPILER V9.00   SPI                                                                   07/02/2013 14:00:50 PAGE 11  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  12
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0012H  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001BH  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001FH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

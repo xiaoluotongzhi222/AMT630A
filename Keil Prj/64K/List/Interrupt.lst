@@ -1,0 +1,762 @@
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE INTERRUPT
+OBJECT MODULE PLACED IN ..\Hex\Interrupt.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE ..\..\..\Kernel\Interrupt.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\OSD;..
+                    -\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Pannels;..\
+                    -..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\E2prom;
+                    -..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..\..\..\Ge
+                    -tUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\..\..\Deb
+                    -ug) DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\Interrupt.lst) TABS(2) OBJECT(..\Hex\Interrupt.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          *Copyright (C) 2005 深圳艾科创新有限公司产品应用一部
+   3          * All rights reserved.
+   4          
+   5          *File name: 　 Interrupt.c    
+   6          *Version:      0.1
+   7          *update:       2011-12-10
+   8          *Description:
+   9                   系统中断处理。
+  10                   
+  11          *History:  jordan.chen  2011/12/10    0.1    build  this  moudle
+  12          ******************************************************************************/
+  13          #define _INTERRUPT_C_
+  14          
+  15          #include "DataType.h"
+  16          #include "systemConfig.h"
+  17          #include "global.h"
+  18          #include "Debug.h"
+  19          #include "mcu.h"
+  20          #include "MsgMap.h"
+  21          #include "AMT_Mcu.h"
+  22          #include "AMT_Drv.h"
+  23          #include "AMT_Reg.h"
+  24          #include "ConfigLcdPara.h"
+  25          #include "Interrupt.h"
+  26          
+  27          
+  28          
+  29          void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
+  30          {
+  31   1         #ifdef SpiInitPannelEn
+                 #ifdef SpiAdjRegEn
+                 POS_RecUartSpiInfor();
+                 #endif
+                 #endif
+  36   1      
+  37   1      }
+  38          
+  39          
+  40          /***********************************************************
+  41          *name:       IrqServerTimer1(void)
+  42          *input:      non
+  43          *output:     对系统的实时事件进行检测.
+  44          *update:     2011-12-23 
+  45          *state:      try out
+  46          
+  47          *description:  
+  48                   对系统的实时事件进行检测，并置事件标志。
+  49          *NOTE:
+  50                   这个计数器可以从0-255分频
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 2   
+
+  51          *history:
+  52          ************************************************************/
+  53          void POS_IrqServerTimer1(void) interrupt 3     //timer 1
+  54          {  
+  55   1          static UCHAR s_ucSysTimer;
+  56   1      
+  57   1        #ifdef LargeSignalEn
+                static UCHAR ucContAgcStable = 0;
+                #endif
+  60   1      
+  61   1          TR1  = OFF;
+  62   1        SetTimer1(_ms(5));
+  63   1        TR1  = ON;
+  64   1      
+  65   1        s_ucSysTimer++; 
+  66   1      
+  67   1          POS_VideoProcess(VdLibCmd);
+  68   1      
+  69   1        #ifdef Clk_AdjustEn
+                if(IsSignalOk())
+                  { 
+                    UINT XDATA wcNoiseLevel = 0;
+                  static XDATA UCHAR s_ucNoiseLevelBuf[10] ={0,0,0,0,0,0,0,0,0,0};
+                    static XDATA UCHAR s_ucIndex = 0;
+                  static XDATA UINT minWcNoiseLevel = 0xff;
+                  static XDATA UCHAR contClkChange = 0;
+                  
+                      s_ucNoiseLevelBuf[s_ucIndex] = NOISE_LEVEL;
+                  
+                  if(++s_ucIndex >= 10)
+                  {
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[0]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[1]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[2]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[3]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[4]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[5]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[6]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[7]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[8]; 
+                     wcNoiseLevel +=s_ucNoiseLevelBuf[9]; 
+              
+                       wcNoiseLevel = wcNoiseLevel/10;
+                     //IrqPrintf("current NoiseLevel = %x\n", wcNoiseLevel);
+              
+                     if(contClkChange<=10)
+                     {
+                           contClkChange++;
+                                 if(minWcNoiseLevel>wcNoiseLevel)
+                                 {
+                                      minWcNoiseLevel = wcNoiseLevel ;
+                          //IrqPrintf("*****************current minWcNoiseLevel = %x\n", minWcNoiseLevel);
+                         }     
+                         if(IsPAL())
+                         {
+                                   ANA_DIVA = g_ucPalPllClkDefVal+1;
+                           _nop_();
+                           _nop_();
+                           _nop_();
+                           ANA_DIVA = g_ucPalPllClkDefVal;
+                         }
+                         else
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 3   
+
+                         {
+                                     ANA_DIVA = g_ucNtscPllClkDefVal+1;
+                           _nop_();
+                           _nop_();
+                           _nop_();
+                           ANA_DIVA = g_ucNtscPllClkDefVal;
+                         }
+                        
+                     }
+                     else
+                     {
+                       if(wcNoiseLevel> (minWcNoiseLevel+1)) 
+                       {
+                                     if(IsPAL())
+                           {
+                                     ANA_DIVA = g_ucPalPllClkDefVal+1;
+                             _nop_();
+                             _nop_();
+                             _nop_();
+                             ANA_DIVA = g_ucPalPllClkDefVal;
+                           }
+                           else
+                           {
+                                       ANA_DIVA = g_ucNtscPllClkDefVal+1;
+                             _nop_();
+                             _nop_();
+                             _nop_();
+                             ANA_DIVA = g_ucNtscPllClkDefVal;
+                           }
+              
+                           if(contClkChange<=30)
+                           {
+                                          contClkChange++; //调整切换时钟。 
+                                          //IrqPutstr("************  adj\n");
+                           }
+                           else
+                           {
+                                          contClkChange = 0;//表示信号存在变化从新复位计算最小Noiselevel
+                            minWcNoiseLevel=wcNoiseLevel;
+                            //IrqPutstr("************  reset\n");
+                           }
+                       }
+                     }
+                     s_ucIndex =0;   
+                  }
+                }
+                
+                  /*实时监测时钟*/
+                if(IsPAL())
+                {
+                  if(ANA_DIVA != g_ucPalPllClkDefVal)
+                  {
+                    ANA_DIVA = g_ucPalPllClkDefVal;
+                  }
+                }
+                else
+                {
+                    if(ANA_DIVA != g_ucNtscPllClkDefVal)
+                  {
+                    ANA_DIVA = g_ucNtscPllClkDefVal;
+                  } 
+                }
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 4   
+
+                #endif
+ 176   1        
+ 177   1        #ifdef GrayBar_DetectEn
+                  /*灰阶*/
+                if(XBYTE[0XFED0]&_BIT4)
+                {
+                       XBYTE[0XFFB9]=0X3F;
+                   XBYTE[0XFFBA]=0X00;
+                }
+                else
+                {
+                       XBYTE[0XFFB9]=0X22;
+                   XBYTE[0XFFBA]=0X20;
+                }
+                #endif
+ 190   1      
+ 191   1        #ifdef Same_Color_AdjustEn
+                  if(Is100ms(s_ucSysTimer))
+                  { 
+                       static XDATA UCHAR contSame = 0 ;
+                   
+                       if(XBYTE[0XFED0] & _BIT6)
+                       {
+                            if(++contSame>10)
+                            {
+                                 contSame = 0;
+                                 XBYTE[0XFE45] = 0X70;
+                      }  
+                   }
+                   else
+                   {
+                            contSame = 0; 
+                      XBYTE[0XFE45] = 0X80;
+                   }
+                }
+                #endif
+ 211   1      
+ 212   1        if(Is5ms(s_ucSysTimer))
+ 213   1        {
+ 214   2            HFZ_LR_BLANK_WR = 0X00;
+ 215   2            g_bGetSignalFlg = 1;  
+ 216   2            g_bGetUserInputFlg = 1;
+ 217   2          g_bGetBatteryAdcFlg = 1;
+ 218   2        }
+ 219   1          
+ 220   1        if(Is20ms(s_ucSysTimer))
+ 221   1        {
+ 222   2            g_bGetColorSysFlg = 1;
+ 223   2        }
+ 224   1        if(Is30ms(s_ucSysTimer))
+ 225   1        {
+ 226   2            g_bGetTimeFlg = 1;
+ 227   2            g_bGetUserDefFlg = 1;
+ 228   2        }
+ 229   1      
+ 230   1        /**********图像制式消息处理*********/
+ 231   1        if(g_bGetColorSysFlg)
+ 232   1        {
+ 233   2              #define StableTimes   20
+ 234   2      
+ 235   2          static UCHAR  s_ucPreSys = PAL;
+ 236   2          UCHAR  ucCurSys;
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 5   
+
+ 237   2        
+ 238   2            if(IsSignalOk()||(0XFF == g_ucColorSys))
+ 239   2          {
+ 240   3             ucCurSys = GetSignalSys();
+ 241   3             if(ucCurSys != s_ucPreSys)
+ 242   3               {
+ 243   4                  s_ucPreSys = ucCurSys;
+ 244   4                  g_ucStableTime = 0;
+ 245   4               }
+ 246   3             else
+ 247   3             {
+ 248   4                 if(g_ucStableTime < StableTimes)
+ 249   4               {
+ 250   5                       if(++g_ucStableTime == StableTimes)
+ 251   5                       {
+ 252   6                          switch(ucCurSys)
+ 253   6                          {
+ 254   7                              case 0X00:
+ 255   7                       ucCurSys = NTSC;
+ 256   7                     break;
+ 257   7      
+ 258   7                    case 0X01:
+ 259   7                       ucCurSys = PAL;
+ 260   7                       break;
+ 261   7      
+ 262   7                    default:
+ 263   7                       ucCurSys = PAL;
+ 264   7                       break;
+ 265   7                          }
+ 266   6                 g_ucColorSys = ucCurSys;
+ 267   6                       }
+ 268   5                 }
+ 269   4             }
+ 270   3          }
+ 271   2          else
+ 272   2          {
+ 273   3             g_ucStableTime = 0X00;
+ 274   3          }
+ 275   2        }
+ 276   1      
+ 277   1        #ifdef SignalChangeBLOffEn
+                #define ContBackLightOff        15
+                #define ContSyncStableTimes       10
+              
+                if(g_bBLCtrlEnFlg)
+                {
+                    static UCHAR ucContSignal = 0xff;
+              
+                  if(g_bPreSignalFlg)
+                  {
+                      if(g_bBackLightFlg)
+                          {
+                      if((!IsHlockOk()) || (!IsVlockOk()))
+                      {
+                          VDE_REG = 0X54; 
+                        ucContSignal = 0;
+                        hw_clrBacklight();
+                        g_bBackLightFlg = OFF;
+                        //IrqPutstr("quickly test pic");
+                      }
+                    }
+                  }
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 6   
+
+                  
+                  if(g_bPreSignalFlg != IsSignalOk())
+                    {
+                        ucContSignal = 0;
+                    g_bPreSignalFlg = !g_bPreSignalFlg;
+                    }
+                  else
+                  {
+                      if(ucContSignal < ContSyncStableTimes)
+                      {
+                              if(++ucContSignal == ContSyncStableTimes)
+                              {
+                                    g_bSignalFlg = g_bPreSignalFlg;
+                          //黑屏信号
+                          VDE_REG = 0X54;        
+                          g_ucContBLOn = ContBackLightOff;     
+                          hw_clrBacklight();
+                          g_bBackLightFlg = OFF;
+                        
+                         if(!g_bPreSignalFlg)
+                         {
+                             //可靠无信号出测试图蓝屏。
+                                       VDE_REG = 0X52;
+                         }
+                         else
+                         {
+                             //可靠有信号配置为无信号黑屏
+                                       VP_EN_REG = 0X27;
+                         }
+                      }
+                    }
+                  }
+                }
+                #endif
+ 333   1        
+ 334   1        #ifdef NoSignalBLOffEn
+ 335   1        if((!IsHlockOk()) || (!IsVlockOk()))
+ 336   1          {
+ 337   2              if(g_bBackLightFlg)
+ 338   2              {
+ 339   3                //IrqPutstr("bl off2\n");
+ 340   3                #ifdef BacklightEn
+ 341   3      //      hw_clrBacklight(); 
+ 342   3      //      g_bBackLightFlg = OFF; 
+ 343   3                #endif
+ 344   3              }
+ 345   2        }
+ 346   1        #endif
+ 347   1      }
+ 348          
+ 349          
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 7   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_CtrlMode. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+P0 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0080H  1
+P1 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0090H  1
+KEY_MENU . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_LogoID. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ALL_INPUT_SOURCE . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+P2 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A0H  1
+INPUT_YPBPR. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+P3 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B0H  1
+MSG_SIGNAL_OK. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PVOID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  VOID_PTR -----  3
+MSG_NULL . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+ProtocolData0. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SLONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+ProtocolData1. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_FM . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+KEY_NULL . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_NO_SIGNAL. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+ULONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+INPUT_ITU656 . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_UPK_CONTRAST . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_ucPreColorSys. . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0000H  1
+IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
+PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+g_ucStableTime . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
+DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_NOSIGNALPOWEROFF . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 8   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_UPK_BRIGHTNESS . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+POS_IrqServerRec . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_bGetUserDefFlg . . . . . . . . . . .  PUBLIC   DATA   BIT      0000H  1
+MSG_UPK_RIGHT. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+g_bGetUserInputFlg . . . . . . . . . .  PUBLIC   DATA   BIT      0001H  1
+_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+INT8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_MacroKeyVal . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+MSG_OSD_STORAGE. . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_UPK_SATURATION . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MSG_UPK_POWER. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BatterAdc_Lev0 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_bGetColorSysFlg. . . . . . . . . . .  PUBLIC   DATA   BIT      0002H  1
+KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 9   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+MSG_BATTERYADC . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+g_bVideoChSelOk. . . . . . . . . . . .  PUBLIC   DATA   BIT      0003H  1
+_POS_VideoProcess. . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+POS_IrqServerTimer1. . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  s_ucPreSys . . . . . . . . . . . . .  STATIC   DATA   U_CHAR   0000H  1
+  ucCurSys . . . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0000H  1
+  s_ucSysTimer . . . . . . . . . . . .  STATIC   DATA   U_CHAR   0001H  1
+VDE_GREEN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+g_bBackLightFlg. . . . . . . . . . . .  EXTERN   DATA   BIT      -----  1
+DISP_EXT0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
+_VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KEY_CONTRAST . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+CH1. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+_KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+MSG_CONFIG_COLOR_SYS . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 10  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MacroKeyVal. . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+MSG_UPK_LEFT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+TIME_500MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KEY_BRIGHTNESS . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+g_bGetSignalFlg. . . . . . . . . . . .  PUBLIC   DATA   BIT      0004H  1
+LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KEY_RIGHT. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_OSD_EXIT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TH1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008DH  1
+MSG_UPK_MENU . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+g_bGetBatteryAdcFlg. . . . . . . . . .  PUBLIC   DATA   BIT      0005H  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 11  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+TL1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008BH  1
+INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
+_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+TR1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008EH  1
+WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KEY_SATURATION . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+KEY_POWER. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+MSG_TURNOFF_BACKLIGHT. . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+EIP. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
+BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_ucColorSys . . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0001H  1
+_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
+_LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 12  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_sysMsg. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+KEY_LEFT . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+g_bGetTimeFlg. . . . . . . . . . . . .  PUBLIC   DATA   BIT      0006H  1
+_OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    212    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2    ----
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 13  
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      7    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

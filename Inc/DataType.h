@@ -140,12 +140,9 @@ typedef void            *PVOID;
 
 
 
-
-
 /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<事件开关>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 #define    OFF      0
 #define    ON       1
-#define    SAVE     2
 
 #define    ENABLE   1
 #define    DISABLE  0

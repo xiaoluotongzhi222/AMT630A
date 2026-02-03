@@ -27,16 +27,16 @@
 #include "delay.h"
 #include "Osd_Menu.h"
 #include "Osd_MenuPage.h"
-#include "sysPower.h"
-#include "AMT_REG.h"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_MCU.h"
+#include "AMT_Mcu.h"
+#include "SysPower.h"
 #include "BatteryAdc.h"
-#include "BT_UartRec.h"
+
 
 
 /***********************************************************
-*name:       POS_GetUserInputMsg(timeflg)
+*name:       POS_GetUserInputMsg(void)
 *input:      timeflg  //定时时间标志
 *output:     void 
 *update:     2011-11-27 
@@ -48,31 +48,20 @@
 *history:
 
 ************************************************************/
-MSG POS_GetUserInputMsg(FLAG timer)
+MSG POS_GetUserInputMsg(void)
 {
     MSG XDATA curInputMsg = MSG_NULL;
+
+    #ifdef KeyDetectEn
+	curInputMsg = POS_GetKeyPadMsg();
 	
-	if(timer)
-	{
-	    g_bGetUserInputFlg = 0;
-		
-	    #ifdef IrDetectEn
-		curInputMsg = POS_GetIrMsg();
-		if(curInputMsg != MSG_NULL)
-		{
-		    return curInputMsg;
-		}
-		#endif
-		
-		#ifdef KeyDetectEn
-		curInputMsg = POS_GetKeyPadMsg();
-		if(curInputMsg != MSG_NULL)
-		{  			
-		    return curInputMsg;
-		}
-		#endif
+	if(curInputMsg != MSG_NULL)
+	{  			
+	   return curInputMsg;
 	}
-	return MSG_NULL;
+    #endif
+	
+	return curInputMsg;
 }
 
 
@@ -100,7 +89,8 @@ MSG POS_GetSignalMsg(FLAG timer)
 	if(timer)
 	{
 	    g_bGetSignalFlg = 0;
-		
+
+		#ifndef NoSignalBLOffEn
         //有无信号检测
 		if(bSignalFlg == ((COLOR_SYS_TV_ACTIVE&_BIT1)>>1))
 		{   
@@ -125,10 +115,39 @@ MSG POS_GetSignalMsg(FLAG timer)
 		    ucCont = 0; 
 		    bSignalFlg = (COLOR_SYS_TV_ACTIVE&_BIT1)>>1;
 		}
+        #else
+		if(!IsSignalOk())
+		{
+	        SelAvSOGIn();
+	        SelNullChannel();
+			if(bSignalFlg == ((COMPHV_DETECT & _BIT6)>>6))
+			{
+			   	if(ucCont<DetecTimes)
+				{
+				    ucCont++; 
+					if(ucCont == DetecTimes)
+					{
+					     if(bSignalFlg)
+					     {   
+					         return MSG_SIGNAL_OK; //可靠有信号
+					     }
+						 else
+						 {   
+						     return MSG_NO_SIGNAL;//无信号
+						 }
+					}
+				}
+			}
+			else
+			{
+			    ucCont = 0; 
+			    bSignalFlg = (COMPHV_DETECT&_BIT6)>>6;
+			}
+		}
+		#endif
 	}
 	return MSG_NULL;
 }
-
 
 /***********************************************************
 *name:       POS_GetColorSysMsg(timeflg)
@@ -155,7 +174,7 @@ MSG POS_GetColorSysMsg(FLAG timer)
 			if(g_ucColorSys != NULL_SYS)  
 	        {
 	        	g_sysSetting.Video.colorSys = g_ucColorSys;
-				printf("g_sysSetting.Video.colorSys =%x", g_sysSetting.Video.colorSys);
+				//printf("g_sysSetting.Video.colorSys =%x", g_sysSetting.Video.colorSys);
 				if(g_sysSetting.Video.colorSys < AUTO)
 				{
 				     return MSG_CONFIG_COLOR_SYS; 
@@ -187,12 +206,9 @@ MSG POS_GetColorSysMsg(FLAG timer)
 ************************************************************/
 MSG POS_GetTimeMsg(FLAG timer)
 {
-#define NoSyncTime          10
-
 	if(timer)
 	{  
 		g_bGetTimeFlg = 0;
-		
 		if(g_sysSetting.Osd.dispTime>0)
 		{   
 		    if(--g_sysSetting.Osd.dispTime == 0)
@@ -202,12 +218,12 @@ MSG POS_GetTimeMsg(FLAG timer)
 		    }
 		}
 
-		#ifdef QuickParaSaveEn 
+	    #ifdef QuickParaSaveEn 
         if(g_sysSetting.Osd.storageTime < OSD_STORAGE_TIME)  
         {
 			if(++g_sysSetting.Osd.storageTime == OSD_STORAGE_TIME)
             {
-                /*在此判断是否需要记忆OSD数据*/
+                /*在此判断是否需要快速记忆OSD数据*/
                 return(MSG_OSD_STORAGE);
             }
         }
@@ -241,6 +257,7 @@ MSG POS_GetTimeMsg(FLAG timer)
 }
 
 
+
 /***********************************************************
 *name:       POS_GetBatteryAdcMsg(timeflg)
 *input:      timeflg  //定时时间标志
@@ -262,7 +279,7 @@ MSG POS_GetBatteryAdcMsg(FLAG timer)
     if(timer)
     {
         g_bGetBatteryAdcFlg = 0;
-		
+
 		#ifdef LowBaterryDetecEn 
 		curBatteryAdcVal = POS_GetBatteryAdcValue();
 		if(NULL_BATTERYADC != curBatteryAdcVal)
@@ -271,10 +288,10 @@ MSG POS_GetBatteryAdcMsg(FLAG timer)
              return MSG_BATTERYADC;
 		}
 		#endif
-		
     }
     return MSG_NULL;  
 }
+
 
 
 /***********************************************************
@@ -292,336 +309,33 @@ MSG POS_GetBatteryAdcMsg(FLAG timer)
 ************************************************************/
 MSG POS_GetUserDefinedMsg(FLAG timer)
 {
-#define IsCarReversing()      		((COMPHV_DETECT & _BIT6) == _BIT6)
 
-    static FLAG   s_bAvCarNoSignalFlg = TRUE;
-		
-	if((timer)&&(!IsFactoryEn()))
-	{
-		#ifdef CarBackEn
-		#ifdef CarReversingSignalDetectEn
-		g_bGetUserDefFlg = 0;
-        
-		if(g_sysSetting.Car.RemberSource == INPUT_CAMERA_Car)  //倒车通道
-		{
-             if(IsCarReversing())
-             {
-	             SelVideoDevice(INPUT_CAMERA_Car);
-				 if(g_sysSetting.Power.status == POWER_OFF)
-				 {
-		             if(g_sysSetting.Car.status != CAR_POF_REVERSING)
-		             {
-		                  return MSG_CAR_POF_REVERSING;
-		             }
-				 }
-				 else
-				 {
-				     if(g_sysSetting.Car.status != CAR_PON_REVERSING)
-		             {   
-		                  return MSG_CAR_PON_REVERSING;
-		             }
-				 }
-             }
-             else
-             {
-	             if(!IsSignalOk())
-	             {
-	               SelCarSOGIn();
-				   SelNullChannel();
-				   if(g_sysSetting.Power.status == POWER_OFF)
-				   {
-		               if(g_sysSetting.Car.status != CAR_POF_GO_AHEAD)
-		               {  
-		                   s_bAvCarNoSignalFlg = TRUE;
-		                   return MSG_CAR_POF_GO_AHEAD;
-		               }
-				   }
-				   else
-				   {
-				       if(g_sysSetting.Car.status != CAR_PON_GO_AHEAD)
-		               {
-		                  s_bAvCarNoSignalFlg = TRUE;
-		                  return MSG_CAR_PON_GO_AHEAD;
-		               }
-				   }
-	             }
-				 else
-				 {
-				       if(g_sysSetting.Power.status == POWER_OFF)
-                       {
-	                        if(g_sysSetting.Car.status != CAR_POF_REVERSING)
-	                        {
-	                            return MSG_CAR_POF_REVERSING;
-	                        }
-                       }
- 					   else
-                       {
-	                       if(g_sysSetting.Car.status != CAR_PON_REVERSING)
-	                       {   
-	                           return MSG_CAR_PON_REVERSING;
-	                       }
-                       }
-				 }
-             }
-		}
-		else //非倒车通道
-		{
-			switch(g_sysSetting.Car.DetecMode)
-			{
-				case AV_CAR_NO_SIGANL:	
-					  if(s_bAvCarNoSignalFlg)
- 					  {
- 					    s_bAvCarNoSignalFlg = FALSE;
- 	                    if(IsCarReversing())
- 	                    {
-                           g_sysSetting.Car.DetecMode = AV_SIGNAL_OK;
-                           SelVideoDevice(INPUT_AV1);
-						   
-						   #ifdef NoSignalBLOffEn 
-						   ExitLowPowerMode();
-						   TurnOnBackLight();
-						   #else
-						   DelayMs(400);	
-						   #endif
- 	                    }
- 						else
- 						{  
- 						   SelCarSOGIn();
- 						   SelAv1Channel();
- 						}
- 					   }
-					  else
-					  {
-					    s_bAvCarNoSignalFlg = TRUE;
-					    SelCarSOGIn();
-					    SelAv1Channel();
-					    if(IsCarReversing())
-					    {    
-							 if(g_sysSetting.Power.status == POWER_ON)
-							 {								 
-                                 g_sysSetting.Car.status = CAR_PON_REVERSING;
-                                 g_sysSetting.Car.DetecMode = CAR_SIGNAL_OK;
-                                 g_sysSetting.Video.curSource = INPUT_CAMERA_Car;
-                                 SelVideoDevice(INPUT_CAMERA_Car);
-								 
-                                 #ifdef NoSignalBLOffEn 
-								 OsdHide();
-                                 ExitLowPowerMode();
-                                 TurnOnBackLight();
-                                 #else
-                                 DelayMs(400);	
-                                 #endif
-							 }
-							 else
-							 {
-								 return MSG_CAR_POF_REVERSING;
-							 }
-					    }
-					    else
-					    {
-					      SelAvSOGIn();
-						  SelCarChannel();
-					    }
-					 }
-					break;
-
-			  case AV_SIGNAL_OK:	
-					SelCarSOGIn();
-				    SelAv1Channel();
-					if(IsCarReversing())
-					{
-						 if(g_sysSetting.Power.status == POWER_ON)
-						 {
-							 return MSG_CAR_PON_REVERSING;
-						 }
-						 else
-						 {
-							 return MSG_CAR_POF_REVERSING;
-						 }
-					}
-					else
-					{  	
-						if(!IsSignalOk())
-						{	
-						    g_sysSetting.Car.DetecMode = AV_CAR_NO_SIGANL;
-							
-						    #ifdef NoSignalBLOffEn 
-	                        TurnOffBackLight();
-							EnterLowPowerMode();
-	                        #endif
-						}
-					}					
-					break;
-					
-			   case CAR_SIGNAL_OK:
-					 if(!IsSignalOk())
-					 {
-						if(g_sysSetting.Power.status == POWER_ON)
-						{
-							if(g_sysSetting.Car.RemberSource != g_sysSetting.Video.curSource)
-							{     
-							     s_bAvCarNoSignalFlg = TRUE;
-								 return MSG_CAR_PON_GO_AHEAD;	
-							}
-						}
-						else
-						{
-							if(g_sysSetting.Car.RemberSource != g_sysSetting.Video.curSource)
-							{   
-							     s_bAvCarNoSignalFlg = TRUE;
-								 return MSG_CAR_POF_GO_AHEAD;	  
-							}
-						}
-					 }
-					 break;
-				 
-			   case PON_CAR_SIGNAL_OK:
-					 return MSG_PON_REVERSING; 
-					 break;
-			 
-			   default:
-					break;
-						
-			}
-
-		}		
-		#endif
-		
-		#ifdef CarReversingIODetectEn
-		#define ContIOState   10
-	    static FLAG LastIOState = hw_setCarBackAheadStatus;  
-	    static UCHAR XDATA IOStateCnt=ContIOState;
-	    FLAG   CurrentIOStatus;
-
-		g_bGetUserDefFlg = 0;
-		
-		CurrentIOStatus = hw_getCarBackPinStatus();
-		
-		if(CurrentIOStatus != LastIOState)
-		{
-		   LastIOState = CurrentIOStatus;
-           IOStateCnt = 0;
-		}
-        else
-		{
-            if(IOStateCnt < ContIOState)
-		    {
-               if(++IOStateCnt == ContIOState)
-			   {
-               
-                  if(CurrentIOStatus != hw_setCarBackAheadStatus)
-				  {
-                     //printfStr("CarReversing......");
-                     if(g_sysSetting.Power.status == POWER_ON)
-				     {   
-                         return MSG_CAR_PON_REVERSING;
-				     }
-					 else
-					 {   
-					     return MSG_CAR_POF_REVERSING;
-					 }
-				  }
-				  else
-				  {
-					    //printfStr("Go Ahead......");
-					    if(g_sysSetting.Power.status == POWER_ON)
-					    {
-						   return MSG_CAR_PON_GO_AHEAD;	
-						}
-					   else
-					   {
-	                       return MSG_CAR_POF_GO_AHEAD;	
-					   }
-				  }					
-		        }
-            }
-        }
-		#endif  
-		#else
-		g_bGetUserDefFlg = 0;
-		#endif
-	}
-	return MSG_NULL;  
-}
-
-
-
-
-/***********************************************************
-*name:       POS_GetBTMsg(timeflg)
-*input:      timeflg  //定时时间标志
-*output:     void 
-*update:     2011-11-27 
-*state:      allright
-
-*description:   
-          获取BT连接、释放，接听、挂断的消息。
-          
-*history:
-
-************************************************************/
-MSG POS_GetBTMsg(FLAG timer)
-{
-   if(timer)
-   {
-       g_bGetBTFlg = 0;
-	   
-       #ifdef BTEn
-       if(g_bBTConnFlg)
-       {
-        return MSG_BT_CONN;
-       }
-       
-       if(g_bBTDiscFlg)
-       {
-        return MSG_BT_DISC;
-       }
-       
-       if(g_bBTCinFlg)
-       {
-        return MSG_BT_CALLERID;
-       }
-       
-       if(g_bBTCdropFlg)
-       {
-        return MSG_BT_CALLERDROP;
-       }
-	   #endif
-   }
-   return MSG_NULL; 
-}
-
-
-
-/***********************************************************
-*name:       POS_GetMiscMsg(timeflg)
-*input:      timeflg  //定时时间标志
-*output:     void 
-*update:     2011-11-27 
-*state:      allright
-
-*description:   
-          获取杂类消息，主要由一些不能分类的消息。
-          
-*history:
-
-************************************************************/
-MSG POS_GetMiscMsg(FLAG timer)
-{
 	if(timer)
 	{
-		g_bGetMiscFlg = 0;
+		g_bGetUserDefFlg = 0;
 
-		#ifdef ColorSysChangeBLOffEn
+		#ifdef SignalChangeBLOffEn
+		//在正常开机情况下，信号变化时出测试黑屏到一定时间后打开
 		if(g_ucContBLOn > 0)
 		{   
 	        g_ucContBLOn--;
 			if(g_ucContBLOn == 0)
 			{
-	          return MSG_TURNON_BACKLIGHT;
+	             if(g_bSignalFlg)
+				 {
+				     //等待Thlen 自动调整完成
+				     while(XBYTE[0XFCE7]&_BIT3);
+                     SetVDETestSwitch(VDE_CLOSE);
+				 }
+				 else
+				 {
+                     SetVDETestSwitch(VDE_BLUE);
+				 }
+				 TurnOnBackLight(); 			
 			}
 		}
-        #endif
+		#endif
+
 		
 		#ifdef BL_OvpSoftProtecEn 
 		if(g_bReleaseAdcKeyFlg)
@@ -643,9 +357,7 @@ MSG POS_GetMiscMsg(FLAG timer)
             }
 		}
 		#endif
+
 	}
 	return MSG_NULL;  
 }
-
-
-

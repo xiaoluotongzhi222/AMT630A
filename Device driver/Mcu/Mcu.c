@@ -50,11 +50,11 @@
 *history:
 ************************************************************/
 void InitialPPort(void)
-{
+{   
    	#ifdef BacklightEn
 	#if BACKLIGHT_CTRL_MODE == DC_PWM0_CTRL
     SelPWM0 |= (_BIT0|_BIT1);	 
-    SelPWM0 &=~_BIT2;
+    SelPWM0 &=~_BIT2;	
 	#endif
 
 	#if BACKLIGHT_CTRL_MODE == DC_PWM1_CTRL
@@ -76,16 +76,8 @@ void InitialPPort(void)
     g_bBackLightFlg = OFF;
 	hw_clrBIASEn();
     #endif
-   
-    #ifdef BuzzerEn
-    //hw_turnOffBuzzer();
-    #endif
 
-    #ifdef AudioCtrlEn
-    SetAudioMute();
-    #endif
-
-    #ifdef UartPrintfEn  
+	#ifdef UartPrintfEn
     SetUartPrint();
     #endif
 }
@@ -124,7 +116,7 @@ void InitialTimer(void)
     /*关闭时钟*/
     TR0  = OFF;
 	TR1  = OFF;
-	
+
     /*T0 T1 模式设置*/
     TMOD = 0x11;              //定时器0方式1，16位计数 ,定时器1 方式1 16计数方式
 	SetTimer0(_us(560));
@@ -156,8 +148,11 @@ void SetT2BaudRate(ULONG Brate)
 {
     T2CON   = 0x30;      	 //27MHZ  TF2,EXF2,RCLK,TCLK,EXEN2,TR2,C/T2,CP/RL2  
     SCON    = 0x50;
-		RCAP2H  = 0xFF;
-		RCAP2L  = 0xF1;
+
+	#ifdef MCU_CLOCK_27M
+	RCAP2H  = (UCHAR)(((65536-(MCU_CLK/(Brate*32)))>>8)&0xff);
+	RCAP2L  = (UCHAR)((65536-(MCU_CLK/(Brate*32)))& 0xff);
+	#endif
 }
 
 /***********************************************************
@@ -183,7 +178,7 @@ void InitialSerialPort(void)
 	RI = 0;
 	
 	/*串口中断设置*/
-	ES   = OFF;		     // Serial  interrupt disable
+    ES   = OFF;		     // Serial  interrupt disable
 }
 
 
@@ -291,8 +286,8 @@ void InitialExtInterrupt(void)
     /*外部中断5设置*/
 	EXIF = EXIF&0x7F; //IE5 = 0
 
-    /*设置外部中断2优先级*/
-	PX2 = 0; //若要使用外部中断2，则要置为1
+	 /*设置外部中断2优先级*/
+	PX2 =0; //若要使用外部中断2，则要置为1
 
 	/*设置外部中断3优先级*/
 	PX3 = 0; //若要使用外部中断3，则要置为1
@@ -303,22 +298,18 @@ void InitialExtInterrupt(void)
 	/*设置外部中断5优先级*/
 	PX5 = 0; //若要使用外部中断5，则要置为1
 
-	
     /*外部中断开关*/
-	#ifdef IrDetectEn
-    EX0 = ON;          //IR  interrupt enable
-    #else
-	EX0 = OFF;          //IR  interrupt disable
-	#endif
-	
+    EX0 = OFF;         //IR  interrupt enable
 	EX2 = OFF;		   //ADC  interrupt enable
     EX3 = OFF;
 	EX4 = OFF;
-    EX5 = OFF;        //OSD VSYN interrupt enable
+    EX5 = OFF;       //OSD VSYN interrupt enable
 
-    /*总中断DISABLE*/
+ 
+    /*总中断使能*/
 	EA  = OFF;          
 }
+
 
 
 
@@ -343,7 +334,7 @@ void InitMcu(void)
 	InitialPPort();
 	InitialTimer();
 	InitialSerialPort();
-	//InitialWatchDog();
+	InitialWatchDog();
 	InitialExtInterrupt();
-	//printfStr("Mcu init ok!\n");
+	printfStr("mcu init ok!\n");
 }

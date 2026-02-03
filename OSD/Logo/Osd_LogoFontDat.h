@@ -33,4 +33,5 @@
 #define LogoWidth_LOGO5   0
 #define LogoHeighth_LOGO5   0
 #define LogoIndexAddr_LOGO5   0
-#define LOGOMAX 2
+
+#define LogoMax                2            

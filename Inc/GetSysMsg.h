@@ -23,13 +23,10 @@
 
 
  
-_GET_MSG_EXTERN_ MSG POS_GetUserInputMsg(FLAG timer);
+_GET_MSG_EXTERN_ MSG POS_GetUserInputMsg(void);
 _GET_MSG_EXTERN_ MSG POS_GetSignalMsg(FLAG timer);
 _GET_MSG_EXTERN_ MSG POS_GetColorSysMsg(FLAG timer);
 _GET_MSG_EXTERN_ MSG POS_GetTimeMsg(FLAG timer);
 _GET_MSG_EXTERN_ MSG POS_GetBatteryAdcMsg(FLAG timer);
 _GET_MSG_EXTERN_ MSG POS_GetUserDefinedMsg(FLAG timer);
-_GET_MSG_EXTERN_ MSG POS_GetBTMsg(FLAG timer);
-_GET_MSG_EXTERN_ MSG POS_GetMiscMsg(FLAG timer);
-
 #endif

@@ -2,17 +2,17 @@
 *Copyright (C) 2005 ÉîÛÚ°¬¿Æ´´ĞÂÓĞÏŞ¹«Ë¾²úÆ·Ó¦ÓÃÒ»²¿
 * All rights reserved.
 
-*File name: ¡¡ Prj_AMT_7D_SDK_DEMO.h
-*Version:    ¡¡0.1
-*Author:       cjinzong
-*update:       20111208
+*File name: ¡¡ 	Prj_AMT_7D_SDK_DEMO.h
+*Version:    ¡¡	0.1
+*Author:      	Jordan.chen
+*update:      	2013-02-18
 
 *Description:
             
 *History:
 ************************************************************************/
-#ifndef AMT_PRJ_CONFIG_H__
-#define AMT_PRJ_CONFIG_H__
+#ifndef AMT6XX_PRJ_CONFIG_H__
+#define AMT6XX_PRJ_CONFIG_H__
 
 
 /*=======================================================
@@ -21,24 +21,24 @@
 /*
 >>¿Í»§Ãû³Æ: ARK
 
->>ÆÁĞÍºÅ:MEX070TM
+>>ÆÁĞÍºÅ:HSD4.3D
 
->>Ğ§¹ûÒªÇó:ARKÍ¨ÓÃÍ¼ÏñĞ§¹û¡£
+>>Ğ§¹ûÒªÇó:ARK  Í¨ÓÃÍ¼ÏñĞ§¹û¡£
 
->>OSD·ç¸ñ:ARKÍ¨ÓÃOSD·ç¸ñ¡£
+>>OSD·ç¸ñ:ARK  Í¨ÓÃOSD·ç¸ñ¡£
 
 >>Èí¼ş¹¦ÄÜÒªÇó: 
-   
+    1.Ö§³ÖµçÎ»Æ÷(Ö§³ÖÕı·´·½Ïòµ÷½Ú)£¬°´¼üµ÷½Ú¡£
+    2.Ö§³ÖOSD ÏÔÊ¾Ê¹ÄÜ¿ª¹Ø¡£
 
 >>Ó²¼ş¹¦ÄÜÒªÇó:
-    1.´«Í³³µÔØ³£¹æ¹¦ÄÜÓ²¼şĞèÇó¡£
+    1.ÃÅÁå³£¹æ¹¦ÄÜÓ²¼şĞèÇó¡£
 
 >>ÌØÊâ¹¦ÄÜÒªÇó:ÎŞ¡£
 
 >>±¸×¢:
 
 */
-
 
 
 /*========================================================
@@ -51,171 +51,64 @@
 
 
 /*========================================================
-<<<<<<<<<<<<<<<<<<<<<<   ÆÁÏÔÊ¾ÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/   
-//[LCD pannel parameter list]  
-#define P_MEX070TM_50D_DHV_AMT630A_20141113_EN   	ENABLE
-
-//[VcomDC type]
-#define VCOMDC_TYPE    								NULL_PWM  
-#define DEFAULT_VCOMDCFREQ	                        0
-#define DEFAULT_VCOMDCVAL                             0
-
-/*========================================================
 <<<<<<<<<<<<<<<<<< Èí¼ş¿âÅäÖÃ>>>>>>>>>>>>>>>>>
 =========================================================*/
-#define VD_EN           _BIT0  //Êı×ÖAGCÊ¹ÄÜ¿ª¹Ø DAGC_0XFE90 
-#define PDF_EN          _BIT1 //ËøÏà»·Ê¹ÄÜ¿ª¹Ø  PDFC3_0XFE35¡¢PDFC2_0XFE34 
-#define VL_EN           _BIT3 //ĞĞËøÊ¹ÄÜ¿ª¹Ø   0XFEA7¡¢0XFE2E 
+#define VdLibCmd         0
+#define ConfigUserPara() {/*ÔÚ´ËĞ´¼Ä´æÆ÷¿ÉÒÔ°ÑlibµÄ¶ÔÓ¦¸³Öµ¸²¸Ç*/ }
 
-#define VdLibCmd        VD_EN|PDF_EN|VL_EN
-#define ConfigUserPara() 
 
+
+/*========================================================
+<<<<<<<<<<<<<<<<<< ¿ª»úÑÓ³ÙÊ±¼äÅäÖÃ>>>>>>>>>>>>>>>>>
+=========================================================*/
+#define PowerOnDelay    1  //note:200msÎªÒ»¸öµ¥Î»
+
+
+
+/*========================================================
+<<<<<<<<<<<<<<<<<<<<<<   ÆÁÏÔÊ¾ÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
+=========================================================*/  
+//[LCD pannel parameter list]  
+#define P_AT070TN92_AMT630A_STD_20141202_EN      	DISABLE
+#define P_AT070TN92_AMT630A_STD_20141219_EN      	DISABLE
+#define P_SAT043CM40DMY0_AMT630A_STD_20141202_EN  ENABLE   // <--- å¼€å¯4.3å¯¸
 
 
 /*========================================================
 <<<<<<<<<<<<<<<<<<<<   Í¼ÏñÏÔÊ¾ÅäÖÃ>>>>>>>>>>>>>>>>>>>>>
 =========================================================*/ 
-//[Video Channel]
-#define AV1                    CVBS1   //av
-#define AV2                    CVBS3  //car detect
-#define AV3                    CVBS4  //reserve
+//[Video channel]
+#define  AV                     CVBS1
 
-#if(AV1 == CVBS1)
-#define SelAv1Channel()    	hw_SelChannelToCVBS1()
-#define SelAvSOGIn()       	hw_SelSOG1In()   
-#elif(AV1 == CVBS2)
-#define SelAv1Channel()    	hw_SelChannelToCVBS2()
-#define SelAvSOGIn()       	hw_SelSOG2In()   
-#elif(AV1 == CVBS3)
-#define SelAv1Channel()    	hw_SelChannelToCVBS3()
+#if(AV == CVBS1)
+#define SelAvChannel()			hw_SelChannelToCVBS1() 
+#define SelAvSOGIn()       	hw_SelSOG1In()    
+#elif(AV == CVBS3)
+#define SelAvChannel()			hw_SelChannelToCVBS3() 
 #define SelAvSOGIn()       	hw_SelSOG3In()  
 #endif
 
-#if(AV2 == CVBS1)
-#define SelCarChannel()    	hw_SelChannelToCVBS1()
-#define SelCarSOGIn()       	hw_SelSOG1In()  
-#elif(AV2 == CVBS2)
-#define SelCarChannel()    	hw_SelChannelToCVBS2()
-#define SelCarSOGIn()       	hw_SelSOG2In()    
-#elif(AV2 == CVBS3)
-#define SelCarChannel()    	hw_SelChannelToCVBS3()
-#define SelCarSOGIn()       	hw_SelSOG3In() 
-#endif
-
-#define SelAv2Channel()    	hw_SelChannelToNULL() 
 #define SelNullChannel()      	hw_SelChannelToNULL() 
-#define SelSOGNULLIn()   		hw_SelSOGNULLIn()
-
-//[Video Channel List]
-#define SourceOrderBuf      	{INPUT_AV1,INPUT_CAMERA_Car} 
-#define DefaultSource          INPUT_AV1
-
+#define SelSOGNULLIn()			hw_SelSOGNULLIn()
 
 //[PIC display value]
-#define BRIGHT_MIN           	0X49   //ÁÁ¶Èµ÷½Ú×îĞ¡Öµ
-#define	BRIGHT_MAX          	0XA9   //ÁÁ¶Èµ÷½Ú×î´óÖµ                                     
-#define	CONTRAST_MIN        	0X00   //¶Ô±È¶Èµ÷½Ú×îĞ¡Öµ           
-#define	CONTRAST_MAX        	0XB0   //¶Ô±È¶Èµ÷½Ú×î´óÖµ                                                   
-#define	SATURATION_MIN      	0X00  //É«¶Èµ÷½Ú×îĞ¡Öµ
-#define	SATURATION_MAX     	0X44  //É«¶Èµ÷½Ú×î´óÖµ
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<   ±³¹â¿ØÖÆÅäÖÃ>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//[Backlight ctrl]
-//#define BacklightEn          		//±³¹â¿ØÖÆÊ¹ÄÜ¿ª¹Ø
-
-#ifdef BacklightEn
-#define BACKLIGHT_CTRL_MODE     DC_PWM0_CTRL // DC_PWM0_CTRL¡¢DC_PWM1_CTRL¡¢DC_PWM2_CTRL¡¢DC_PWM3_CTRL¡¢GPIO_CTRL 
-
-#if BACKLIGHT_CTRL_MODE == GPIO_CTRL  
-#define hw_setBacklight()    	SetP3_5(1)
-#define hw_clrBacklight()    	SetP3_5(0)
-#define hw_setBIASEn()    		SetP3_6(1)
-#define hw_clrBIASEn()        	SetP3_6(0)
-#endif
-
-#if BACKLIGHT_CTRL_MODE == DC_PWM0_CTRL
-#define hw_setBacklight() 		(PWM_CTRL |= _BIT0)
-#define hw_clrBacklight() 		(PWM_CTRL &= ~_BIT0)
-#define hw_setBIASEn()    	
-#define hw_clrBIASEn() 
-#endif
-
-#if BACKLIGHT_CTRL_MODE == DC_PWM1_CTRL
-#define hw_setBacklight() 		(PWM_CTRL |= _BIT1)
-#define hw_clrBacklight() 		(PWM_CTRL &= ~_BIT1)
-#define hw_setBIASEn()    	
-#define hw_clrBIASEn() 
-#endif
-
-#if BACKLIGHT_CTRL_MODE == DC_PWM2_CTRL
-#define hw_setBacklight() 		(PWM_CTRL |= _BIT2)
-#define hw_clrBacklight() 		(PWM_CTRL &= ~_BIT2)
-#define hw_setBIASEn()    	
-#define hw_clrBIASEn() 
-#endif
-
-#if BACKLIGHT_CTRL_MODE == DC_PWM3_CTRL
-#define hw_setBacklight() 		(PWM_CTRL |= _BIT3)
-#define hw_clrBacklight() 		(PWM_CTRL &= ~_BIT3)
-#define hw_setBIASEn()    	
-#define hw_clrBIASEn() 
-#endif
-
-#endif
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<   °´¼ü¹¦ÄÜÅäÖÃ>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//[Key detect Ctrl]
-#define KeyDetectEn            //°´¼ü¼ì²âÊ¹ÄÜ¿ª¹Ø
-
-#ifdef KeyDetectEn 
-#define hw_upResistance      			12000     //ÉÏÀ­µç×èÖµ  12k
-#define hw_downResistance    			0        // 0:±íÊ¾ÎŞÏÂÀ­µç×è
-#define hw_keyVoltage        			3.3  
-#define ADC_CH_LIST         			{CH2} //{CH0,CH1,CH2} //Í¨µÀÁĞ±í   
-#define hw_Key_getSDA_input()     	GetP1_0()      //SDA
-#define hw_Key_setSDA_output(x)   	SetP1_0(x)    //SDA
-#define hw_Key_setSCL_output(x)   	SetP1_1(x)  //SCL
-
-#define ADCKEY_PAD_ID        			KP_ARK_DEBUG_V01  //°´¼ü°å
-#define I2CKEY_PAD_ID        			KP_ZYD_909K_V10  //I2C °´¼ü°å
-
-#define KEY_OFFSET           			0X0A         //°´¼üµÄÆ«ÒÆÁ¿
-#define RepeatTime           			0X15        //Á¬Ğø°´¼üÏìÓ¦Ê±¼ä
-#define SpRepeatTime         			0X50        //ÌØÊâ³¤°´×ªÒåÃüÁî
-#endif//#ifdef KeyDetectEn 
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<   IR¹¦ÄÜÅäÖÃ>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//[IR detect Ctrl]
-#define IrDetectEn           		//Ò£¿Ø¼ì²âÊ¹ÄÜ¿ª¹Ø
-
-#ifdef IrDetectEn
-#define IR_TYPE          		NEC  
-#define IR_DECODE_MODE       	IR_HARDWARE
-#define IR_ID                 	CR2025_6KEY
-#define IR_Delta_DATA        	0X05
-#define IR_Delta_96ms        	0X0F	
-#endif  //#ifdef IrDetectEn
+#define BRIGHT_MIN             0X49   //ÁÁ¶Èµ÷½Ú×îĞ¡Öµ
+#define	BRIGHT_MAX             0XA9   //ÁÁ¶Èµ÷½Ú×î´óÖµ                                     
+#define	CONTRAST_MIN           0X00   //¶Ô±È¶Èµ÷½Ú×îĞ¡Öµ           
+#define	CONTRAST_MAX           0XB0   //¶Ô±È¶Èµ÷½Ú×î´óÖµ                                                   
+#define	SATURATION_MIN         0X00  //É«¶Èµ÷½Ú×îĞ¡Öµ
+#define	SATURATION_MAX         0X44  //É«¶Èµ÷½Ú×î´óÖµ
 
 
 
 /*========================================================
 <<<<<<<<<<<<<<<<<<<<<<  OSD ¹¦ÄÜÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
 =========================================================*/ 
+//[OSD enable]
+#define OsdEn                  				//OsdÄ£¿éÏÔÊ¾¿ª¹Ø
+
 //[OSD Icon Size And ScalerRatio]
-#define ICON_SIZE							SIZE_12X16//SIZE_16X22   SIZE_12X16
+#define ICON_SIZE							SIZE_16X22   //SIZE_16X22
 
 #if(ICON_SIZE == SIZE_12X16)
 #define ICON_SIZE_X                       	12     //ICON Ë®Æ½ÏñËØµãÊı
@@ -223,54 +116,70 @@
 #define OsdScalerRatio						2 
 #define NoSignalScalerRatio              	4
 #elif(ICON_SIZE == SIZE_16X22)
-#define ICON_SIZE_X                       	16    //ICON Ë®Æ½ÏñËØµãÊı
+#define ICON_SIZE_X                    	16    //ICON Ë®Æ½ÏñËØµãÊı
 #define ICON_SIZE_Y                       	22    //ICON ´¹Ö±ĞĞÊı
 #define OsdScalerRatio						1 
 #define NoSignalScalerRatio              	2
 #endif
 
-//[OSD style]
-#define OSD_STYLE_TYPE         			OSD_STYLE_ARK
+//[OSD style]    //ÉèÖÃÏÔÊ¾²Ëµ¥µÄ´óĞ¡¡¢Ç°±³¾°É«
+#define MAINMENU_XSIZE     				0x12
+#define MAINMENU_YSIZE      				0x02
 
-//[OSD bar lenght]
-#define MAX_VALUE               			100    //×î´óÖµ
+#define MAINMENU_FORECOLOR    			RED
+#define MAINMENU_BACKCOLOR                GRAY
+
+#define MAINMENU_ITEM_TITELFORECOLOR    	RED
+#define MAINMENU_ITEM_TITELBACKCOLOR    	GRAY
+
+#define MAINMENU_ITEM_NUMFORECOLOR      	RED
+#define MAINMENU_ITEM_NUMBACKCOLOR     	GRAY
+
+#define MAINMENU_ITEM_GUAGE              	0X0E
+#define GUAGE_LENGTH                      	0X10
+
+#define MAINMENU_ITEM_GUAGEFORECOLOR   	RED
+#define MAINMENU_ITEM_GUAGEBACKCOLOR    	GRAY
+
+
+//[Osd bar lenght]
+#define MAX_VALUE              			30     	    //OSDÏÔÊ¾×î´óÖµÉèÖÃ( 30-100 )
+
 
 //[OSD menu X Y position]
-#define MAINMENU_START_X_POS   			0X014C      //MAIN MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define MAINMENU_START_Y_POS   			0X01BA     //MAIN MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
+#define MAINMENU_START_X_POS     0X0080     // è°ƒæ•´ä¸ºé€‚åˆ480å®½åº¦çš„ä½ç½®
+#define MAINMENU_START_Y_POS     0X00ED     // è°ƒæ•´ä¸ºé€‚åˆ272é«˜åº¦çš„ä½ç½®
 
-#define SOURCEMENU_START_X_POS 			0X032A   //SOURCE MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define SOURCEMENU_START_Y_POS 			0X001C   //SOURCE MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
+#define SOURCEMENU_START_X_POS   0X01D6
+#define SOURCEMENU_START_Y_POS   0X0002
 
-#define SOURCE_43_START_X_SHIFT          0X65      //SOURCE MENU ²Ëµ¥4:3Ä£Ê½ Óë16:9Ä£Ê½µÄX²îÖµ
+#define SOURCE_43_START_X_SHIFT  0X3F      // åç§»é‡å‡å°
 
-#define NOSIGNALMENU_START_X_POS 		0x014B   //NOSIGNAL MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define NOSIGNALMENU_START_Y_POS 		0x00E2   //NOSIGNAL MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
+#define NOSIGNALMENU_START_X_POS 0x007E
+#define NOSIGNALMENU_START_Y_POS 0x007D
 
-#define BTMENU_START_X_POS 				0x0000   //BT MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define BTMENU_START_Y_POS    			0x000A   //BT MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
+#define BTMENU_START_X_POS       0x0000
+#define BTMENU_START_Y_POS       0x000A
 
-#define BTCALLERMENU_START_X_POS 		0x0055   //BTCALLER MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define BTCALLERMENU_START_Y_POS 		0x0090   //BTCALLER MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
+#define BTCALLERMENU_START_X_POS 0x0055
+#define BTCALLERMENU_START_Y_POS 0x0090
 
-#define BATTERYADCMENU_START_X_POS 		0x0015   //BATTERYADC MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define BATTERYADCMENU_START_Y_POS 		0x0000   //BATTERYADC MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
+#define BATTERYADCMENU_START_X_POS 0x0015
+#define BATTERYADCMENU_START_Y_POS 0x0000
 
-#define MUTEMENU_START_X_POS   			0X0018   //MUTE MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define MUTEMENU_START_Y_POS   			0X0020   //MUTE MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
-		
-#define FACTORYMENU_START_X_POS  			0X00AC   //FACTORY MENU ²Ëµ¥µÄXÆğÊ¼Î»ÖÃ
-#define FACTORYMENU_START_Y_POS  			0X008A   //FACTORY MENU ²Ëµ¥µÄYÆğÊ¼Î»ÖÃ
+#define MUTEMENU_START_X_POS     0X0018
+#define MUTEMENU_START_Y_POS     0X0020
+        
+#define FACTORYMENU_START_X_POS  0X00AC
+#define FACTORYMENU_START_Y_POS  0X008A
 
 //[OSD default language]
-#define DEFAULT_LANGUAGE        			JAPANESE//CHINESE//ENGLISH  //OSD Ä¬ÈÏÓïÑÔ
+#define DEFAULT_LANGUAGE       			ENGLISH  
 
 //[OSD display timeout]
-#define OSD_DISP_TIME           			200     //OSD ÏÔÊ¾Ê±¼ä
-#define OSD_STORAGE_TIME           		100     //OSD ¼ÇÒäÏÔÊ¾Ê±¼ä
+#define OSD_DISP_TIME           			200
+#define OSD_STORAGE_TIME           		100  
 
-//[OSD Position Offset]
-#define MAX_OFFSETVALUE         			50    //×î´óÖµ
 
 
 
@@ -281,11 +190,11 @@
 //#define LogoEn                    					//LogoÄ£¿é¿ª¹Ø
 
 //[Logo display mode]
-#define LOGO_DISP_MODE          			POWER_ON_DISP_LOGO
-
+#define LOGO_DISP_MODE          			POWER_ON_DISP_LOGO//NOSIGNAL_DISP_LOGO
 
 //[Logo display backcolor]
-#define LOGO_DISP_BACKCOLOR               WHITE     //LOGOÏÔÊ¾±³¾°ÑÕÉ«
+#define LOGO_DISP_BACKCOLOR               BLUE  		//LOGOÏÔÊ¾±³¾°ÑÕÉ«
+
 
 
 //[Logo menu X Y position]
@@ -307,18 +216,46 @@
 
 
 /*========================================================
-<<<<<<<<<<<<<<<<<<<<  µ¹³µ¼ì²âÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<<<<<<<<   ±³¹â¿ØÖÆÅäÖÃ>>>>>>>>>>>>>>>>>>>>>
 =========================================================*/ 
-#define CarBackEn            		//µ¹³µÊ¹ÄÜ¿ª¹Ø
+//[Backlight ctrl]
+#define BacklightEn             //±³¹â¿ØÖÆÊ¹ÄÜ¿ª¹Ø
+#ifdef BacklightEn
+#define BACKLIGHT_CTRL_MODE     DC_PWM0_CTRL // DC_PWM0_CTRL¡¢DC_PWM1_CTRL¡¢DC_PWM2_CTRL¡¢DC_PWM3_CTRL¡¢GPIO_CTRL 
 
-#ifdef CarBackEn
+#if BACKLIGHT_CTRL_MODE == GPIO_CTRL  
+#define hw_setBacklight()    	SetP3_5(1)
+#define hw_clrBacklight()    	SetP3_5(0)
+#define hw_setBIASEn()    	   	SetP3_6(1)
+#define hw_clrBIASEn()			SetP3_6(0)
+#endif
 
-//#define CarReversingIODetectEn    	   //IO ¼ì²âµ¹³µÊ¹ÄÜ
-#define CarReversingSignalDetectEn     //ĞÅºÅ¼ì²âµ¹³µÊ¹ÄÜ
+#if BACKLIGHT_CTRL_MODE == DC_PWM0_CTRL
+#define hw_setBacklight() (PWM_CTRL |= _BIT0)
+#define hw_clrBacklight() (PWM_CTRL &= ~_BIT0)
+#define hw_setBIASEn()    	
+#define hw_clrBIASEn()  
+#endif
 
-#ifdef CarReversingIODetectEn
-#define hw_setCarBackAheadStatus  	1     		//Õı³£×´Ì¬µ¹³µ½Å×´Ì¬
-#define hw_getCarBackPinStatus()   	GetP1_5()   //µ¹³µ½ÅÎ»
+#if BACKLIGHT_CTRL_MODE == DC_PWM1_CTRL
+#define hw_setBacklight() (PWM_CTRL |= _BIT1)
+#define hw_clrBacklight() (PWM_CTRL &= ~_BIT1)
+#define hw_setBIASEn()    	
+#define hw_clrBIASEn()  
+#endif
+
+#if BACKLIGHT_CTRL_MODE == DC_PWM2_CTRL
+#define hw_setBacklight() (PWM_CTRL |= _BIT2)
+#define hw_clrBacklight() (PWM_CTRL &= ~_BIT2)
+#define hw_setBIASEn()    	
+#define hw_clrBIASEn()  
+#endif
+
+#if BACKLIGHT_CTRL_MODE == DC_PWM3_CTRL
+#define hw_setBacklight() (PWM_CTRL |= _BIT3)
+#define hw_clrBacklight() (PWM_CTRL &= ~_BIT3)
+#define hw_setBIASEn()    	
+#define hw_clrBIASEn()  
 #endif
 
 #endif
@@ -326,26 +263,59 @@
 
 
 /*========================================================
-<<<<<<<<<<<<<<<<<<<<   ÆÁÌØÊâÏÔÊ¾ÅäÖÃ>>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<<<<<<<<   °´¼ü¹¦ÄÜÅäÖÃ>>>>>>>>>>>>>>>>>>>>>
 =========================================================*/ 
-//#define PannelSfrDispEn      		//ÆÁÌØÊâÏÔÊ¾Ê¹ÄÜ¿ª¹Ø (·­×ª)
+//[Key detect ctrl]
+//#define KeyDetectEn            //°´¼ü¼ì²âÊ¹ÄÜ¿ª¹Ø
+#ifdef KeyDetectEn 
 
-#ifdef PannelSfrDispEn
-#define hw_SfrDisp_PinRL(x)	SetP0_5(x) 
-#define hw_SfrDisp_PinUD(x)	SetP0_4(x) 
+#define KEY_TYPE             DIANWEIQI_KEY//DIANWEIQI_KEY¡¢ADC_KEY¡¢GPIO_KEY
 
-#define hw_turnToLeft()     	{hw_SfrDisp_PinRL(1); hw_SfrDisp_PinUD(0);}
-#define hw_turnToRight() 	 	{hw_SfrDisp_PinRL(0); hw_SfrDisp_PinUD(0);}
-#define hw_turnToUp()	     	{hw_SfrDisp_PinRL(0); hw_SfrDisp_PinUD(1);}
-#define hw_turnToDown()	 	{hw_SfrDisp_PinRL(1); hw_SfrDisp_PinUD(1);}
-#endif
+#if(KEY_TYPE == ADC_KEY)
+#define hw_upResistance      1000     //ÉÏÀ­µç×èÖµ  12k
+#define hw_downResistance    0        // 0:±íÊ¾ÎŞÏÂÀ­µç×è
+#define hw_keyVoltage        3.3  
+#define ADC_CH_LIST          {CH1} //{CH0,CH1,CH2,Ch3} //Í¨µÀÁĞ±í     
+#define KEY_PAD_ID            KP_ARK_SDK_V01   
+#define KEY_OFFSET            0X05            //°´¼üµÄÆ«ÒÆÁ¿
+#define RepeatTime            0X07       //Á¬Ğø°´¼üÏìÓ¦Ê±¼ä
+#endif// #if(KEY_TYPE == ADC_key)                  
+
+#if(KEY_TYPE == DIANWEIQI_KEY) 
+#define ForwardAdj                 0              //µçÎ»Æ÷ÕıÏòµ÷½Ú
+#define ReverseAdj                 1              //µçÎ»Æ÷·´Ïòµ÷½Ú
+
+#define DianWeiQiAdjDir            ForwardAdj   //µçÎ»Æ÷ÕıÏòµ÷½Ú
+#define DianWeiQi_CH_LIST         {CH2,CH3}    //Í¨µÀÁĞ±í     
+#define BrightnessChannel          CH3   		//ÁÁ¶ÈADCÍ¨µÀ
+#define ContrastChannel            CH1   		//¶Ô±È¶ÈADCÍ¨µÀ
+#define SaturationChannel          CH2   		//É«¶ÈADCÍ¨µÀ
+#endif //#if(KEY_TYPE == DIANWEIQI_KEY)
+
+
+#if(KEY_TYPE == GPIO_KEY)
+#define GPIO_KEY_COUNT              3             //GPIO KEY °´¼ü¸öÊı
+#define GPIO_KEY_VALID              0             //GPIO KEY °´¼üÓĞĞ§×´Ì¬
+#define RepeatTime                  0X07        //Á¬ĞøGPIO KEY ÏìÓ¦Ê±¼ä
+
+#define GPIO_KEY0                   GetP1_0()      //KEY0 ¶ÔÓ¦µÄGPIO¿Ú
+#define GPIO_KEY0_CMD               KEY_MENU  //KEY0¶ÔÓ¦µÄ¹¦ÄÜ
+
+#define GPIO_KEY1                   GetP1_1()  //KEY1 ¶ÔÓ¦µÄGPIO¿Ú
+#define GPIO_KEY1_CMD               KEY_LEFT     //KEY1¶ÔÓ¦µÄ¹¦ÄÜ
+
+#define GPIO_KEY2                   GetP1_2()     //KEY2 ¶ÔÓ¦µÄGPIO¿Ú
+#define GPIO_KEY2_CMD               KEY_RIGHT     //KEY2¶ÔÓ¦µÄ¹¦ÄÜ
+#endif  //#if(KEY_TYPE == GPIO_KEY)
+
+#endif//#ifdef KeyDetectEn 
 
 
 
 /*========================================================
-<<<<<<<<<<<<<<<<<<<<   ÆÁSPI³õÊ¼»¯ÅäÖÃ>>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<<<<<<<<   ÆÁSPI ³õÊ¼»¯ÅäÖÃ>>>>>>>>>>>>>>>>>>>
 =========================================================*/ 
-//[SPI Inital Pannel Ctrl]
+//[SPI inital pannel]
 //#define SpiInitPannelEn       //SPI ÆÁ³õÊ¼»¯Ê¹ÄÜ¿ª¹Ø
 
 #ifdef SpiInitPannelEn
@@ -369,66 +339,16 @@
 
 
 /*========================================================
-<<<<<<<<<<<<<<<<<<<<   Audio ¹¦ÄÜÅäÖÃ>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//[Audio Ctrl]
-//#define AudioCtrlEn          		//ÒôÁ¿¿ØÖÆÊ¹ÄÜ¿ª¹Ø
-
-#ifdef AudioCtrlEn
-#define AUDIO_CTRL               	VOLUME_PWM_CTRL
-
-#define hw_setAudioMute()      	//SetP2_6(1)
-#define hw_clrAudioMute()      	//SetP2_6(0)
-
-#define hw_AudioSel_PinA(x)		//SetGPIO4(x) 
-#define hw_AudioSel_PinB(x)		//SetGPIO5(x)   
-
-#define hw_SetAudioSelToAv1() 	{hw_AudioSel_PinA(1); hw_AudioSel_PinB(1);}
-#define hw_SetAudioSelToAv2() 	{hw_AudioSel_PinA(1); hw_AudioSel_PinB(0);}
-#define hw_SetAudioSelToBt()	    {hw_AudioSel_PinA(0); hw_AudioSel_PinB(0);}
-
-
-
-#if AUDIO_CTRL == VOLUME_PWM_CTRL  
-#define    VOL_PWM_CTRL    PWM1_CTRL 
-#define    VOL_PWM_RATE    PWM1_RATE 
-#define    VOL_PWM_TYPE    PWM1
-#endif
-
-#endif
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<   FM ·¢ÉäÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//#define FmSendEn            //Fm·¢ÉäÊ¹ÄÜ¿ª¹Ø
-
-#ifdef FmSendEn
-#define FM_CHIP                        KT0803l
-
-#define hw_FmSend_getSDA_input()     GetSdaIn()      
-#define hw_FmSend_setSDA_output(x)   SetSdaOut(x)    
-#define hw_FmSend_setSCL_output(x)   SetSclOut(x) 
-#endif
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<   BTÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//#define BTEn                //À¶ÑÀÊ¹ÄÜ¿ª¹Ø
-
-#ifdef BTEn
-#define BT_Module           BlueSoleil_i50e
-#endif
-
-
-
-/*========================================================
 <<<<<<<<<<<<<<<<<<<<   ³ÌĞò´æ´¢ÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
 =========================================================*/ 
 #define FlashEn 
+
+//#define E2promEn      
+#ifdef E2promEn
+#define hw_E2p_getSDA_input()     GetGPIO11()
+#define hw_E2p_setSDA_output(x)   SetGPIO11(x)
+#define hw_E2p_setSCL_output(x)   SetGPIO8(x)
+#endif
 
 
 
@@ -437,7 +357,6 @@
 =========================================================*/ 
 //[Power LED]
 //#define PowerLedEn             //µçÔ´Ö¸Ê¾µÆÊ¹ÄÜ¿ª¹Ø 
-
 #ifdef PowerLedEn
 #define hw_setRedLEDOn()             SetGPIO6(1) 
 #define hw_setRedLEDOff()            SetGPIO6(0) 
@@ -451,8 +370,7 @@
 /*========================================================
 <<<<<<<<<<<<<<<<<<   ±³¹â¹ıÑ¹±£»¤ÅäÖÃ>>>>>>>>>>>>>>>>>>>
 =========================================================*/        
-//#define BL_OvpSoftProtecEn     //±³¹â¹ıÑ¹Èí¼ş±£»¤ 
-
+//#define BL_OvpSoftProtecEn     //±³¹â¹ıÑ¹Èí¼ş±£»¤    
 #ifdef BL_OvpSoftProtecEn 
 #define ADC_DETEC_CH           CH0
 #define ProtecVolte            2.0
@@ -465,7 +383,6 @@
 <<<<<<<<<<<<<<<<<<   µç³ØµçÁ¿¼ì²âÅäÖÃ>>>>>>>>>>>>>>>>>>>
 =========================================================*/ 
 //#define LowBaterryDetecEn     //µç³ØµçÁ¿²»×ã
-
 #ifdef LowBaterryDetecEn 
 #define BATTER_DETEC_CH      	CH2
 #define BatterLowVolte       	1.7   
@@ -476,78 +393,32 @@
 
 
 
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<   ·äÃùÆ÷ÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//#define BuzzerEn              	//·äÃùÆ÷Ê¹ÄÜ¿ª¹Ø
-
-#ifdef BuzzerEn
-#define hw_turnOnBuzzer()   SetP2_2(1)
-#define hw_BuzzerTime()     DelayMs(80)
-#define hw_turnOffBuzzer()  SetP2_2(0)
-#endif
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<  IRAB IOÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//#define IrABCtrlEn          //IrAB Ê¹ÄÜ¿ª¹Økuan'shi
-
-#ifdef IrABCtrlEn
-#define hw_setAPort()     SetP1_5(0)
-#define hw_setBPort()     SetP1_5(1) 
-#define hw_turnOffIRAB()  
-#endif
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<<<  IR ·¢ÉäÅäÖÃ>>>>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-//#define IrSendEn            //ºìÍâ·¢ËÍÊ¹ÄÜ¿ª¹Ø
-
-
-
-/*========================================================
-<<<<<<<<<<<<<<<<<<  ¹¤³§²Ëµ¥ÅäÖÃ>>>>>>>>>>>>>>>>>>>
-=========================================================*/ 
-#define FactoryEn                //¹¤³§Ä£Ê½¿ª¹Ø
-
-//[Factory PassWord]
-#ifdef FactoryEn
-#define PassWordBuf             {COMD_SelSource,COMD_SelMode,COMD_LEFT,COMD_RIGHT,COMD_RedrawMenu}
-#endif
-
-
 
 /*========================================================
 <<<<<<<<<<<<<<<<<<<<<<  Èí¼ş¹¦ÄÜÅäÖÃ>>>>>>>>>>>>>>>>>>>>
 =========================================================*/
 //[Software function enable]
-//#define NoSignalEn               //NoSignalÄ£¿é¿ª¹Ø
-//#define NoSignalBLOffEn        //ÎŞĞÅºÅ¹Ø±³¹â¿ª¹Ø
-//#define NoSignalPowerOffEn     //ÎŞĞÅºÅÒ»¶ÎÊ±¼ä×Ô¶¯¹Ø»ú¿ª¹Ø
-//#define QuickParaSaveEn        //¿ìËÙ²ÎÊı±£´æ¿ª¹Ø
-//#define NoSignalSnowEn         //ÎŞĞÅºÅ³öÑ©»¨¿ª¹Ø
+#define NoSignalBLOffEn          //ÎŞĞÅºÅ¹Ø±³¹â¿ª¹Ø
+//#define NoSignalPowerOffEn      //ÎŞĞÅºÅÒ»¶ÎÊ±¼ä×Ô¶¯¹Ø»ú¿ª¹Ø
+//#define QuickParaSaveEn       //¿ìËÙ²ÎÊı±£´æ¿ª¹Ø
+//#define KillColorEn           //Ç¿ÖÆ¹Ø±ÕÉ«²Ê
 //#define DithingEn             //DithingÊ¹ÄÜ¿ª¹Ø
-//#define ColorSysChangeBLOffEn //ÖÆÊ½ÇĞ»»ºÚÆÁ¿ª¹Ø
+//#define Clk_AdjustEn          //Ê±ÖÓµ÷½ÚÊ¹ÄÜ¿ª¹Ø
+//#define Same_Color_AdjustEn  //´¿É«µ÷½ÚÊ¹ÄÜ¿ª¹Ø
+//#define GrayBar_DetectEn     //»Ò½×¼ì²âÊ¹ÄÜ¿ª¹Ø
+//#define SignalChangeBLOffEn  //ĞÅºÅ±ä»¯¹Ø±³¹â¿ª¹Ø
 
-
-/*====================================================================================
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<     ÏµÍ³²âÊÔµã(TP)   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-======================================================================================*/
+/*========================================================
+<<<<<<<<<<<<<<<<<<<     ÏµÍ³²âÊÔµã(TP)   >>>>>>>>>>>>>>>>>>>>
+==========================================================*/
 /*TP: Test Point£¬²âÊÔµã¶¼ÊÇÍ¨¹ı´®¿Ú´òÓ¡À´¼à²âÏàÓ¦²âÊÔ±äÁ¿£¬
 ËùÒÔĞèÒªÊ¹ÄÜ´®¿Ú´òÓ¡²âÊÔ²ÅÄÜÓĞĞ§¡£
 */
-#define  TP0_ADC    DISABLE  /*ADC µ×²ã²ÉÑùÖµ(²»¾­¹ıÂË²¨)*/
-#define  TP1_ADC    DISABLE  /*ADC ¾­¹ıÂË²¨´¦ÀíºóµÄÖµ*/
-#define  TP2_ADC    DISABLE  /*ADC Key ·µ»Ø¸øÓ¦ÓÃ²ãµÄ°´¼üÖµ*/
+#define  TP0_ADC    DISABLE   /*ADC µ×²ã²ÉÑùÖµ(²»¾­¹ıÂË²¨)*/
+#define  TP1_ADC    DISABLE   /*ADC ¾­¹ıÂË²¨´¦ÀíºóµÄÖµ*/
+#define  TP2_ADC    DISABLE   /*ADC Key ·µ»Ø¸øÓ¦ÓÃ²ãµÄ°´¼üÖµ*/
 #define  TP3_ADC    DISABLE   /*ADC Key ·µ»Ø¸øÓ¦ÓÃ²ã¶ÔÓ¦µÄÃüÁîÖµ*/
+#define  TP1_KEY    DISABLE   /*Key ·µ»Ø¸øÓ¦ÓÃ²ã¶ÔÓ¦µÄÏûÏ¢*/
 
-#define  TP1_KEY    DISABLE  /*Key ·µ»Ø¸øÓ¦ÓÃ²ã¶ÔÓ¦µÄÏûÏ¢*/
-
-#define  TP0_RM     DISABLE  /*Remote µ×²ã²ÉÑùºìÍâÖµ*/   
-#define  TP1_RM     DISABLE  /*Remote °´¼üÖµ¶ÔÓ¦µÄÏûÏ¢Öµ*/
-#endif
+#endif//AMT6XX_PRJ_CONFIG_H__ 
 

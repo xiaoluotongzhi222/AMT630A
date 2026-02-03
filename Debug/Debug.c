@@ -33,10 +33,9 @@ void putSIOChar(unsigned char sendData)
 
 void putchar(UCHAR ucVal)
 {
-//	TI = 0;
-//	SBUF = ucVal; 
-//	while(!TI);
-	return ;
+	TI = 0;
+	SBUF = ucVal; 
+	while(!TI);
 }
 
 void IrqPutstr(UCHAR *pFmt)
@@ -44,7 +43,7 @@ void IrqPutstr(UCHAR *pFmt)
     UCHAR XDATA ucBff; 
 
 	SetUartPrint();
-
+	
     while(1)
     {
          ucBff = *pFmt; 
@@ -62,9 +61,9 @@ void IrqPutstr(UCHAR *pFmt)
 void printfStr(char *str)
 {
     BYTE XDATA ucBff;
-
+	
 	SetUartPrint();
-
+	
   	putSIOChar((char)'\r');
   	putSIOChar((char)'\n');
 
@@ -76,14 +75,14 @@ void printfStr(char *str)
          putSIOChar(ucBff);
          str++;
     }
-    SetI2CDebug();
+	SetI2CDebug();
 }
 void IrqPrintf(char *str, WORD value)
 {
 	char XDATA sendData;
 
 	SetUartPrint();
-
+	
   	while(sendData=*(str++))
     {
     	if (sendData==(char)'%') 
@@ -136,7 +135,7 @@ void printf(char *str, WORD value)
 	char XDATA sendData;
 
 	SetUartPrint();
-
+	
   	putSIOChar((char)'\r');
   	putSIOChar((char)'\n');
 	
@@ -186,5 +185,6 @@ void printf(char *str, WORD value)
     }
 	SetI2CDebug();
 }
+
 #endif
 

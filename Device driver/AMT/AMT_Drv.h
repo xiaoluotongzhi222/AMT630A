@@ -41,8 +41,7 @@
 #define OSD_DISP_V_MIRROR     2
 #define OSD_DISP_HV_MIRROR    3
 
-#define IsPal()                 (XBYTE[0XFE28] & 0X04)
-#define SetAUX0ENA()       	    {ADC_CTRL_L = (ADC_CTRL_L & 0X87)|0X08;}
+#define SetAUX0ENA()        	{ADC_CTRL_L = (ADC_CTRL_L & 0X87)|0X08;}
 #define SetAUX0CMD()        	{ADC_CTRL_M = (ADC_CTRL_M & 0X0F) |0X20;}
 #define CheckAUX0ValInt()    	{while((ADC_INT_STATUS_L & _BIT2) != _BIT2);}
 
@@ -74,29 +73,19 @@ typedef struct
 	 UINT block4Size;
 }OsdCtrlerType;
 
-AMTDRV_EXTERN_ OsdCtrlerType  XDATA g_OsdContrller;
+AMTDRV_EXTERN_ OsdCtrlerType XDATA g_OsdContrller;
 
 AMTDRV_EXTERN_ void InitGlobalPara();
-AMTDRV_EXTERN_ void InitRemote(void);
-AMTDRV_EXTERN_ UINT  Abs(UINT tmpVal1,UINT tmpVal2);
 AMTDRV_EXTERN_ UCHAR DataCurve(UCHAR minDat,UCHAR ideaDat,UCHAR maxDat,UCHAR currentDat,UCHAR len);
-AMTDRV_EXTERN_ UCHAR TintCurve(UCHAR currentDat,UCHAR len);
 AMTDRV_EXTERN_ void TurnOnBackLight(void);
 AMTDRV_EXTERN_ void TurnOffBackLight(void);
 AMTDRV_EXTERN_ void EnterLowPowerMode(void);
 AMTDRV_EXTERN_ void ExitLowPowerMode(void);
-AMTDRV_EXTERN_ void SetAudioMute(void);
-AMTDRV_EXTERN_ void SelAudioInputSource(InputSourceType curSource);
-AMTDRV_EXTERN_ void SelVideoDevice(InputSourceType curSource);
+AMTDRV_EXTERN_ void SetNosiceSwitch(FLAG nosiceSw);
 AMTDRV_EXTERN_ void SetVDETestSwitch(UCHAR ScreeSw);
-AMTDRV_EXTERN_ void SetNoSignalSnow(void);
-AMTDRV_EXTERN_ void OpenAudio(void);
-AMTDRV_EXTERN_ void TurnOnDevicePower(InputSourceType curSource);
-AMTDRV_EXTERN_ void TurnOffDevicePower(InputSourceType curSource);
 AMTDRV_EXTERN_ void ConfigCrtlMode(UCHAR CtrlMode);
-AMTDRV_EXTERN_ UINT POS_GetIrKeyVal(void);
 AMTDRV_EXTERN_ void InitAdc(void);
-AMTDRV_EXTERN_ void InitCarReversing(void);
+AMTDRV_EXTERN_ void InitNoSignalBLOff(void);
 AMTDRV_EXTERN_ void SetPWM0(ULONG Freq,UCHAR Duty);
 AMTDRV_EXTERN_ void SetPWM1(ULONG Freq,UCHAR Duty);
 AMTDRV_EXTERN_ void SetPWM2(ULONG Freq,UCHAR Duty);
@@ -105,18 +94,13 @@ AMTDRV_EXTERN_ void SetSpDat(UCHAR Data);
 AMTDRV_EXTERN_ void SetSpClk(UCHAR Data);
 AMTDRV_EXTERN_ void SetSpEna(UCHAR Data);
 AMTDRV_EXTERN_ void SetReset(UCHAR Data);
-AMTDRV_EXTERN_ void SetBuzzerOn(UINT8 Buzzertime);
 AMTDRV_EXTERN_ void POS_AdjustSpiReg(void);
-AMTDRV_EXTERN_ void POS_RecUartSpiInfor(void); 
+AMTDRV_EXTERN_ void POS_RecUartSpiInfor(void);
 AMTDRV_EXTERN_ void SetI2CDebug(void);
 AMTDRV_EXTERN_ void SetUartPrint(void);
-AMTDRV_EXTERN_ void  GetProCompielTime(void);
-AMTDRV_EXTERN_ BOOL POS_SysTimeDriver(void);
-AMTDRV_EXTERN_ void POS_SendNecIrData(UCHAR DataWith,ULONG SendData);
-AMTDRV_EXTERN_ void POS_SelectKeyDevice(void);
-AMTDRV_EXTERN_ void SetIRABSwitch(UCHAR Val);
-AMTDRV_EXTERN_ void CtrlVolumeByPWM(UCHAR tmpVolume);
 AMTDRV_EXTERN_ UINT POS_EnableChipAdc(AdcChannelType Channel);  
+AMTDRV_EXTERN_ BOOL POS_SysTimeDriver(void);
+AMTDRV_EXTERN_ void SetPowerOnDelaytime(UCHAR Delaytime);
 
 
 //====================================================================================
@@ -128,14 +112,17 @@ AMTDRV_EXTERN_ void OsdBlockHide(UCHAR ucOsdBlockId);
 AMTDRV_EXTERN_ void OsdClear(void);
 AMTDRV_EXTERN_ void OsdBlockClear(UCHAR ucOsdBlockId);
 AMTDRV_EXTERN_ void OsdConfigBlockColor(UCHAR fbColor);
+AMTDRV_EXTERN_ void OsdConfigWndColor(UCHAR starRow,UCHAR starLine, UCHAR xSize,UCHAR ySize, UCHAR fbColor);
 AMTDRV_EXTERN_ void OsdConfigWndPosition(UINT xPos, UINT yPos);
 AMTDRV_EXTERN_ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str);
 AMTDRV_EXTERN_ void OsdDrawIcon(UCHAR starRow,UCHAR starLine,UCHAR xSize,UCHAR ySize,UCHAR BackColor,UINT *pIconStr);
 AMTDRV_EXTERN_ void OsdWriteCharToFontram(BYTE indexAddr, UCHAR *pCharData);
-AMTDRV_EXTERN_ void LoadMulCharToFontram(UINT indexAddr, UCHAR Size,UCHAR *pCharData);
-AMTDRV_EXTERN_ void OsdDrawNum(UCHAR starRow,UCHAR starLine,UCHAR fbColor,SWORD value);
+AMTDRV_EXTERN_ void LoadMulCharToFontram(BYTE indexAddr, UCHAR Size,UCHAR *pCharData);
+AMTDRV_EXTERN_ void OsdDrawNum(UCHAR starRow,UCHAR starLine,UCHAR fbColor,WORD value);
 AMTDRV_EXTERN_ void OsdDrawGuage(UCHAR starRow, UCHAR starLine, UCHAR length,UCHAR fbColor, UCHAR value);
-AMTDRV_EXTERN_ void OsdDrawHex(UCHAR starRow,UCHAR starLine,UCHAR fbColor,SWORD value);
+AMTDRV_EXTERN_ void OsdDrawHex(UCHAR starRow,UCHAR starLine,UCHAR fbColor,WORD value);
+AMTDRV_EXTERN_ void OsdBlock0BlinkSet(UCHAR blinkFre,UCHAR xstart,UCHAR xend,UCHAR ystart,UCHAR yend);
+AMTDRV_EXTERN_ void OsdBlock0BlinkSwitch(FLAG oprateBit);
 AMTDRV_EXTERN_ void OsdConfigScaler(UCHAR zoom);
 AMTDRV_EXTERN_ void OsdConfigWndSize(BYTE width, BYTE height);
 AMTDRV_EXTERN_ void OsdBlockShow(UCHAR ucOsdBlockId);
@@ -152,6 +139,7 @@ AMTDRV_EXTERN_ void OsdConfigBitmapStarIndex(UCHAR starIndexAddr);
 AMTDRV_EXTERN_ void OsdConfigBitmapPalette(UCHAR *paletColor);
 AMTDRV_EXTERN_ UINT OsdConfigBlockIndexStarAddr(UCHAR blockId,UINT starAddr);
 AMTDRV_EXTERN_ void OsdWndClear(UCHAR starRow,UCHAR starLine,UCHAR endRow,UCHAR endLine);
+AMTDRV_EXTERN_ void OsdClearIcon(UCHAR starRow,UCHAR starLine,UCHAR xSize,UCHAR ySize);
 AMTDRV_EXTERN_ void DMALoadFontRam(ULONG SrcAddr,UINT DstAddr,UINT numOper);
 AMTDRV_EXTERN_ void LoadBitMapToFontRam(UCHAR indexAddr,UCHAR BitMapSize,UCHAR *pBitMapData);
 AMTDRV_EXTERN_ void OsdBlockEnable(UCHAR ucOsdBlockId);

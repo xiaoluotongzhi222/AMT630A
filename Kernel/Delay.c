@@ -3,12 +3,12 @@
 * All rights reserved.
 
 *File name: 　 Delay.c	  
-*Version:      1.0
+*Version:      0.1
 *update:       2011-12-16
 *Description:
   		    延时时间函数的定义。
   		  
-*History:  Jordan.chen   2011/12/16    1.0    build  this  moudle
+*History:  Jordan.chen   2011/12/16    0.1    build  this  moudle
 ******************************************************************************/
 #define _DELAY_C_
 
@@ -17,7 +17,7 @@
 #include "global.h"
 
 
-void Delay(UINT cont_time)
+void DelayUs(UINT cont_time)
 {
     while(cont_time--)
 	{
@@ -29,7 +29,8 @@ void DelayMs(UINT contTime)
 {
 	while(contTime--)
 	{
-	  Delay(400);
+	   DelayUs(400);
 	}
 }
+
 

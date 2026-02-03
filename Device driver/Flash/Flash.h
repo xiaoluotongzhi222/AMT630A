@@ -14,15 +14,15 @@
 
 
 #define FLASH_INT_EN            	0X80
-#define FLASH_CLEAR_STATUS 	 	0X00 
+#define FLASH_CLEAR_STATUS 	    0X00 
 #define FLASH_ERASE_EN          	0X08
 #define FLASH_PROGRAM_EN        	0X80
 #define FLASH_READ_EN           	0x10
 #define FLASH_READ_END          	0X10
-#define FLASH_WRITE_DISABLE_EN 	0x04
+#define FLASH_WRITE_DISABLE_EN  	0x04
 
 
-#define FLASH_LOGO_ADDR      0X10000
+#define FLASH_LOGO_ADDR      		0X10000
 #define FLASH_DAT_ADDR       0X0F000  
 #define FLASH_COPY_ADDR      0X0E000
 

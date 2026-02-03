@@ -1,0 +1,708 @@
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CONFIGLCDPARA
+OBJECT MODULE PLACED IN ..\Hex\ConfigLcdPara.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE ..\..\..\LCD Pannels\ConfigLcdPara.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\
+                    -..\OSD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Pa
+                    -nnels;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device drive
+                    -r\E2prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..
+                    -\..\..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\
+                    -..\..\Debug) DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\ConfigLcdPara.lst) TABS(2) OBJECT(..\Hex\ConfigLcdPara.obj)
+
+line level    source
+
+   1          
+   2          /*******************************************************************************
+   3          *Copyright (C) 2005 ÉîÛÚ°¬¿Æ´´ÐÂÓÐÏÞ¹«Ë¾²úÆ·Ó¦ÓÃÒ»²¿
+   4          * All rights reserved.
+   5          
+   6          *File name: ¡¡ ConfigLcdPara.c    
+   7          *Version:      0.1
+   8          *update:       2011-11-16
+   9          *Description:
+  10                  ÅäÖÃÆÁ²Î¡£
+  11                  
+  12          *History:  yshuizhou   2011/12/06    0.1    build  this  moudle
+  13          ******************************************************************************/
+  14          #define _CONFIGLCDPARA_C_
+  15          
+  16          #include "DataType.h"
+  17          #include "global.h"
+  18          #include "systemConfig.h"
+  19          #include "ConfigLcdPara.h"
+  20          #include "LcdPannelList.c" 
+  21          #include "AMT_Drv.h"
+  22          #include "AMT_Reg.h"
+  23          #include "AMT_Mcu.h"
+  24          #include "Debug.h"
+  25          
+  26          
+  27          UCHAR CODE g_ucPalPllClkDefVal  = PAL_PLL_CLK;
+  28          UCHAR CODE g_ucNtscPllClkDefVal   = NTSC_PLL_CLK;
+  29          
+  30          /****************************************************************************
+  31          name:   DataCurve(UCHAR minDat,UCHAR ideaDat,UCHAR maxDat,UCHAR currentDat,UCHAR len)
+  32          input:   
+  33                  ideaDat    ±ê×¼Ä£Ê½Ê±Ð´µ½¼Ä´æÆ÷µÄÖµ  
+  34                maxDat     Ð´µ½¼Ä´æÆ÷µÄ×î´óÖµ
+  35                  minDat     Ð´µ½¼Ä´æÆ÷µÄ×îÐ¡Öµ
+  36                currentDat OSDÏÔÊ¾µÄÖµÓÐÐ§·¶Î§ 0 - 100 
+  37                len        ÄÜ¹»µ÷½ÚµÄ×î´óÖµ
+  38                
+  39          *output: ·µ»ØÐ´µ½¼Ä´æÆ÷ÖÐµÄÊµ¼ÊÖµ¡£
+  40          
+  41          *description:
+  42                Õâ¸öº¯ÊýÊÇÓÃÀ´Õë¶ÔÁÁ¶È¡¢¶Ô±È¶È¡¢É«¶È£¬¸ù¾ÝÊµ¼ÊÖÐÐ´¸ø¼Ä´æÆ÷µÄ×î´óÖµ¡¢±ê×¼Öµ£¬µ±Ç°OSDµÄÖµ·µ»ØÒ»¸öÐ´µ½¼
+             -Ä´æÆ÷µÄÖµ¡£
+  43          
+  44          *history: yshuizhou   2011/12/06    0.1    transplant   this  function
+  45          *****************************************************************************/
+  46          UCHAR DataCurve(UCHAR minDat,UCHAR ideaDat,UCHAR maxDat,UCHAR currentDat,UCHAR len)   
+  47          {
+  48   1          UCHAR XDATA regVal;
+  49   1         
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 2   
+
+  50   1          if(ideaDat >= 10)
+  51   1          {
+  52   2                if((currentDat>=0)&&(currentDat<((len>>1)-2)))
+  53   2              {
+  54   3                 regVal=(UINT)((ideaDat - (minDat+10))*currentDat)/((len>>1)-2) + minDat;
+  55   3               return(regVal);
+  56   3              }
+  57   2            else if((currentDat>=((len>>1)-2))&&(currentDat<=((len>>1)+2)))
+  58   2            {  
+  59   3                regVal= ideaDat+currentDat-(len>>1);      
+  60   3              return(regVal);
+  61   3            }
+  62   2            else
+  63   2            {
+  64   3                regVal= ideaDat+10+(UINT)((maxDat-10-ideaDat)*(currentDat-((len>>1)+2)))/((len>>1)-2);
+  65   3              return(regVal);
+  66   3            }
+  67   2          }
+  68   1         return(ideaDat);
+  69   1      }
+  70          
+  71          
+  72          
+  73          /***********************************************************
+  74          *name:      GetSourceID(UCHAR CurretSource)
+  75          *input:     CurretSource
+  76          *output:    non
+  77          *update:    2011-11-18
+  78          *state:     allright
+  79          
+  80          *description:  
+  81                   Õâ¸öº¯ÊýÊÇ»ñÈ¡µ±Ç°Í¨µÀµÄÆÁ²ÎIDºÅ¡£      
+  82          
+  83          *History:  yshuizhou   2011/12/06    0.1    build  this  function
+  84          ************************************************************/
+  85          UCHAR GetSourceID(UCHAR CurretSource)
+  86          {
+  87   1          UCHAR XDATA i;
+  88   1        
+  89   1        for(i=0;i<(sizeof(VideoChannelPara)/sizeof(VideoChannelPara[0]));i++)
+  90   1        {
+  91   2              if(VideoChannelPara[i].INPUT_ID == CurretSource)
+  92   2              {
+  93   3                  return i;
+  94   3              }
+  95   2         }
+  96   1         return 0;
+  97   1      }
+  98          
+  99          
+ 100          
+ 101          /***********************************************************
+ 102          *name:    ConfigStaticPara() 
+ 103          *input:     CurretSource
+ 104          *output:    non
+ 105          *Update:    2011-11-18
+ 106          *state:     allright
+ 107          
+ 108          *description:  
+ 109                   Õâ¸öº¯ÊýÊÇÅäÖÃ²»Í¬Í¨µÀµÄ¾²Ì¬²ÎÊý¡£      
+ 110          
+ 111          *History:  yshuizhou   2011/12/06    0.1    build  this  function
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 3   
+
+ 112          ************************************************************/
+ 113          void ConfigStaticPara(UCHAR CurretSource)
+ 114          {     
+ 115   1           UINT  XDATA i;
+ 116   1         UCHAR XDATA ucSourceIndex;
+ 117   1      
+ 118   1         ucSourceIndex = GetSourceID(CurretSource);
+ 119   1         
+ 120   1           for(i=0; i<STATIC_NUM;i++)
+ 121   1         {     
+ 122   2           XBYTE[VideoChannelPara[ucSourceIndex].VideoPara.pVideoStaicPara[i].addr] = VideoChannelPara[ucSourceInd
+             -ex].VideoPara.pVideoStaicPara[i].dat;
+ 123   2         }
+ 124   1      
+ 125   1         #ifdef NoSignalBLOffEn
+ 126   1         XBYTE[0XFFB0] = 0X07;
+ 127   1         #endif
+ 128   1      
+ 129   1         #ifdef KillColorEn
+                 XBYTE[0XFE48] &= ~(_BIT7|_BIT3|_BIT2|_BIT1|_BIT0);
+                 XBYTE[0XFE48] |=_BIT6;
+                 #endif
+ 133   1      
+ 134   1         #ifdef DithingEn
+                 XBYTE[0XFFCB] = 0X00;
+                 XBYTE[0XFFCC] = 0X2A;
+                 XBYTE[0XFFCD] = 0X00;
+                 #endif
+ 139   1      }
+ 140          
+ 141          
+ 142          /***********************************************************
+ 143          *name:    ConfigPadMuxPara() 
+ 144          *input:   non
+ 145          *output:  non
+ 146          *Update:  2011-11-18
+ 147          *state:   allright
+ 148          
+ 149          *description:  
+ 150                   Õâ¸öº¯ÊýÊÇÅäÖÃ²»Í¬Í¨µÀµÄ¾²Ì¬²ÎÊý¡£      
+ 151          
+ 152          *History:  yshuizhou   2011/12/06    1.0    build  this  function
+ 153          ************************************************************/
+ 154          void ConfigPadMuxPara(void)
+ 155          {     
+ 156   1           UINT  XDATA i;
+ 157   1             
+ 158   1           for(i=0; i<PAD_MUX_NUM;i++)
+ 159   1         {     
+ 160   2               XBYTE[AMT_PadMuxStaticPara[i].addr] = AMT_PadMuxStaticPara[i].dat;
+ 161   2         }
+ 162   1      }
+ 163          
+ 164          
+ 165          
+ 166          /***********************************************************
+ 167          *name:      ConfigUserParaSetting(void) 
+ 168          *input:     void
+ 169          *output:    void
+ 170          *update:    2013-03-28
+ 171          *state:     allright
+ 172          
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 4   
+
+ 173          *description:  
+ 174                   Õâ¸öº¯ÊýÊÇÓÃÀ´½â¾ö²»Í¬¿Í»§µÄÒ»Ð©ÌØÊâÅäÖÃ²ÎÊý¡£
+ 175          
+ 176          *History:  Jordan¡£chen   2013/03/28    0.1    build  this  function
+ 177          ************************************************************/
+ 178          void ConfigUserParaSetting(void)
+ 179          {
+ 180   1          ConfigUserPara();
+ 181   1      }
+ 182          
+ 183          
+ 184          /***********************************************************
+ 185          *name:      ConfigColorSysDynPara(UCHAR currentSys) 
+ 186          *input:     currentSys
+ 187          *output:    non
+ 188          *update:    2011-11-18
+ 189          *state:     allright
+ 190          
+ 191          *description:  
+ 192                   Õâ¸öº¯ÊýÊÇÊµÊ±ÅäÖÃ²»Í¬Í¼ÏñÖÆÊ½²ÎÊý¡£      
+ 193          
+ 194          *History:  yshuizhou   2011/12/06    0.1    build  this  function
+ 195          ************************************************************/
+ 196          void ConfigColorSysDynPara(UCHAR currentSys) 
+ 197          {    
+ 198   1         UCHAR XDATA i;
+ 199   1         UCHAR XDATA ucSourceIndex;
+ 200   1      
+ 201   1         //printf("current sys = %x", currentSys);
+ 202   1         
+ 203   1         ucSourceIndex = GetSourceID(g_sysSetting.Video.curSource);
+ 204   1         
+ 205   1         for(i=0; i<SYS_DYN_NUM;i++)    
+ 206   1         {     
+ 207   2               XBYTE[VideoChannelPara[ucSourceIndex].VideoPara.pVideoSysDynPara[i].addr] = VideoChannelPara[ucSo
+             -urceIndex].VideoPara.pVideoSysDynPara[i].dat_sysDyn[currentSys];
+ 208   2         }  
+ 209   1         
+ 210   1         g_ucbrightness = BRIGHT_REG;
+ 211   1         g_ucContrast = CONTRAST_REG;
+ 212   1         g_ucSaturation = SATURATION_REG;
+ 213   1        
+ 214   1         UpdataPicPara();
+ 215   1      }
+ 216          
+ 217          
+ 218          
+ 219          
+ 220          /***********************************************************
+ 221          *name:      ConfigDispZoomDynPara(UCHAR currentmode) 
+ 222          *input:     currentmode
+ 223          *output:    non
+ 224          *update:    2011-11-18
+ 225          *state:     allright
+ 226          
+ 227          *description:  
+ 228                   Õâ¸öº¯ÊýÊÇÅäÖÃ²»Í¬Í¨µÀ16:9/4:3ÏÔÊ¾µÄ²ÎÊý¡£      
+ 229          
+ 230          *History:  yshuizhou   2011/12/06    0.1    build  this  function
+ 231          ************************************************************/
+ 232          void ConfigDispZoomDynPara(UCHAR currentmode) 
+ 233          {    
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 5   
+
+ 234   1          UCHAR XDATA i;
+ 235   1      
+ 236   1          EA = OFF;
+ 237   1          SCALER_HSYNC_UPDATE |= _BIT6;
+ 238   1          for(i=0; i<POS_DYN_NUM;i++)
+ 239   1          {
+ 240   2            XBYTE[VideoChannelPara[GetSourceID(g_sysSetting.Video.curSource)].VideoPara.pVideoPosDynPara[i].addr] =
+             - VideoChannelPara[GetSourceID(g_sysSetting.Video.curSource)].VideoPara.pVideoPosDynPara[i].dat_posDyn[currentmode];
+ 241   2          }  
+ 242   1          HFZ_LR_BLANK_WR = 0X00;
+ 243   1          EA = ON;
+ 244   1      }
+ 245          
+ 246          
+ 247          /*************************************************************************
+ 248          *name:  UpdataPicPara(void) 
+ 249          *input: currentSys
+ 250          *update:  2011-11-16
+ 251          state:   allright
+ 252          *description: 
+ 253                           ¸üÐÂ²»Í¬Í¨µÀÁÁ¶È¡¢¶Ô±È¶È¡¢É«¶È¡¢É«µ÷²ÎÊý  
+ 254                           
+ 255          *History:  yshuizhou   2011/12/06    0.1    build  this  function
+ 256          **************************************************************************/
+ 257          void UpdataPicPara(void) 
+ 258          {   
+ 259   1        BRIGHT_REG    =  DataCurve(BRIGHT_MIN,g_ucbrightness,BRIGHT_MAX,  g_sysSetting.Video.brigthness,MAX_VALUE
+             -);
+ 260   1        CONTRAST_REG  =  DataCurve(CONTRAST_MIN,g_ucContrast,CONTRAST_MAX,  g_sysSetting.Video.contrast,MAX_VALUE
+             -);
+ 261   1        SATURATION_REG=  DataCurve(SATURATION_MIN,g_ucSaturation,SATURATION_MAX,  g_sysSetting.Video.saturation,M
+             -AX_VALUE);
+ 262   1      }
+ 263          
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 6   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_CtrlMode. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+P0 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0080H  1
+P1 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0090H  1
+_PanlstaticPara. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  dat. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+_LogoID. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ALL_INPUT_SOURCE . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+P2 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A0H  1
+INPUT_YPBPR. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+P3 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B0H  1
+PanlSysDynPara . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  dat_sysDyn . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0002H  8
+PVOID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  VOID_PTR -----  3
+_DataCurve . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  minDat . . . . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0002H  1
+  ideaDat. . . . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0001H  1
+  maxDat . . . . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0003H  1
+  currentDat . . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0003H  1
+  len. . . . . . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0004H  1
+  regVal . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
+ProtocolData0. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SLONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+EA . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AFH  1
+ProtocolData1. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_FM . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+ULONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+UpdataPicPara. . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+INPUT_ITU656 . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+AMT_PadMuxStaticPara . . . . . . . . .  PUBLIC   CODE   ARRAY    056CH  129
+g_ucAdjustContrastVal. . . . . . . . .  PUBLIC   XDATA  U_CHAR   0000H  1
+INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  38
+_KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
+PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 7   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoChannel. . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  10
+  INPUT_ID . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  VideoPara. . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  9
+TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+PanlstaticPara . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  dat. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+INT8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_GetSourceID . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0005H  -----
+  CurretSource . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
+FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+BatterAdc_Lev0 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 8   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+AV1_posDynPara . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0504H  64
+VDE_GREEN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+ConfigPadMuxPara . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0000H  2
+DISP_EXT0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
+_VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VideoChannel . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  INPUT_ID . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  VideoPara. . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  9
+g_ucNtscPllClkDefVal . . . . . . . . .  PUBLIC   CODE   U_CHAR   0616H  1
+VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+AV1_staticPara . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0000H  1284
+g_ucPalPllClkDefVal. . . . . . . . . .  PUBLIC   CODE   U_CHAR   0615H  1
+CH1. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+AV1_sysDynPara . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0544H  40
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 9   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VideoChannelPara . . . . . . . . . . .  PUBLIC   CODE   ARRAY    05EDH  40
+INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+_KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+_FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+TIME_500MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_PannelPara. . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  pVideoStaicPara. . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
+  pVideoPosDynPara . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
+  pVideoSysDynPara . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+_ConfigDispZoomDynPara . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  currentmode. . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0000H  1
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
+LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 10  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_ConfigStaticPara. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  CurretSource . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0000H  2
+  ucSourceIndex. . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0002H  1
+INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+_ConfigColorSysDynPara . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  currentSys . . . . . . . . . . . . .  AUTO     DATA   U_CHAR   0000H  1
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
+  ucSourceIndex. . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0001H  1
+g_ucSaturation . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0001H  1
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
+_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+_PanlPosDynPara. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  dat_posDyn . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0002H  6
+VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+g_ucAdjustBrightnessVal. . . . . . . .  PUBLIC   XDATA  U_CHAR   0002H  1
+WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+EIP. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
+BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 11  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+g_ucbrightness . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0003H  1
+_PanlSysDynPara. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  10
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  dat_sysDyn . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0002H  8
+_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
+_LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ConfigUserParaSetting. . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+g_ucAdjustSaturationVal. . . . . . . .  PUBLIC   XDATA  U_CHAR   0004H  1
+LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PannelPara . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  pVideoStaicPara. . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
+  pVideoPosDynPara . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
+  pVideoSysDynPara . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/03/2026 10:50:00 PAGE 12  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+g_ucContrast . . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0005H  1
+VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PanlPosDynPara . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  dat_posDyn . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0002H  6
+_RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    881    ----
+   CONSTANT SIZE    =   1559    ----
+   XDATA SIZE       =      6      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -96,13 +96,13 @@ UINT POS_FilterBatteryAdcVal(UINT * AdcValueBuf,UCHAR len)
 
 
 /***********************************************************
-*name:     GetAdcKeyValue(void)
+*name:     POS_GetBatteryAdcValue(void)
 *input:    non
-*return:   返回当前通道采集到得按键值。
+*return:   返回当前电池ADC通道采集到的值。
 update： 2012-10-30
 *state:   try out
 *description:   
-         这个函数定时获取ADC各个通道的按键值。 
+         这个函数定时获取电池ADC通道采集到的值。 
 
          
 *History:  yshuizhou  2012/10/30   0.1    build  this  moudle

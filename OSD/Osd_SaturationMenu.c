@@ -12,11 +12,12 @@
 #include "configLCDPara.h"
 #include "Debug.h"
 #include "Delay.h"
-#include "AMT_REG.H"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_MCU.h"
+#include "AMT_Mcu.h"
 #include "Osd_Menu.h"
 #include "Osd_MenuPage.h"
+#include "Osd_BitMapFontDat.h"
 
 
 
@@ -25,22 +26,8 @@
 *****************************************************************/
 UCHAR* CODE SaturationMenuStr[]=
 {
-    "SATURATION",
-    "SATURATION",
-    "SATURAZIONE",
-    "SATURACI\x099N",
-    "S\x089TTIGUNG",
-    "SATURA\x0AD\x088O",
-    "KLEUR",
-    "\x017\x009\x00C\x0B8\x013\x0B7\x025\x0B8\x028",
-    "#\x000#\x003",
-    "#\x052#\x003",
-    "\x017\x009\x01F\x027",
-    "SATURATION",
-    "SATURATION"
+    "COLOR",
 };
-
-
 
 
 /*****************************************************************
@@ -58,25 +45,25 @@ UCHAR * SaturationMenu_TitelStr(void)
 *****************************************************************/
 AdjustType SaturationMenu_CheckCondition(void)
 {
-	AdjustType XDATA adjust = {0,0,0};
-    adjust.Flags |= osdVisible;
+    AdjustType XDATA adjust ={0,0,0};
+	
+	adjust.Flags |= osdVisible;
+	
 	//printfStr("SaturationMenu_CheckCondition");
 	return adjust;
 }
 
 
 
-
-
 BOOL SaturationMenuItem_DrawStyle(void)
 {
     //printfStr("SaturationMenuItem_DrawStyle");
-    OsdWndClear(0X00, 0X00, 0X00, 0X11);
+	OsdWndClear(0X00, 0X00, 0X00, 0X1E);
     return 0;
 }
 
 
-SWORD GetSaturationVal(void)
+WORD GetSaturationVal(void)
 {
      //printfStr("GetSaturationVal");
      return g_sysSetting.Video.saturation;
@@ -87,6 +74,7 @@ BOOL AdjustSaturation(UCHAR opratComd)
 {
     if(opratComd == COMD_IncValue)
     {
+        
 		  if(g_sysSetting.Video.saturation<MAX_VALUE)
 		  {
 		      g_sysSetting.Video.saturation++;
@@ -95,28 +83,21 @@ BOOL AdjustSaturation(UCHAR opratComd)
     }
 	if(opratComd == COMD_DecValue)
 	{
+	    
 		  if(g_sysSetting.Video.saturation>0)
 		  {
 		      g_sysSetting.Video.saturation--;
 		  } 
 		 //printf("Dec Value -- =%d",g_sysSetting.Video.contrast);
 	}
-	if(opratComd == COMD_Saturation)
-    {     
-		g_sysSetting.Video.saturation++;
-		if(g_sysSetting.Video.saturation >MAX_VALUE)
-		{
-		   g_sysSetting.Video.saturation = 0;
-		}
-	    //printf("saturation Adjust Value = %d",g_sysSetting.Video.saturation);
-    }
 	return 1;
 }
 
 
 BOOL ExectSaturation(void)
 {
-   UpdataPicPara(); 
+   //printfStr("ExectSaturation");
+   SATURATION_REG=  DataCurve(SATURATION_MIN,g_ucSaturation,SATURATION_MAX, g_sysSetting.Video.saturation,MAX_VALUE);
    return 1;
 }
 
@@ -126,12 +107,11 @@ BOOL ExectSaturation(void)
 *****************************************************************/
 DrawNumberType CODE Number_Saturation[]=
 {
-    {0,14,RED,TRANSPARENCE,RED,TRANSPARENCE, GetSaturationVal,osdDecNum|osdEnd},
+	{0,MAINMENU_ITEM_GUAGE,MAINMENU_ITEM_NUMFORECOLOR,MAINMENU_ITEM_NUMBACKCOLOR,MAINMENU_ITEM_NUMFORECOLOR,MAINMENU_ITEM_NUMBACKCOLOR, GetSaturationVal,osdDecNum|osdEnd},
 };
-
 DrawGuageType CODE Gugae_Saturation[]=
 {
-    {1,0,WHITE,TRANSPARENCE,WHITE,TRANSPARENCE, MAX_VALUE,GetSaturationVal,osdEnd},
+    {1,1,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR, MAX_VALUE,GetSaturationVal,osdEnd},
 };
 
 ItemValueType CODE SaturationMenuItemVal_Saturation[]=
@@ -151,14 +131,15 @@ ItemValueType CODE SaturationMenuItemVal_Saturation[]=
 
 
 
-
 /*****************************************************************
                          Item  Titel table
 *****************************************************************/
 TitelType CODE SaturationMenuItem_SaturationTitelTab[]=
 {
-   {0,0,RED,TRANSPARENCE,RED,TRANSPARENCE,DWT_Text,SaturationMenu_TitelStr,osdEnd},
+   {0,1,MAINMENU_ITEM_TITELFORECOLOR,MAINMENU_ITEM_TITELBACKCOLOR,MAINMENU_ITEM_TITELFORECOLOR,MAINMENU_ITEM_TITELBACKCOLOR,DWT_Text,SaturationMenu_TitelStr,osdEnd},
 };
+
+
 
 /*****************************************************************
                           Menu Icon table
@@ -169,3 +150,5 @@ TitelType CODE SaturationMenuItem_SaturationTitelTab[]=
 /*****************************************************************
                          Menu  Titel table
 *****************************************************************/
+
+

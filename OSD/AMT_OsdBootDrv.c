@@ -1,30 +1,30 @@
   //'Space'  ''      ''      ''      ''       ''        ''      ''        ''      ''       ''  		   		  		  		 '-'			   		 			   		  		  					  
 /*******************************************************************************
-*Copyright (C) 2005 Ã‰Ã®Ã›ÃšÂ°Â¬Â¿Ã†Â´Â´ÃÃ‚Ã“ÃÃÃÂ¹Â«Ã‹Â¾Â²ÃºÃ†Â·Ã“Â¦Ã“ÃƒÃ’Â»Â²Â¿
+*Copyright (C) 2005 ¨¦??¨²¡ã???¡ä¡äD?¨®D?T1???2¨²?¡¤¨®|¨®?¨°?2?
 * All rights reserved.
 
-*File name: Â¡Â¡ AMT_0sdBootDrv.c	  
+*File name: ?? AMT_0sdBootDrv.c	  
 *Version:      1.0
 *update:       2011-12-06
 *Description:
-  		  AMT OSDÂµÃ—Â²Ã£Ã‡Ã½Â¶Â¯Â¡Â£
+  		  AMT OSD¦Ì¡Á2??y?¡¥?¡ê
 	   
 *History:  yshuizhou   2011/12/19    1.0    build  this  moudle
 ******************************************************************************/
 #include "AMT_Mcu.h"
 #include "Flash.h"
 
-#define RedColor       	0x000f //ÂºÃ¬Ã‰Â«:
-#define GreenColor     	0x00f0 //Ã‚ÃŒÃ‰Â«:
-#define BlueColor      	0x0f00 //Ã€Â¶Ã‰Â«: 
-#define YellowColor    	0x00ff //Â»Ã†Ã‰Â«:
-#define Red1Color      	0x0f0f //Ã†Â·ÂºÃ¬:
-#define GrayColor      	0x0888 //Â»Ã’Ã‰Â«: 
-#define WhiteColor     	0x0fff //Â°Ã—Ã‰Â«: 
-#define CyanColor      	0x0ff0 //Ã‡Ã Ã‰Â«:
-#define OrangeColor    	0x008f //Â³ÃˆÃ‰Â«:
-#define PurpleColor    	0x0f08 //Ã—ÃÃ‰Â«:
-#define MalachiteColor 	0x08f0 //Ã‚ÃŒÃ‡Ã :
+#define RedColor       	0x000f //o¨¬¨¦?:
+#define GreenColor     	0x00f0 //?¨¬¨¦?:
+#define BlueColor      	0x0f00 //¨¤?¨¦?: 
+#define YellowColor    	0x00ff //??¨¦?:
+#define Red1Color      	0x0f0f //?¡¤o¨¬:
+#define GrayColor      	0x0888 //?¨°¨¦?: 
+#define WhiteColor     	0x0fff //¡ã¡Á¨¦?: 
+#define CyanColor      	0x0ff0 //?¨¤¨¦?:
+#define OrangeColor    	0x008f //3¨¨¨¦?:
+#define PurpleColor    	0x0f08 //¡Á?¨¦?:
+#define MalachiteColor 	0x08f0 //?¨¬?¨¤:
 
 static UCHAR XDATA g_ucCurOsdBlockId = 0;
 OsdCtrlerType  XDATA g_OsdContrller;
@@ -40,7 +40,7 @@ static UINT CODE  ASCIIMap[256] =
 //(1,18-16)  (1,19-17) (1,20-18)   (1,21-19)  (1,22-20)  (1,23-21)   (1,24-22)   (1,25-23)  (1,26-24) (1,27-25)  (1,28-26)   (1,29-27)   (1,30-28)  (1,31-29)  (1,32-30)    (1,33-31)
   0X1F5,    0X1F6,   0X1F7,    0X1F8,    0X1F9,    0X1FA,     0X1FB,    0X1FC,    0X1FD,   0X1FE,    0X1FF,     0X200,    0X201,    0X202,    0X203,      0X204,
 
-  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 Â¡Â£         (2,18-47)
+  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 ?¡ê         (2,18-47)
   0X1C0,    0X210,   0X205,    ' ',        0X208,   0X209,      ' ',       0X20B,    0X20C,   0X242,	  0X206,    0X241,    0X051,    0X052,    0X20D,		 0X058,
 
   //0          1        2           3          4          5            6          7          8         9          :          (2,19-59)     <        (2,27-61)     >           ?
@@ -76,7 +76,7 @@ static UINT CODE  ASCIIMap[256] =
 //(1,18-16)  (1,19-17) (1,20-18)   (1,21-19)  (1,22-20)  (1,23-21)   (1,24-22)   (1,25-23)  (1,26-24) (1,27-25)  (1,28-26)   (1,29-27)   (1,30-28)  (1,31-29)  (1,32-30)    (1,33-31)
   0X035,    0X036,   0X037,    0X038,    0X039,    0X03A,     0X03B,    0X03C,    0X03D,   0X03E,    0X03F,     0X040,    0X041,    0X042,    0X043,      0X044,
 
-  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 Â¡Â£         (2,18-47)
+  //Space      !       (1,34-34)    #         (2,2-36)   (2,3-37)      &         (2,5-39)   (2,6-40)  (2,9-41)    *  	     (2,10-43) 	 (2,11-44)  (2,12-45)	 ?¡ê         (2,18-47)
   0X000,    0X135,   0X045,    ' ',        0X048,   0X049,      ' ',       0X04B,    0X04C,   0X04F,    0x046,     0X050,    0X051,    0X052,    0X10C,      0X058,
 
   //0          1        2           3          4          5            6          7          8         9          :          (2,19-59)     <        (2,27-61)     >           ?
@@ -114,25 +114,25 @@ static UINT CODE  ASCIIMap[256] =
 static UINT CODE  AsianMap[256] = 
 {
 #if(ICON_SIZE == SIZE_12X16)
-  //(Ã‰Â«-0)   (ÃÃ‚-1)   (Ã—Â¼-2)     (Â¶Ãˆ-3)   (ÃÃ”-4)    (ÃŠÂ¾-5)     (Ã„Â¬-6)    (ÃˆÃ-7)     (ÃÂµ-8)     (ÃÂ³-9)     (Â»Â­-10)    (Ã–ÃŠ-11)    (ÂµÃ·-12)     (Ã•Ã»-13)    (Ã“Ã¯-14)   (Ã‘Ã”-15)
+  //(¨¦?-0)   (??-1)   (¡Á?-2)     (?¨¨-3)   (??-4)    (¨º?-5)     (??-6)    (¨¨?-7)     (?¦Ì-8)     (¨ª3-9)     (?--10)    (?¨º-11)    (¦Ì¡Â-12)     (??-13)    (¨®?-14)   (??-15)
   0X243,   0X064,   0X065,   0x257,  0x067,   0X068,	   0X069,   0X06A,    0X06B,   0X06C,    0X06D,    0X06E,    0X24F,    0X070,   0X249,    0X24A,
 
- //(Ã‘Â¡-16)  (Ã”Ã±-17)   (Â¿Âª-18)    (Â¹Ã˜-19)  (Â¶Ã”-20)   (Â±Ãˆ-21)    (Ã‹Â¯-22)   (ÃƒÃŸ-23)    (ÃÃ±-24)    (Â¶Â¨-25)    (ÃŠÃ¤-26)    (ÃˆÃ«-27)    (Â»Ã–-28)     (Â¸Â´-29)   (ÂºÃ-30)    (Ã‹Ã‘-31) 
+ //(??-16)  (??-17)   (?a-18)    (1?-19)  (??-20)   (¡À¨¨-21)    (?¡¥-22)   (??-23)    (??-24)    (?¡§-25)    (¨º?-26)    (¨¨?-27)    (??-28)     (?¡ä-29)   (o¨ª-30)    (??-31) 
   0X073,   0X074,   0X075,   0X076,  0X245,   0X246,	   0X079,   0X07A,    0X07B,   0X07C,    0X07D,    0X07E,    0X07F,    0X255,   0X081,    0X082,
 
- //(Ã„Ãª-32)  (Ã”Ã‚-33)   (ÃˆÃ•-34)    (Â·Ã–-35)  (ÃƒÃ«-36)   (ÃÃ‡-37)    (Ã†Ãš-38)   (Ã’Â»-39)     (Â¶Ã¾-40)   (ÃˆÃ½-41)    (Ã‹Ã„-42)    (ÃÃ¥-43)    (ÃÃ¹-44)    (Â´Ã³-45)   (Ã„Â£-46)     (ÃŠÂ½-47) 
+ //(?¨º-32)  (??-33)   (¨¨?-34)    (¡¤?-35)  (??-36)   (D?-37)    (?¨²-38)   (¨°?-39)     (?t-40)   (¨¨y-41)    (??-42)    (??-43)    (¨¢¨´-44)    (¡ä¨®-45)   (?¡ê-46)     (¨º?-47) 
   0X083,   0X084,   0X085,   0X086,  0X087,   0X088,    0X089,  0X08A,     0X08B,   0X08C,    0X08D,   0X08E,    0X08F,    0X090,   0X250,    0X251,
 
- //(Â½Âµ-48)  (Ã”Ã«-49)   (ÃˆÃ¡-50)    (Ã–Âµ-51)  (ÃÂ¡-52)   (Â¸Â½-53)    (Â¼Ã¾-54)   (Â·Â­-55)     (Ã—Âª-56)    (Ã‰Ã-57)   (ÃÃ‚-58)    (Ã—Ã³-59)    (Ã“Ã’-60)    (Ã–Ã†-61)   (Ã‰Ã¹-62)     (Ã–Ãƒ-63)
+ //(?¦Ì-48)  (??-49)   (¨¨¨¢-50)    (?¦Ì-51)  (D?-52)   (??-53)    (?t-54)   (¡¤--55)     (¡Áa-56)    (¨¦?-57)   (??-58)    (¡Á¨®-59)    (¨®¨°-60)    (??-61)   (¨¦¨´-62)     (??-63)
   0X093,   0X094,   0X095,   0X096,  0X097,	0X098,    0X099,  0X247,     0X248,   0X09C,    0X09D,    0X09E,   0X09F,    0X0A0,   0X0A1,  	 0X0A2,
 
- //(ÂºÃ…-64)  (ÃÃ-65)   (Â°Ã©-66)    (ÃŒÃ¥-67)  (Ã”Â´-68)   (Ã—Ã–-69)    (ÃƒÃ¦-70)   (Ã€Ã¶-71)     (Â´Ã¦-72)    (ÃŒÂ¨-73)   (ÃŠÃ–-74)    (Ã—Ã”-75)    (Â¶Â¯-76)    (ÃÂ»-77)   (Ã†Âµ-78)     (ÂµÃ€-79)
+ //(o?-64)  (?T-65)   (¡ã¨¦-66)    (¨¬?-67)  (?¡ä-68)   (¡Á?-69)    (??-70)   (¨¤?-71)     (¡ä?-72)    (¨¬¡§-73)   (¨º?-74)    (¡Á?-75)    (?¡¥-76)    (??-77)   (?¦Ì-78)     (¦Ì¨¤-79)
   0X24B,   0X252,	  0X0A5,   0X254,  0X258,   0X0A8,    0X0A9,  0X0AA,     0X0AB,   0X0AC,    0X0AD,    0X0AE,    0X0AF,   0X256,   0X0B1,     0X0B2, 
 
-//(Â¶Ã-80)   (Â±Â£-81)   (Â²ÃŠ-82)    (Ã‡Ã¥-83)  (ÃÃº-84) 	(Â¾Â²-85)    (Ã’Ã´-86)   (ÃŠÂ±-87)     (Â¼Ã¤-88)    (Â¼Ã²-89)    (Ã–Ã-90)    (ÃÃ„-91)    (ÃŒÃ¸-92)    (Ã”Â½-93)  (ÃÂ¼-94)      (Ã”Â¤-95)
+//(??-80)   (¡À¡ê-81)   (2¨º-82)    (??-83)  (?¨²-84) 	(?2-85)    (¨°?-86)   (¨º¡À-87)     (??-88)    (?¨°-89)    (?D-90)    (??-91)    (¨¬?-92)    (??-93)  (¨ª?-94)      (?¡è-95)
   0X0B3,   0X0B4,   0X262,   0X0B6,  0X0B7,   0X0B8,    0X0B9,  0X0BA,     0X0BB,   0X24C,    0X24D,    0X24E,    0X0BF,    0X0C0,  0X0C1,     0X0C2,
 
-//(Ã‰Ã¨-96)   (ÃˆÂ·-97)   (ÃÃ…-98)    (ÃÂ¿-99)  (ÃÃ-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
+//(¨¦¨¨-96)   (¨¨¡¤-97)   (D?-98)    (¨¢?-99)  (¨¢¨¢-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
   0X0C3,   0X0C4,   0X253,   0X0C6,  0X244,   0X260,    0X0C9,   0X0CA,    0X0CB,    0X267,    0X0CD,    0X25D,   0X25E,    0X25F,  0X261,   0X25B,
 
 //(6,1-112) (6,4-113) (6,5-114)  (6,6-115) (6,7-116) (6,8-117) (6,9-118)  (6,10-119) (6,11-120) (6,12-121)  (6,13-122) (6,14-123) (6,15-124) (6,16-125) (6,17-126) (6,18-127)
@@ -162,25 +162,25 @@ static UINT CODE  AsianMap[256] =
 //(11,18-240) (11,19-241) (11,20-242) (11,21-243)  (11,22-244) (11,26-245) (11,27-246) (11,28-247)  (11,29-248)
 0X193,      0X194,      0X195,     0X196,     0X197,    0X19B,      0X19C,     0X19D,      0X19E,
 #elif(ICON_SIZE == SIZE_16X22)
-  //(Ã‰Â«-0)   (ÃÃ‚-1)   (Ã—Â¼-2)     (Â¶Ãˆ-3)   (ÃÃ”-4)    (ÃŠÂ¾-5)     (Ã„Â¬-6)    (ÃˆÃ-7)     (ÃÂµ-8)     (ÃÂ³-9)     (Â»Â­-10)    (Ã–ÃŠ-11)    (ÂµÃ·-12)     (Ã•Ã»-13)    (Ã“Ã¯-14)   (Ã‘Ã”-15)
+  //(¨¦?-0)   (??-1)   (¡Á?-2)     (?¨¨-3)   (??-4)    (¨º?-5)     (??-6)    (¨¨?-7)     (?¦Ì-8)     (¨ª3-9)     (?--10)    (?¨º-11)    (¦Ì¡Â-12)     (??-13)    (¨®?-14)   (??-15)
   0X063,   0X064,   0X065,   0x066,  0x067,   0X068,	   0X069,   0X06A,    0X06B,   0X06C,    0X06D,    0X06E,    0X06F,    0X070,   0X071,    0X072,
 
- //(Ã‘Â¡-16)  (Ã”Ã±-17)   (Â¿Âª-18)    (Â¹Ã˜-19)  (Â¶Ã”-20)   (Â±Ãˆ-21)    (Ã‹Â¯-22)   (ÃƒÃŸ-23)    (ÃÃ±-24)    (Â¶Â¨-25)    (ÃŠÃ¤-26)    (ÃˆÃ«-27)    (Â»Ã–-28)     (Â¸Â´-29)   (ÂºÃ-30)    (Ã‹Ã‘-31) 
+ //(??-16)  (??-17)   (?a-18)    (1?-19)  (??-20)   (¡À¨¨-21)    (?¡¥-22)   (??-23)    (??-24)    (?¡§-25)    (¨º?-26)    (¨¨?-27)    (??-28)     (?¡ä-29)   (o¨ª-30)    (??-31) 
   0X073,   0X074,   0X075,   0X076,  0X077,   0X078,	   0X079,   0X07A,    0X07B,   0X07C,    0X07D,    0X07E,    0X07F,    0X080,   0X081,    0X082,
 
- //(Ã„Ãª-32)  (Ã”Ã‚-33)   (ÃˆÃ•-34)    (Â·Ã–-35)  (ÃƒÃ«-36)   (ÃÃ‡-37)    (Ã†Ãš-38)   (Ã’Â»-39)     (Â¶Ã¾-40)   (ÃˆÃ½-41)    (Ã‹Ã„-42)    (ÃÃ¥-43)    (ÃÃ¹-44)    (Â´Ã³-45)   (Ã„Â£-46)     (ÃŠÂ½-47) 
+ //(?¨º-32)  (??-33)   (¨¨?-34)    (¡¤?-35)  (??-36)   (D?-37)    (?¨²-38)   (¨°?-39)     (?t-40)   (¨¨y-41)    (??-42)    (??-43)    (¨¢¨´-44)    (¡ä¨®-45)   (?¡ê-46)     (¨º?-47) 
   0X083,   0X084,   0X085,   0X086,  0X087,   0X088,    0X089,  0X08A,     0X08B,   0X08C,    0X08D,   0X08E,    0X08F,    0X090,   0X091,    0X092,
 
- //(Â½Âµ-48)  (Ã”Ã«-49)   (ÃˆÃ¡-50)    (Ã–Âµ-51)  (ÃÂ¡-52)   (Â¸Â½-53)    (Â¼Ã¾-54)   (Â·Â­-55)     (Ã—Âª-56)    (Ã‰Ã-57)   (ÃÃ‚-58)    (Ã—Ã³-59)    (Ã“Ã’-60)    (Ã–Ã†-61)   (Ã‰Ã¹-62)     (Ã–Ãƒ-63)
+ //(?¦Ì-48)  (??-49)   (¨¨¨¢-50)    (?¦Ì-51)  (D?-52)   (??-53)    (?t-54)   (¡¤--55)     (¡Áa-56)    (¨¦?-57)   (??-58)    (¡Á¨®-59)    (¨®¨°-60)    (??-61)   (¨¦¨´-62)     (??-63)
   0X093,   0X094,   0X095,   0X096,  0X097,	0X098,    0X099,  0X09A,     0X09B,   0X09C,    0X09D,    0X09E,   0X09F,    0X0A0,   0X0A1,  	 0X0A2,
 
- //(ÂºÃ…-64)  (ÃÃ-65)   (Â°Ã©-66)    (ÃŒÃ¥-67)  (Ã”Â´-68)   (Ã—Ã–-69)    (ÃƒÃ¦-70)   (Ã€Ã¶-71)     (Â´Ã¦-72)    (ÃŒÂ¨-73)   (ÃŠÃ–-74)    (Ã—Ã”-75)    (Â¶Â¯-76)    (ÃÂ»-77)   (Ã†Âµ-78)     (ÂµÃ€-79)
+ //(o?-64)  (?T-65)   (¡ã¨¦-66)    (¨¬?-67)  (?¡ä-68)   (¡Á?-69)    (??-70)   (¨¤?-71)     (¡ä?-72)    (¨¬¡§-73)   (¨º?-74)    (¡Á?-75)    (?¡¥-76)    (??-77)   (?¦Ì-78)     (¦Ì¨¤-79)
   0X0A3,   0X0A4,	  0X0A5,   0X0A6,  0X0A7,   0X0A8,    0X0A9,  0X0AA,     0X0AB,   0X0AC,    0X0AD,    0X0AE,    0X0AF,   0X0B0,   0X0B1,     0X0B2, 
 
-//(Â¶Ã-80)   (Â±Â£-81)   (Â²ÃŠ-82)    (Ã‡Ã¥-83)  (ÃÃº-84) 	(Â¾Â²-85)    (Ã’Ã´-86)   (ÃŠÂ±-87)     (Â¼Ã¤-88)    (Â¼Ã²-89)    (Ã–Ã-90)    (ÃÃ„-91)    (ÃŒÃ¸-92)    (Ã”Â½-93)  (ÃÂ¼-94)      (Ã”Â¤-95)
+//(??-80)   (¡À¡ê-81)   (2¨º-82)    (??-83)  (?¨²-84) 	(?2-85)    (¨°?-86)   (¨º¡À-87)     (??-88)    (?¨°-89)    (?D-90)    (??-91)    (¨¬?-92)    (??-93)  (¨ª?-94)      (?¡è-95)
   0X0B3,   0X0B4,   0X0B5,   0X0B6,  0X0B7,   0X0B8,    0X0B9,  0X0BA,     0X0BB,   0X0BC,    0X0BD,    0X0BE,    0X0BF,    0X0C0,  0X0C1,     0X0C2,
 
-//(Ã‰Ã¨-96)   (ÃˆÂ·-97)   (ÃÃ…-98)    (ÃÂ¿-99)  (ÃÃ-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
+//(¨¦¨¨-96)   (¨¨¡¤-97)   (D?-98)    (¨¢?-99)  (¨¢¨¢-100)  (5,25-101) (5,26-102) (5,27-103) (5,28-104) (5,29-105) (5,30-106) (5,31-107)  (5,32-108) (5,33-109) (5,34-110) (6,0-111)
   0X0C3,   0X0C4,   0X0C5,   0X0C6,  0X0C7,   0X0C8,    0X0C9,   0X0CA,    0X0CB,    0X0CC,    0X0CD,    0X0CE,    0X0CF,    0X0D0,    0X0D1,   0X0D2,
 
 //(6,1-112) (6,4-113) (6,5-114)  (6,6-115) (6,7-116) (6,8-117)   (6,9-118) (6,10-119) (6,11-120) (6,12-121)  (6,13-122) (6,14-123) (6,15-124) (6,16-125) (6,17-126) (6,18-127)
@@ -232,7 +232,7 @@ static UINT CODE  FontRamMap[256] =
   0X200, 0X201, 0X202, 0X203, 0X204, 0X205, 0X206, 0X207, 0X208, 0X209, 0X20A, 0X20B, 0X20C, 0X20D, 0X20E, 0X20F, 
   // --- 80 ~ 95 ---
   0X210, 0X211, 0X212, 0X213, 0X214, 0X215, 0X216, 0X217, 0X218, 0X219, 0X21A, 0X21B, 0X21C, 0X21D, 0X21E, 0X21F, 
-  // --- 96 ~ 111 (æ¥ç€åŸæ¥çš„ 0x223 ç»§ç»­) ---
+  // --- 96 ~ 111 (½Ó×ÅÔ­À´µÄ 0x223 ¼ÌĞø) ---
   0X220, 0X221, 0X222, 0X223, 0X224, 0X225, 0X226, 0X227, 0X228, 0X229, 0X22A, 0X22B, 0X22C, 0X22D, 0X22E, 0X22F, 
   // --- 112 ~ 127 ---
   0X230, 0X231, 0X232, 0X233, 0X234, 0X235, 0X236, 0X237, 0X238, 0X239, 0X23A, 0X23B, 0X23C, 0X23D, 0X23E, 0X23F,
@@ -244,63 +244,65 @@ static UINT CODE  FontRamMap[256] =
   0X260, 0X261, 0X262, 0X263, 0X264, 0X265, 0X266, 0X267, 0X268, 0X269, 0X26A, 0X26B, 0X26C, 0X26D, 0X26E, 0X26F,
   // --- 176 ~ 191 ---
   0X270, 0X271, 0X272, 0X273, 0X274, 0X275, 0X276, 0X277, 0X278, 0X279, 0X27A, 0X27B, 0X27C, 0X27D, 0X27E, 0X27F,
-  // --- 192 ~ 207 (å®é™…ä¸Šåªç”¨åˆ° 199, å³ 0x287) ---
+  // --- 192 ~ 207 (Êµ¼ÊÉÏÖ»ÓÃµ½ 199, ¼´ 0x287) ---
   0X280, 0X281, 0X282, 0X283, 0X284, 0X285, 0X286, 0X287, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000,
 #endif
 };
 code UCHAR BigNum_Table[10][6] = {
-// æ•°å­— 0 (0x24 - 0x29)
+// Êı×Ö 0 (0x24 - 0x29)
     {0x24, 0x25, 0x26, 0x27, 0x28, 0x29},
 
-    // æ•°å­— 1 (0x2A - 0x2F)
+    // Êı×Ö 1 (0x2A - 0x2F)
     {0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F},
 
-    // æ•°å­— 2 (0x30 - 0x35)
+    // Êı×Ö 2 (0x30 - 0x35)
     {0x30, 0x31, 0x32, 0x33, 0x34, 0x35},
 
-    // æ•°å­— 3 (0x36 - 0x3B)
+    // Êı×Ö 3 (0x36 - 0x3B)
     {0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B},
 
-    // æ•°å­— 4 (0x3C - 0x41)
+    // Êı×Ö 4 (0x3C - 0x41)
     {0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41},
 
-    // æ•°å­— 5 (0x42 - 0x47)
+    // Êı×Ö 5 (0x42 - 0x47)
     {0x42, 0x43, 0x44, 0x45, 0x46, 0x47},
 
-    // æ•°å­— 6 (0x48 - 0x4D)
+    // Êı×Ö 6 (0x48 - 0x4D)
     {0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D},
 
-    // æ•°å­— 7 (0x4E - 0x53)
+    // Êı×Ö 7 (0x4E - 0x53)
     {0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53},
 
-    // æ•°å­— 8 (0x54 - 0x59)
+    // Êı×Ö 8 (0x54 - 0x59)
     {0x54, 0x55, 0x56, 0x57, 0x58, 0x59},
 
-    // æ•°å­— 9 (0x5A - 0x5F)
+    // Êı×Ö 9 (0x5A - 0x5F)
     {0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F}
 };
 code UCHAR Radar_Wave_Table_Correct[8][4] = {
-// Front 3 (Far) -> åŸ0x6E -> ç°0x61
+// Front 3 (Far) -> Ô­0x6E -> ÏÖ0x61
     {0x61, 0x63, 0x65, 0x67},
     
-    // Front 2 (Mid) -> åŸ0x76 -> ç°0x69
+    // Front 2 (Mid) -> Ô­0x76 -> ÏÖ0x69
     {0x69, 0x6B, 0x6D, 0x6F},
     
-    // Front 1 (Near) -> åŸ0x7E -> ç°0x71
+    // Front 1 (Near) -> Ô­0x7E -> ÏÖ0x71
     {0x71, 0x73, 0x75, 0x77},
 
-    // Rear 1 (Near) -> åŸ0x86 -> ç°0x79
+    // Rear 1 (Near) -> Ô­0x86 -> ÏÖ0x79
     {0x79, 0x7B, 0x7D, 0x7F},
     
-    // Rear 2 (Mid) -> åŸ0x8E -> ç°0x81
+    // Rear 2 (Mid) -> Ô­0x8E -> ÏÖ0x81
     {0x81, 0x83, 0x85, 0x87},
     
-    // Rear 3 (Far) -> åŸ0x96 -> ç°0x89
+    // Rear 3 (Far) -> Ô­0x96 -> ÏÖ0x89
     {0x89, 0x8B, 0x8D, 0x8F}
 };
-//===================================Ã’Ã”ÃÃ‚ÃŠÃ‡ÂºÃOSD BLOCK ÃÃÂ¹Ã˜ÂµÃ„============================
+//===================================¨°???¨º?o¨ªOSD BLOCK ?T1?¦Ì?============================
 void OsdCofigPalette(void)
 {
+	XBYTE[0xFB54] = 0x00; // ICON_CR0_H
+    XBYTE[0xFB55] = 0x00; // ICON_CR0_L
 	ICON_CR1_L = RedColor&0xff;	
 	ICON_CR1_H = RedColor>>8;	
 	ICON_CR2_L = GreenColor&0xff;	
@@ -315,7 +317,7 @@ void OsdCofigPalette(void)
 	ICON_CR6_H = WhiteColor>>8;
 }
 
-//Ã…Ã¤Ã–ÃƒÃÂ»ÃÂ¼ÂµÃ·Ã‰Â«Â°Ã¥
+//??????¨ª?¦Ì¡Â¨¦?¡ã?
 void OsdConfigBitmapPalette(UCHAR *paletColor)     
 {
 	UCHAR XDATA i=0;
@@ -391,7 +393,7 @@ UINT OsdGetStartIndexAddr(void)
 }
 
 
-//Ã‰Ã¨Ã–ÃƒOSD BlockÂ´Â°Â¿ÃšÂ´Ã³ÃÂ¡  Â¿Ã©Â´Ã³ÃÂ¡
+//¨¦¨¨??OSD Block¡ä¡ã?¨²¡ä¨®D?  ?¨¦¡ä¨®D?
 void OsdConfigWndSize(BYTE width, BYTE height)
 {
      //printfStr("OsdConfigWndSize");
@@ -566,7 +568,7 @@ void OsdWndClear(UCHAR starRow,UCHAR starLine,UCHAR endRow,UCHAR endLine)
 	 for(yIndex=starRow;yIndex<=(starRow+(endRow-starRow));yIndex++)
 	 {
 	     wcStartIndexAddr = OsdGetStartIndexAddr();
-         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row ÃÃ   line ÃÃ
+         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row DD   line ¨¢D
 	     wcStartIndexAddr = wcStartIndexAddr + ucIndexOffset;
 		 
 		 INDEX_RAM_ADD_H =(wcStartIndexAddr>>8);
@@ -650,7 +652,7 @@ void OsdConfigDispMode(UCHAR dispMode,UCHAR  mirrorMode)
 }
 
 
-// Ã…Ã¤Ã–ÃƒÃÃ”ÃŠÂ¾Â¿Ã©ÂµÃ„Ã‘Ã•Ã‰Â«
+// ??????¨º??¨¦¦Ì???¨¦?
 void OsdConfigBlockColor(UCHAR fbColor)
 {
 	UINT XDATA wcIndexAddr = 0;
@@ -671,7 +673,7 @@ void OsdConfigBlockColor(UCHAR fbColor)
  }
 
 
-//Ã‰Ã¨Ã–ÃƒÂ¿Ã©ÂµÃ„ÃÂ»Ã–Ãƒ Â¸Ã¼Â¾ÃŸÂ·Ã–Â±Ã¦Ã‚ÃŠÂ²Â»ÃÂ¬Ã“ÃÃ‹Ã¹Â²Â»ÃÂ¬
+//¨¦¨¨???¨¦¦Ì????? ?¨¹??¡¤?¡À??¨º2?¨ª?¨®D?¨´2?¨ª?
 void OsdConfigWndPosition(UINT xPos, UINT yPos)
 {  
     //printfStr("OsdConfigWndPosition");
@@ -735,7 +737,7 @@ void Draw_Big_Number(UCHAR startRow, UCHAR startLine, UCHAR num,UCHAR color)
         {
             tileIndex = BigNum_Table[num][r*2 + c];
             charData = FontRamMap[tileIndex];
-            //charData = (UINT)tileIndex; // <--- ç›´æ¥ç”¨ç´¢å¼•å½“åœ°å€ (0x000 + Index)
+            //charData = (UINT)tileIndex; // <--- Ö±½ÓÓÃË÷Òıµ±µØÖ· (0x000 + Index)
             INDEX_RAM_DATA_H = charData >> 8;
             INDEX_RAM_DATA_L = charData & 0xff;
         }
@@ -761,7 +763,7 @@ void Draw_Big_Dot(UCHAR startRow, UCHAR startLine,UCHAR color)
 		charData = FontRamMap[0x60];
 		INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
     INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
-	//charData = (UINT)tileIndex; // <--- ç›´æ¥ç”¨ç´¢å¼•å½“åœ°å€ (0x000 + Index)
+	//charData = (UINT)tileIndex; // <--- Ö±½ÓÓÃË÷Òıµ±µØÖ· (0x000 + Index)
 		INDEX_RAM_DATA_H = charData >> 8;
 		INDEX_RAM_DATA_L = charData & 0xff;
 			
@@ -776,111 +778,92 @@ void Draw_Radar_Segment(UCHAR row_idx, UCHAR seg_idx, UCHAR color, UCHAR screen_
     UINT wcStartIndexAddr;
     UCHAR wndWidth;
     UINT charData;
-    UCHAR tileIndex;      // å½“å‰å­—çš„é€»è¾‘ç´¢å¼•
-    UCHAR tileIndex_Base; // å½“å‰æ®µçš„èµ·å§‹ç´¢å¼•
+    UCHAR tileIndex;      
+    UCHAR tileIndex_Base; 
     UCHAR current_col;
 
-    // å®‰å…¨æ£€æŸ¥
+
     if(row_idx > 7 || seg_idx > 3) return;
 
     wndWidth = OsdGetWndWidth();
     wcStartIndexAddr = OsdGetStartIndexAddr();
 
-    // 1. è·å–åŸºå‡†å­—åº“ç´¢å¼• (ä»æˆ‘ä»¬å®šä¹‰çš„äºŒç»´æ•°ç»„é‡Œå–)
+
     tileIndex_Base = Radar_Wave_Table_Correct[row_idx][seg_idx];
 
-    // 2. è®¡ç®—å±å¹•åˆ—ä½ç½® (æ¯ä¸ªæ®µå 2åˆ—)
+
     current_col = screen_col_start + (seg_idx * 2);
 
-    // 3. è®¡ç®—æ˜¾å­˜èµ·å§‹åœ°å€
     wcStartIndexAddr = wcStartIndexAddr + (screen_row * wndWidth) + current_col;
 
-    // 4. è®¾ç½®å†™åœ°å€ (å†™æ•°æ®)
+
     INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
     INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
 
-    // --- å¾ªç¯å†™ 2 ä¸ª Tile çš„æ•°æ® ---
+
     for(i = 0; i < 2; i++)
     {
-        if(color == 0) 
+        if(color == 0x30) 
         {
-            // å¦‚æœé¢œè‰²æ˜¯0ï¼Œç›´æ¥å†™ç©ºæ•°æ®æ¸…å±ï¼Œä¸éœ€è¦æŸ¥è¡¨
-            charData = 0x00; 
+ 
+            charData = 0x00;					
         }
         else
         {
-            // 1. è®¡ç®—å½“å‰å—çš„é€»è¾‘ç´¢å¼• (åŸºå‡† + åç§»)
             tileIndex = tileIndex_Base + i;
-            
-            // 2. ã€å…³é”®ä¿®æ”¹ã€‘è¿™é‡ŒåŠ ä¸Šäº† FontRamMap æŸ¥è¡¨ï¼
-            // ä¸¥æ ¼ä»¿ç…§ Draw_Big_Number çš„å†™æ³•
+
             charData = FontRamMap[tileIndex]; 
         }
 
-        // å†™å…¥æ•°æ®
+
         INDEX_RAM_DATA_H = charData >> 8;
         INDEX_RAM_DATA_L = charData & 0xff;
     }
 
-    // 5. é‡æ–°è®¾ç½®åœ°å€ (å› ä¸ºå†™å®ŒDataåœ°å€ä¼šè‡ªåŠ¨åç§»ï¼Œå†™Coloréœ€è¦æ‹‰å›æ¥)
     INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
     INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
 
-    // --- å¾ªç¯å†™ 2 ä¸ª Tile çš„é¢œè‰² ---
     for(i = 0; i < 2; i++)
     {
-        // å†™é¢œè‰²å±æ€§
+
         EACH_ICON_COLOR = color; 
     }
 }
-// =========================================================================
-// æ–°å¢: æš´åŠ›æ“¦é™¤åŠä¸ªå±å¹• (0=å·¦åŠå±, 1=å³åŠå±)
-// å·¦å±èŒƒå›´: 0-17åˆ—, å³å±èŒƒå›´: 18-35åˆ—
-// =========================================================================
-void Clear_Half_Screen(UCHAR half,UCHAR color)
+
+void Clear_Half_Screen(UCHAR half) 
 {
     UCHAR r, c;
     UCHAR c_start, c_end;
     UINT wcStartIndexAddr;
     UCHAR wndWidth = OsdGetWndWidth();
-    UINT startAddr = OsdGetStartIndexAddr();
+    UINT startAddr = OsdGetStartIndexAddr(); 
 
-    // 1. ç•Œå®šèŒƒå›´
-    if(half == 0) // å·¦åŠè¾¹
+ 
+    if(half == 0)
     {
-        c_start = 0; c_end = 15; // å»ºè®®æ”¹æˆ17ï¼Œé˜²æ­¢ä¸­é—´æœ‰ç¼éš™
+        c_start = 0; 
+        c_end = 15; 
     }
-    else // å³åŠè¾¹
+    else 
     {
-        c_start = 16; c_end = 32;
+        c_start = 16; 
+        c_end = 31; 
     }
 
-    // 2. å¾ªç¯å¡«å……çº¢è‰²
-    for(r = 0; r < 17; r++)
+
+    for(r = 0; r < 16; r++) 
     {
         wcStartIndexAddr = startAddr + (r * wndWidth) + c_start;
         
+        INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
+        INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
+
         for(c = c_start; c <= c_end; c++)
         {
-            // --- ç¬¬ä¸€æ­¥ï¼šå†™å­—åº“ç´¢å¼• (å½¢çŠ¶) ---
-            INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
-            INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
-
-            // ã€å…³é”®ã€‘è¿™é‡Œä¸èƒ½å†™ 0x00ï¼0x00æ˜¯é€æ˜çš„ï¼
-            // ä½ éœ€è¦å¡«å…¥ä¸€ä¸ªâ€œå®å¿ƒæ–¹å—â€çš„å­—åº“ç´¢å¼•ã€‚
-            // å¦‚æœä½ æ²¡æœ‰ï¼Œæš‚æ—¶å¡« 0x61 (æ³¢çº¹) è¯•è¯•æ•ˆæœï¼Œä¹‹ååœ¨å­—åº“é‡ŒåŠ ä¸€ä¸ªå…¨0xFFçš„å­—ã€‚
-	        INDEX_RAM_DATA_H = FontRamMap[0x91] >> 8;  
-					INDEX_RAM_DATA_L = FontRamMap[0x91] & 0xff; 
-
-            // --- ç¬¬äºŒæ­¥ï¼šå†™é¢œè‰²å±æ€§ (çº¢è‰²) ---
-            // å†™å®Œæ•°æ®ååœ°å€ä¼šè‡ªåŠ¨+1ï¼Œæ‰€ä»¥å¿…é¡»é‡æ–°æŠŠåœ°å€æ‹‰å›æ¥ï¼
-            INDEX_RAM_ADD_H = (wcStartIndexAddr >> 8);
-            INDEX_RAM_ADD_L = (wcStartIndexAddr & 0xff);
             
-            EACH_ICON_COLOR = color; // 0x01 = çº¢è‰² (COL_RED)
+            INDEX_RAM_DATA_H = 0x00;  
+            INDEX_RAM_DATA_L = 0x00; 
 
-            // åœ°å€è‡ªå¢å‡†å¤‡ç”»ä¸‹ä¸€ä¸ª
-            wcStartIndexAddr++; 
         }
     }
 }
@@ -918,7 +901,7 @@ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str)
 	 while(str[strOffset] != '\0')
 	 { 
 	    INDEX_RAM_ADD_H =(wcStartIndexAddr>>8);
-	    if(str[strOffset] == ASIAN)//Ã‘Ã‡Ã–ÃÃÃ„Ã—Ã–
+	    if(str[strOffset] == ASIAN)//???T??¡Á?
 	    {   
 		   	strOffset++;
 	        INDEX_RAM_DATA_H = AsianMap[str[strOffset]] >> 8;  
@@ -928,7 +911,7 @@ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str)
 			//printf("AsianMap[str[strOffset]] = %x", AsianMap[str[strOffset]]);
 
 	    }
-		else if(str[strOffset] == FONTRAM) //Font Ram Â¶Â¯ÃŒÂ¬Ã”Ã˜ÃˆÃ«
+		else if(str[strOffset] == FONTRAM) //Font Ram ?¡¥¨¬???¨¨?
 		{   
 	    
 		   	strOffset++;
@@ -939,7 +922,7 @@ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str)
 			  printf("FontRamMap[str[strOffset]] = %x", FontRamMap[str[strOffset]]);
 
 	    }
-	 	else//Ã—Ã–Ã„Â¸Â±Ã­
+	 	else//¡Á???¡À¨ª
 	 	{
 	 	    INDEX_RAM_DATA_H = ASCIIMap[str[strOffset]] >> 8;
 			INDEX_RAM_DATA_L = ASCIIMap[str[strOffset]] & 0xff;
@@ -1025,7 +1008,7 @@ void OsdDrawIcon(UCHAR starRow,UCHAR starLine,UCHAR xSize,UCHAR ySize,UCHAR Back
 	 for(yIndex=starRow;yIndex<(starRow+ySize);yIndex++)
 	 {
 	     wcStartIndexAddr = OsdGetStartIndexAddr();
-         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row ÃÃ   line ÃÃ
+         ucIndexOffset = (OsdGetWndWidth()*yIndex)+starLine;  //row DD   line ¨¢D
 	     wcStartIndexAddr = wcStartIndexAddr + ucIndexOffset;
 		 //printf("wcStartIndexAddr = %x", wcStartIndexAddr);
 		 INDEX_RAM_ADD_H =(wcStartIndexAddr>>8);
@@ -1127,7 +1110,7 @@ void LoadMulCharToFontram(UINT indexAddr, UCHAR Size, UCHAR *pCharData)
     printf("Write: Idx=%x\n", indexAddr); 
 		 printf(" AbsAddr=%x\n", AbsoluteAddr); 
     
-    // å†™ä½ä½ (åªå†™ä¸€æ¬¡)
+    // Ğ´µÍÎ» (Ö»Ğ´Ò»´Î)
     FONT_RAM_ADD_L = (UCHAR)(AbsoluteAddr & 0xFF);
 
     for(i = 0; i < Size; i++)
@@ -1289,8 +1272,8 @@ void OsdDrawHex(UCHAR starRow,UCHAR starLine,UCHAR fbColor,SWORD value)
 }
 
 
-// Â»Ã¦Ã–Ã†ÃŒÃµÃ—Â´Â½Ã¸Â¶ÃˆÃŒÃµ
-//input starRow:ÃÃ  starLine:ÃÃ   length:Â½Ã¸Â¶ÃˆÃŒÃµÂµÃ„Â³Â¤Â¶Ãˆ        value:Â½Ã¸Â¶ÃˆÃŒÃµÂµÃ„Â¿Ã­Â¶Ãˆ
+// ????¨¬?¡Á¡ä???¨¨¨¬?
+//input starRow:DD  starLine:¨¢D   length:???¨¨¨¬?¦Ì?3¡è?¨¨        value:???¨¨¨¬?¦Ì??¨ª?¨¨
 //return: void
 void OsdDrawGuage(UCHAR starRow, UCHAR starLine, UCHAR length,UCHAR fbColor, UCHAR value)
 {    
@@ -1468,5 +1451,6 @@ void OsdConfigColorChangWndPosition(UINT XPos, UINT YPos)
 	OSD_CHANGE_Y_START_L = YPos&0XFF;
 	OSD_CHANGE_XY_START_H |= ((YPos>>8)<<4)&0XFF;
 }
+
 
 

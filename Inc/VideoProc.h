@@ -12,8 +12,7 @@
 
 
 _VIDEO_EXTERN_ void InitARKChip(void);
-_VIDEO_EXTERN_ void SelVideoInputSource(InputSourceType curSource);
-_VIDEO_EXTERN_ void ConfigVideoInputSource(InputSourceType curSource);
 _VIDEO_EXTERN_ BOOL CheckColorSys(void);
-_VIDEO_EXTERN_ UCHAR SelNextVideoSource(UCHAR curSource);
+_VIDEO_EXTERN_ void ConfigVideoInputSource(InputSourceType curSource);
+
 #endif

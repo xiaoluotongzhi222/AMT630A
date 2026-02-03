@@ -12,9 +12,9 @@
 #include "configLCDPara.h"
 #include "Debug.h"
 #include "Delay.h"
-#include "AMT_REG.H"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_MCU.h"
+#include "AMT_Mcu.h"
 #include "Osd_Menu.h"
 #include "Osd_MenuPage.h"
 
@@ -70,6 +70,11 @@
 
 /*****************************************************************
                            Item table
+*****************************************************************/
+
+
+/*****************************************************************
+                           Menu 
 *****************************************************************/
 
 

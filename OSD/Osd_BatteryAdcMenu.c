@@ -13,6 +13,7 @@
 #include "AMT_Mcu.h"
 #include "Osd_Menu.h"
 #include "Osd_MenuPage.h"
+#include "Osd_BitMapFontDat.h"
 
 
 
@@ -22,10 +23,10 @@
 *****************************************************************/
 UCHAR* CODE BatteryAdcStr[]=
 {
-  "\x0F7\x0F8\x0FC",
-  "\x0F7\x0F9\x0FC",
-  "\x0F7\x0FA\x0FC",
-  "\x0F7\x0FB\x0FC",
+  "\x0F0\x0F1\x0F5",
+  "\x0F0\x0F2\x0F5",
+  "\x0F0\x0F3\x0F5",
+  "\x0F0\x0F4\x0F5",
 };
 
 /*****************************************************************
@@ -125,5 +126,5 @@ ItemValueType CODE BatteryAdcMenuItemVal_BatteryAdc[]=
 /*****************************************************************
                            Menu 
 *****************************************************************/
-
 #endif
+

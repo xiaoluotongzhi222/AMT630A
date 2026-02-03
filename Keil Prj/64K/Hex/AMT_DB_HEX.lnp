@@ -1,0 +1,54 @@
+"..\..\..\ARKLib\AMTIOLib.LIB",
+"..\..\..\ARKLib\SPI.LIB",
+"..\..\..\ARKLib\AMT630A_VIDEO_LIB_V1.1.0.LIB",
+"..\Hex\ConfigLcdPara.obj",
+"..\Hex\ArkChip.obj",
+"..\Hex\Mcu.obj",
+"..\Hex\E2prom.obj",
+"..\Hex\Flash.obj",
+"..\Hex\E2pI2C.obj",
+"..\Hex\Main.obj",
+"..\Hex\Global.obj",
+"..\Hex\GetSysMsg.obj",
+"..\Hex\Delay.obj",
+"..\Hex\Interrupt.obj",
+"..\Hex\EventHandle.obj",
+"..\Hex\GetUserInputMsg.obj",
+"..\Hex\AdcKeyPad.obj",
+"..\Hex\DianWeiQiKeyPad.obj",
+"..\Hex\GPIOKeyPad.obj",
+"..\Hex\SysPower.obj",
+"..\Hex\SysWorkPara.obj",
+"..\Hex\VideoProc.obj",
+"..\Hex\BatteryAdc.obj",
+"..\Hex\Osd_BitMapFontDat.obj",
+"..\Hex\Osd_GeneralFontDat.obj",
+"..\Hex\Osd_AMT630FontLib.obj",
+"..\Hex\Osd_PowerOnMenu.obj",
+"..\Hex\Osd_PowerOffMenu.obj",
+"..\Hex\Osd_RootMenu.obj",
+"..\Hex\Osd_LogoMenu.obj",
+"..\Hex\Osd_BrightnessMenu.obj",
+"..\Hex\Osd_ContrastMenu.obj",
+"..\Hex\Osd_SaturationMenu.obj",
+"..\Hex\Osd_QuicklyBrightnessMenu.obj",
+"..\Hex\Osd_QuicklyContrastMenu.obj",
+"..\Hex\Osd_QuicklySaturationMenu.obj",
+"..\Hex\Osd_BatteryAdcMenu.obj",
+"..\Hex\Osd_Menu.obj",
+"..\Hex\Debug.obj" 
+TO "..\Hex\AMT_DB_HEX"
+PRINT("..\\List\AMT_DB_HEX.M51") RAMSIZE(256)
+CODE(
+       ?PR?_POS_ENABLECHIPADC?ARKCHIP(0X0070),&
+       ?PR?POS_IRQSERVERTIMER1?INTERRUPT(0X0150),&
+       ?PR?POS_GETSIGNALMSG?GETSYSMSG(0X0223),&
+       ?PR?POS_GETCOLORSYSMSG?GETSYSMSG(0X0294),&
+       ?PR?POS_GETTIMEMSG?GETSYSMSG(0X02C1),&
+       ?PR?POS_GETUSERINPUTMSG?GETSYSMSG(0X02E6),&
+       ?PR?POS_GETUSERDEFINEDMSG?GETSYSMSG(0X02EE),&
+       ?PR?POS_GETBATTERYADCMSG?GETSYSMSG(0X02F6),&
+       ?PR?POS_CLEARWATCHDOG?MCU(0X0306),&
+       ?PR?POS_IRQSERVERREC?INTERRUPT(0X0316),&
+       ?PR?_POS_VIDEOPROCESS?AMT_VIDEOPROCESS(0X0317)
+    )

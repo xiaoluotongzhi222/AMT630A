@@ -16,8 +16,6 @@ extern void CPU_RM61581B_16Bit_Pannel_Initial(UCHAR AmtType);
 extern void CPU_RM68130_16Bit_Pannel_Initial(UCHAR AmtType);
 extern void CPU_OTM4001A_16Bit_Pannel_Initial(UCHAR AmtType);
 extern void CPU_ILI9488_18Bit_Pannel_Initial(UCHAR AmtType);
-extern void CPU_HX8352CT_16Bit_Pannel_Initial(UCHAR AmtType);
-extern void CPU_HX8352CN_18Bit_Pannel_Initial(UCHAR AmtType);
 
 
 //´«Í³SPIÆÁ
@@ -41,17 +39,7 @@ extern void SPI_LQ035Q1DH01_Pannel_Initial(UCHAR Interface,UINT VcomVal); //inte
 extern void WriteLQ035Q1DH01Reg(UINT RegAddr,UINT RegDat);
 extern void SPI_LQ035Q1DH02_Pannel_Initial(UCHAR Interface,UINT VcomVal); //interface:18BIT_RGB_HV,default VcomVal:NULL
 extern void WriteLQ035Q1DH02Reg(UINT RegAddr,UINT RegDat);
-extern void SPI_LQ035Q1DG01_Pannel_Initial(UCHAR Interface,UINT VcomVal); //interface:18BIT_RGB_HV,default VcomVal:NULL
-extern void WriteLQ035Q1DG01Reg(UINT RegAddr,UINT RegDat);
-extern void WriteLQ035Q1DG01Dat(UINT RegAdr);
-extern void SPI_AO35QN05_V0_Pannel_Initial(UCHAR Interface,UINT VcomVal); //interface:8BIT_RGB_HV,default VcomVal:0x4d
-extern void WriteAO35QN05_V0Reg(UINT RegAddr,UINT RegDat);
-extern void SPI_LQ035NC012_Pannel_Initial(UCHAR Interface,UINT VcomVal);//interface:24BIT_RGB_HV  default VcomVal:0X164 
-extern void WriteLQ035NC012Reg(UINT Data);
-extern void SPI_NT35582_Pannel_Initial(UCHAR Interface,UINT VcomVal);//interface:24BIT_RGB_SPI,default VcomVal:NULL
-extern void WriteNT35582Reg(UINT RegAddr,UINT RegDat);
-extern void SPI_PT035TN01_Pannel_Initial(UCHAR Interface,UINT VcomVal);   //interface:24BIT_RGB_HV,default VcomVal:NULL
-extern void WritePT035TN01Reg(UINT RegAddr,UINT RegDat);
+
 
 
 //SRGBÆÁ

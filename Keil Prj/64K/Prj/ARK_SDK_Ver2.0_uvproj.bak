@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_proj.xsd">
 
-  <SchemaVersion>1.1</SchemaVersion>
+  <SchemaVersion>1.0</SchemaVersion>
 
   <Header>### uVision Project, (C) Keil Software</Header>
 
@@ -10,7 +10,6 @@
       <TargetName>ARK-SDK</TargetName>
       <ToolsetNumber>0x0</ToolsetNumber>
       <ToolsetName>MCS-51</ToolsetName>
-      <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>AT89S53</Device>
@@ -30,8 +29,6 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile></SFDFile>
-          <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
           <IncludePath></IncludePath>
@@ -46,7 +43,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>..\Hex\</OutputDirectory>
-          <OutputName>AMT_CAR_HEX</OutputName>
+          <OutputName>AMT_DB_HEX</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -63,8 +60,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopU1X>0</nStopU1X>
-            <nStopU2X>0</nStopU2X>
           </BeforeCompile>
           <BeforeMake>
             <RunUserProg1>1</RunUserProg1>
@@ -73,18 +68,14 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>..\..\..\PC Tool\18X9_Function_Location "\\List"</UserProg1Name>
-            <UserProg2Name>..\..\..\PC Tool\HexMerge ..\..\Bin\AMT_CAR_BIN.bin ..\Hex\AMT_CAR_HEX.hex ..\..\..\OSD\Logo\Hex\Logo.hex</UserProg2Name>
+            <UserProg2Name>..\..\..\PC Tool\HexMerge ..\..\Bin\AMT_DB_BIN.bin ..\Hex\AMT_DB_HEX.hex ..\..\..\OSD\Logo\Hex\Logo.hex</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopA1X>0</nStopA1X>
-            <nStopA2X>0</nStopA2X>
           </AfterMake>
           <SelectedForBatchBuild>0</SelectedForBatchBuild>
           <SVCSIdString></SVCSIdString>
@@ -103,7 +94,6 @@
           <StopOnExitCode>3</StopOnExitCode>
           <CustomArgument></CustomArgument>
           <IncludeLibraryModules></IncludeLibraryModules>
-          <ComprImg>1</ComprImg>
           <BankNo>65535</BankNo>
         </CommonProperty>
         <DllOption>
@@ -134,7 +124,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -145,8 +134,6 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>-1</TargetSelection>
@@ -175,18 +162,13 @@
             <Capability>0</Capability>
             <DriverSelection>-1</DriverSelection>
           </Flash1>
-          <bUseTDR>0</bUseTDR>
           <Flash2></Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
-          <pFcarmOut></pFcarmOut>
-          <pFcarmGrp></pFcarmGrp>
-          <pFcArmRoot></pFcArmRoot>
-          <FcArmLst>0</FcArmLst>
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>2</MemoryModel>
+            <MemoryModel>0</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
@@ -312,7 +294,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\OSD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Pannels;..\..\..\LCD Pannels\LCD parameter;..\..\..\GetUserInput;..\..\..\GetUserInput\Ir;..\..\..\GetUserInput\Key;..\..\..\GetUserInput\GPIO;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\Mcu;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\E2prom;..\..\..\Device driver\WT5700;..\..\..\Device driver\Kt0803l;..\..\..\Device driver\BT;..\..\..\Debug;..\..\..\Device driver\SPI;..\..\..\Device driver\RX5808;..\..\..\FPVGoggles</IncludePath>
+              <IncludePath>..\..\..\OSD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Pannels;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\E2prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..\..\..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\..\..\Debug</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -389,11 +371,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\LCD Pannels\ConfigLcdPara.c</FilePath>
             </File>
-            <File>
-              <FileName>Uart_AdjSpiReg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\LCD Pannels\Uart_AdjSpiReg.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -423,41 +400,6 @@
               <FileName>E2pI2C.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Device driver\I2C\E2pI2C.c</FilePath>
-            </File>
-            <File>
-              <FileName>KeyI2C.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Device driver\I2C\KeyI2C.c</FilePath>
-            </File>
-            <File>
-              <FileName>WT5700.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Device driver\WT5700\WT5700.c</FilePath>
-            </File>
-            <File>
-              <FileName>Kt0803lI2C.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Device driver\I2C\Kt0803lI2C.c</FilePath>
-            </File>
-            <File>
-              <FileName>Kt0803l.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Device driver\Kt0803l\Kt0803l.c</FilePath>
-            </File>
-            <File>
-              <FileName>BT_UartRec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Device driver\BT\BT_UartRec.c</FilePath>
-            </File>
-            <File>
-              <FileName>SPI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Device driver\SPI\SPI.c</FilePath>
-            </File>
-            <File>
-              <FileName>rx_5808.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Device driver\RX5808\rx_5808.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -510,14 +452,14 @@
               <FilePath>..\..\..\GetUserInput\Key\AdcKeyPad.c</FilePath>
             </File>
             <File>
-              <FileName>Ir.c</FileName>
+              <FileName>DianWeiQiKeyPad.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\GetUserInput\Ir\Ir.c</FilePath>
+              <FilePath>..\..\..\GetUserInput\DianWeiQi\DianWeiQiKeyPad.c</FilePath>
             </File>
             <File>
-              <FileName>TouchKeyPad.c</FileName>
+              <FileName>GPIOKeyPad.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\GetUserInput\Key\TouchKeyPad.c</FilePath>
+              <FilePath>..\..\..\GetUserInput\GPIO\GPIOKeyPad.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -550,14 +492,19 @@
           <GroupName>OsdFont</GroupName>
           <Files>
             <File>
-              <FileName>Osd_AMT630FontLib.c</FileName>
+              <FileName>Osd_BitMapFontDat.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_AMT630FontLib.c</FilePath>
+              <FilePath>..\..\..\OSD\Osd_BitMapFontDat.c</FilePath>
             </File>
             <File>
               <FileName>Osd_GeneralFontDat.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\OSD\Osd_GeneralFontDat.c</FilePath>
+            </File>
+            <File>
+              <FileName>Osd_AMT630FontLib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\OSD\Osd_AMT630FontLib.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -585,36 +532,6 @@
               <FilePath>..\..\..\OSD\Osd_LogoMenu.c</FilePath>
             </File>
             <File>
-              <FileName>Osd_BatteryAdcMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_BatteryAdcMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_NoSignalMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_NoSignalMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_BTMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_BTMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_BTCallerMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_BTCallerMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_QuicklySourceMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_QuicklySourceMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_QuicklyMuteMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_QuicklyMuteMenu.c</FilePath>
-            </File>
-            <File>
               <FileName>Osd_BrightnessMenu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\OSD\Osd_BrightnessMenu.c</FilePath>
@@ -630,64 +547,29 @@
               <FilePath>..\..\..\OSD\Osd_SaturationMenu.c</FilePath>
             </File>
             <File>
-              <FileName>Osd_TintMenu.c</FileName>
+              <FileName>Osd_QuicklyBrightnessMenu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_TintMenu.c</FilePath>
+              <FilePath>..\..\..\OSD\Osd_QuicklyBrightnessMenu.c</FilePath>
             </File>
             <File>
-              <FileName>Osd_VolumeMenu.c</FileName>
+              <FileName>Osd_QuicklyContrastMenu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_VolumeMenu.c</FilePath>
+              <FilePath>..\..\..\OSD\Osd_QuicklyContrastMenu.c</FilePath>
             </File>
             <File>
-              <FileName>Osd_ModeMenu.c</FileName>
+              <FileName>Osd_QuicklySaturationMenu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_ModeMenu.c</FilePath>
+              <FilePath>..\..\..\OSD\Osd_QuicklySaturationMenu.c</FilePath>
             </File>
             <File>
-              <FileName>Osd_SysMenu.c</FileName>
+              <FileName>Osd_BatteryAdcMenu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_SysMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_LanguageMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_LanguageMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_IRABMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_IRABMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_RadioFreqMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_RadioFreqMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_ResetMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_ResetMenu.c</FilePath>
+              <FilePath>..\..\..\OSD\Osd_BatteryAdcMenu.c</FilePath>
             </File>
             <File>
               <FileName>Osd_Menu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\OSD\Osd_Menu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_FactoryMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_FactoryMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_FactoryPicMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_FactoryPicMenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>Osd_FactorySwitchMenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\OSD\Osd_FactorySwitchMenu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -708,31 +590,6 @@
               <FileName>Debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Debug\Debug.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>FPVGoggles</GroupName>
-          <Files>
-            <File>
-              <FileName>channels.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\FPVGoggles\channels.c</FilePath>
-            </File>
-            <File>
-              <FileName>Draw_osd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\FPVGoggles\Draw_osd.c</FilePath>
-            </File>
-            <File>
-              <FileName>BattAdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\FPVGoggles\BattAdc.c</FilePath>
-            </File>
-            <File>
-              <FileName>Buzzer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\FPVGoggles\Buzzer.c</FilePath>
             </File>
           </Files>
         </Group>

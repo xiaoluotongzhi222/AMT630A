@@ -15,22 +15,20 @@
 #define _POWER_C_
 
 #include "DataType.h"
-#include "systemConfig.h"
 #include "global.h"
+#include "systemConfig.h"
 #include "configlcdpara.h"
 #include "Debug.h"
 #include "sysWorkPara.h"
 #include "Videoproc.h"
 #include "Delay.h"
-#include "interrupt.h"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_REG.h"
+#include "SysPower.h"
 #include "MsgMap.h"
 #include "Osd_Menu.h"
-#include "Osd_MenuPage.h"
-#include "sysPower.h"
-#include "Ir.h"
-
+#include "interrupt.h"
+#include "DianWeiQiKeyPad.h"
 
 
 /****************************************************************************
@@ -41,10 +39,10 @@
 *description:
       系统开机函数，执行此函数后代表系统已经进入开机状态，并显示正常。
 
-*history: Jordan.chen   2011/12/16    1.0    transplant   this  function
+*history: Jordan.chen   2011/12/16    0.1    transplant   this  function
 *****************************************************************************/
 BOOL PowerOnSystem(void)
-{	
+{ 
     printfStr("PowerOnSystem\n");
 
 	#ifdef PowerLedEn
@@ -52,100 +50,55 @@ BOOL PowerOnSystem(void)
 	hw_setRedLEDOff();
 	#endif
 
-	SetPowerOn();
+    SetPowerOn();
 	
-	#ifdef AudioCtrlEn
-	SetAudioMute(); 	
-	SelAudioInputSource(g_sysSetting.Video.curSource);
+	ExitLowPowerMode();
+	
+    SetNosiceSwitch(g_sysSetting.Video.nosiceSw);
+	
+	DelayMs(100);
+	
+    if(CheckColorSys())
+    {
+        g_ucPreColorSys = g_ucColorSys;
+      	ConfigColorSysDynPara(g_ucColorSys);    
+    }
+	
+	#ifdef KeyDetectEn 
+    #if KEY_TYPE == DIANWEIQI_KEY
+	POS_InitDianWeiQiKey();
+	POS_InitDianWeiQiKeyMsg();
+	g_ucAdjustBrightnessVal = g_sysSetting.Video.brigthness;
+	g_ucAdjustContrastVal = g_sysSetting.Video.contrast;
+	g_ucAdjustSaturationVal = g_sysSetting.Video.saturation;
+	#endif
 	#endif
 
-	ExitLowPowerMode();
-
-	#ifdef CarBackEn
-	#ifdef CarReversingSignalDetectEn
-	SelVideoInputSource(INPUT_CAMERA_Car);
-	DelayMs(200);
-	if(IsSignalOk())
-	{
-	   g_sysSetting.Car.DetecMode = PON_CAR_SIGNAL_OK;
-	}
-	else
-	{  
-	   SelVideoInputSource(g_sysSetting.Video.curSource);
-       DelayMs(200);
-
-	   if(IsSignalOk())
-       {
-         g_sysSetting.Car.DetecMode = AV_SIGNAL_OK; 
-       }
-	   
-	   #ifndef LogoEn 
-	   #ifdef NoSignalBLOffEn
-	   if(IsSignalOk())
-	   {
-		  TurnOnBackLight();
-	   }
-	   else
-	   {
-	      EnterLowPowerMode();
-	   }
-	   #else
-	   TurnOnBackLight();
-	   #endif	//	   #ifdef NoSignalBLOffEn
-	   #endif  //	   #ifndef LogoEn 
-	}
-	#endif  //	#ifdef CarReversingSignalDetectEn
-	
-	#ifdef CarReversingIODetectEn
-	SelVideoInputSource(g_sysSetting.Video.curSource);
-	if(hw_getCarBackPinStatus() == hw_setCarBackAheadStatus)
-	{ 
-	   DelayMs(200);
-	   #ifndef LogoEn 
-	   #ifdef NoSignalBLOffEn
-	   if(IsSignalOk())
-	   {
-		  TurnOnBackLight();
-	   }
-	   else
-	   {
-	      EnterLowPowerMode();
-	   }
-	   #else
-	   TurnOnBackLight();
-	   #endif	//#ifdef NoSignalBLOffEn
-	   #endif  //#ifndef LogoEn 
-	}
-	#endif  //	#ifdef CarReversingIODetectEn
-	
-	#else //#ifndef CarBackEn
-	SelVideoInputSource(g_sysSetting.Video.curSource);
-	DelayMs(200);
+	SetPowerOnDelaytime(PowerOnDelay);
 	
 	#ifndef LogoEn 
 	#ifdef NoSignalBLOffEn
 	if(IsSignalOk())
-	{
-	   TurnOnBackLight();
+	{   
+	   //TurnOnBackLight();
 	}
-    else
-    {
-      EnterLowPowerMode();
-    }
-	#else
-	TurnOnBackLight();
-	#endif	//#ifdef NoSignalBLOffEn
-	#endif //	#ifndef LogoEn 
-	#endif  // 	#ifdef CarBackEn
+	else
+	{
+		//TurnOffBackLight(); 
+		//SaveSetting();
+		//EnterLowPowerMode();
+	}
+	#else  //#ifndef NoSignalBLOffEn
+    //TurnOnBackLight();
+	#endif  //	#ifdef NoSignalBLOffEn
+	#endif  //	#ifndef LogoEn 
 	
-	g_sysSetting.Car.status = CAR_PON_GO_AHEAD;
 	g_bSignalFlg = IsSignalOk();
+	g_bPreSignalFlg = g_bSignalFlg;
     g_bBLCtrlEnFlg = TRUE;
-	g_ucRemoteKeyVal = IR_NULL_KEY; 
 	
 	return 1;
 }
-
 
 /****************************************************************************
 *name:   PowerOffSystem(void)
@@ -155,30 +108,23 @@ BOOL PowerOnSystem(void)
 *description:
       系统关机函数，表示关机时需要执行动作。
 
-*history: Jordan.chen   2011/12/16    1.0    transplant   this  function
+*history: Jordan.chen   2011/12/16    0.1    transplant   this  function
 *****************************************************************************/
 BOOL PowerOffSystem(void)
 {	 
     printfStr("PowerOffSystem\n");
-	
-    #ifdef PowerLedEn
+
+	#ifdef PowerLedEn
 	hw_setRedLEDOn();
 	hw_setGreenLEDOff();
 	#endif
 
 	SetPowerOff();
 	
-	#ifdef AudioCtrlEn
-	SetAudioMute(); 
-	#endif
-		
-	TurnOffBackLight(); 	
+	TurnOffBackLight(); 
 	SaveSetting();
-	TurnOffDevicePower(g_sysSetting.Video.curSource);   
 	EnterLowPowerMode();
-	
-	HideMenu();
-	DelayMs(500);	
-	g_ucRemoteKeyVal = IR_NULL_KEY;
-	return 1;
+
+    return 1;
 }
+

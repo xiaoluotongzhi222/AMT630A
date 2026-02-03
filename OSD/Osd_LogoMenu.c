@@ -1,6 +1,3 @@
-#define _OSD_LOGO_MENU_C_
-
-
 
 #include "DataType.h"
 #include "SystemConfig.h"
@@ -59,17 +56,15 @@ void InitLogoMenuDat(void)
 	}
 	else
 	{
-	  IconSize = 0x30;
-	  BitMapPattleSize = 0x01;
-	  OsdConfigDispMode(OSD_MODE,OSD_DISP_NORMAL);	
-	  
+	   IconSize = 0x30;
+	   BitMapPattleSize = 0x01;
+	   OsdConfigDispMode(OSD_MODE,OSD_DISP_NORMAL);	
 	}
     OsdConfigBitmapStarIndex(LOGOBITMAP_SATRT_INDEX);
     OsdConfigBitmapPalette(LogoBitMapPattle);
     DMALoadFontRam(StartAddr+BitMapPattleSize,LOGOBITMAP_SATRT_INDEX<<4,IconSize*FontRamNum);  
 
 }
-
 
 #endif
 

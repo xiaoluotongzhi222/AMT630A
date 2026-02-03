@@ -1,0 +1,770 @@
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE FLASH
+OBJECT MODULE PLACED IN ..\Hex\Flash.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE ..\..\..\Device driver\Flash\Flash.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\
+                    -..\OSD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Pa
+                    -nnels;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device drive
+                    -r\E2prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..
+                    -\..\..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\
+                    -..\..\Debug) DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\Flash.lst) TABS(2) OBJECT(..\Hex\Flash.obj)
+
+line level    source
+
+   1          /****************************************************************************************************
+   2          *Copyright (C) 2005 深圳艾科创新有限公司产品应用一部
+   3          * All rights reserved.
+   4          
+   5          *File name: 　 Flash.c
+   6          *Version:    　0.1
+   7          *Author:       cjinzong
+   8          *Finish date:  2008-09-03
+   9          
+  10          *Description:
+  11          *           这个文件是对系统的主要参数进行保存到FLASH的函数定义。 
+  12          
+  13          *History:
+  14          *
+  15          ***************************************************************************************************/
+  16          #define _FLASH_C_
+  17          
+  18          #include "DataType.h"
+  19          #include "systemConfig.h"
+  20          #include "global.h"
+  21          #include "Flash.h"
+  22          #include "debug.h"
+  23          #include "AMT_REG.h"
+  24          #include "AMT_Drv.h"
+  25          #include "AMT_MCU.h"
+  26          
+  27          
+  28          
+  29          #ifdef FlashEn
+  30          
+  31          FLASH_COMD CODE Flash_comd[]=
+  32          {
+  33            {0x39,0x20},
+  34            {0x06,0xD7},
+  35            {0x06,0xD8},
+  36            {0x06,0x20},
+  37          };             
+  38          
+  39          /************************************************************************
+  40          *name:       CheckIdle(void)
+  41          *input:      non
+  42          *output:     non
+  43          *return:     void
+  44          
+  45          *description: 
+  46                     这个函数是用来检测FLASH是否出于空闲状态
+  47                 是：  退出
+  48                 不是：等待 
+  49          *history:  
+  50          *************************************************************************/
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 2   
+
+  51          void CheckIdle(void)
+  52          {
+  53   1          while(!(IDLE_DF&0x80));
+  54   1      }
+  55          
+  56          
+  57          void SoftwareBlockProtect(void)
+  58          {
+  59   1          CheckIdle();
+  60   1        STATUS_DD = 0x00;
+  61   1        CTRL_DE = FLASH_INT_EN;
+  62   1        WRDATA_D1 = 0x0c;
+  63   1        INSTR_D0  = 0x04;
+  64   1        while(!STATUS_DD);
+  65   1        CheckIdle();
+  66   1      }
+  67          
+  68          void SoftwareBlockUnprotect(void)
+  69          {
+  70   1          CheckIdle();
+  71   1        STATUS_DD = 0x00;
+  72   1        CTRL_DE = FLASH_INT_EN;
+  73   1        WRDATA_D1 = 0x00;
+  74   1        INSTR_D0  = 0x04;
+  75   1        while(!STATUS_DD);
+  76   1        CheckIdle();
+  77   1      }
+  78          
+  79          
+  80          
+  81          
+  82          /************************************************************************
+  83          *name:       WriteDisable(void)
+  84          *input:      non
+  85          *output:     non
+  86          *return:     void
+  87          *update:     20090927
+  88          
+  89          *description: 
+  90                     这个函数是用来对FLASH写操作完毕后， 关闭写使能。让数据更稳定，安全。 
+  91          *history:  
+  92          *************************************************************************/
+  93          void WriteDisable(void)
+  94          {
+  95   1        CheckIdle();
+  96   1        CTRL_DE = FLASH_INT_EN; 
+  97   1        ERASE_CMD_E4 = FLASH_WRITE_DISABLE_EN;  //burning-commond  lj 2008.09.09  
+  98   1        INSTR_D0 = FLASH_ERASE_EN;  
+  99   1        CheckIdle();
+ 100   1      }
+ 101          
+ 102          
+ 103          /************************************************************************
+ 104          *name:       void EnableFlashUnprotected(ULONG stAddr)
+ 105          *input:      stAddr   flash目标地址
+ 106          *output:     non
+ 107          *return:     void
+ 108          
+ 109          *description: 
+ 110                    这个函数是用来使能flash unprotected sector.
+ 111          *history:  
+ 112          *************************************************************************/
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 3   
+
+ 113          void EnableFlashUnprotected(ULONG stAddr)
+ 114          {
+ 115   1           while((stAddr != FLASH_DAT_ADDR)&&(stAddr != FLASH_COPY_ADDR))
+ 116   1           {
+ 117   2              _nop_();
+ 118   2           }
+ 119   1      
+ 120   1      
+ 121   1         if(FLASH_DAT_ADDR == stAddr)
+ 122   1         {
+ 123   2            SoftwareBlockUnprotect();
+ 124   2      
+ 125   2            CheckIdle();
+ 126   2            CTRL_DE = FLASH_INT_EN;
+ 127   2            STATUS_DD = FLASH_CLEAR_STATUS; 
+ 128   2      
+ 129   2            FADDR_REG0_D6 = (UCHAR)FLASH_DAT_ADDR;
+ 130   2            FADDR_REG1_D7 = (UCHAR)(FLASH_DAT_ADDR>>8);
+ 131   2            FADDR_REG2_D8 = (UCHAR)(FLASH_DAT_ADDR>>16);
+ 132   2      
+ 133   2            ERASE_CMD_E4 = g_sysSetting.Flash.unprotectedComd;   
+ 134   2            INSTR_D0 = FLASH_ERASE_EN;
+ 135   2            while(!(STATUS_DD));
+ 136   2            CheckIdle();
+ 137   2         }
+ 138   1      
+ 139   1         if(FLASH_COPY_ADDR == stAddr)
+ 140   1         {
+ 141   2            SoftwareBlockUnprotect();
+ 142   2      
+ 143   2            CheckIdle();
+ 144   2            CTRL_DE = FLASH_INT_EN;
+ 145   2            STATUS_DD = FLASH_CLEAR_STATUS; 
+ 146   2      
+ 147   2            FADDR_REG0_D6 = (UCHAR)FLASH_COPY_ADDR;
+ 148   2            FADDR_REG1_D7 = (UCHAR)(FLASH_COPY_ADDR>>8);
+ 149   2            FADDR_REG2_D8 = (UCHAR)(FLASH_COPY_ADDR>>16);
+ 150   2      
+ 151   2            ERASE_CMD_E4 = g_sysSetting.Flash.unprotectedComd;   
+ 152   2            INSTR_D0 = FLASH_ERASE_EN;
+ 153   2            while(!(STATUS_DD));
+ 154   2            CheckIdle();
+ 155   2         }
+ 156   1      }
+ 157          
+ 158          
+ 159          /************************************************************************
+ 160          *name:       void EraseFlashSector(ULONG stAddr)
+ 161          *input:      stAddr   flash目标地址
+ 162          *output:     non
+ 163          *return:     void
+ 164          
+ 165          *description: 
+ 166                    这个函数是用来使能flash unprotected sector.
+ 167          *history:  
+ 168          *************************************************************************/
+ 169          void EraseFlashSector(ULONG stAddr)
+ 170          {
+ 171   1      
+ 172   1           while((stAddr != FLASH_DAT_ADDR)&&(stAddr != FLASH_COPY_ADDR))
+ 173   1           {
+ 174   2              _nop_();
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 4   
+
+ 175   2           }
+ 176   1         
+ 177   1           if(FLASH_DAT_ADDR == stAddr)
+ 178   1           {
+ 179   2            CheckIdle();
+ 180   2            CTRL_DE = FLASH_INT_EN;
+ 181   2            STATUS_DD = FLASH_CLEAR_STATUS; 
+ 182   2      
+ 183   2            FADDR_REG0_D6 = (UCHAR)FLASH_DAT_ADDR;
+ 184   2            FADDR_REG1_D7 = (UCHAR)(FLASH_DAT_ADDR>>8);
+ 185   2            FADDR_REG2_D8 = (UCHAR)(FLASH_DAT_ADDR>>16);
+ 186   2      
+ 187   2            ERASE_CMD_E4 = g_sysSetting.Flash.erase4kComd;
+ 188   2            INSTR_D0 = FLASH_ERASE_EN;
+ 189   2            while(!(STATUS_DD));
+ 190   2            CheckIdle();
+ 191   2           }
+ 192   1      
+ 193   1         if(FLASH_COPY_ADDR == stAddr)
+ 194   1           {
+ 195   2            CheckIdle();
+ 196   2            CTRL_DE = FLASH_INT_EN;
+ 197   2            STATUS_DD = FLASH_CLEAR_STATUS; 
+ 198   2      
+ 199   2            FADDR_REG0_D6 = (UCHAR)FLASH_COPY_ADDR;
+ 200   2            FADDR_REG1_D7 = (UCHAR)(FLASH_COPY_ADDR>>8);
+ 201   2            FADDR_REG2_D8 = (UCHAR)(FLASH_COPY_ADDR>>16);
+ 202   2      
+ 203   2            ERASE_CMD_E4 = g_sysSetting.Flash.erase4kComd;
+ 204   2            INSTR_D0 = FLASH_ERASE_EN;
+ 205   2            while(!(STATUS_DD));
+ 206   2            CheckIdle();
+ 207   2           }
+ 208   1      }
+ 209          
+ 210          
+ 211          /************************************************************************
+ 212          *name:    ReadFlashSysPara(ULONG stAddr, UCHAR *pSysPara,UINT numOper)
+ 213          *input:   non   
+ 214          *output:  non  
+ 215          *return:  void 
+ 216          
+ 217          *description:   
+ 218                这个函数是用来对flash的系统参数进行读取。 
+ 219          *history:  
+ 220          *************************************************************************/
+ 221          void ReadFlashSysPara(ULONG stAddr, UCHAR *pSysPara,UINT numOper)
+ 222          {
+ 223   1        UINT i;
+ 224   1        UCHAR j;
+ 225   1      
+ 226   1        WriteDisable();
+ 227   1          SoftwareBlockProtect();
+ 228   1        CheckIdle();  
+ 229   1        CTRL_DE = FLASH_INT_EN;                             
+ 230   1        
+ 231   1        for(i=0; i<numOper; i++)
+ 232   1        {
+ 233   2            STATUS_DD = FLASH_CLEAR_STATUS;                  
+ 234   2        
+ 235   2            FADDR_REG0_D6 = (UCHAR)(stAddr);
+ 236   2            FADDR_REG1_D7 = (UCHAR)(stAddr>>8);
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 5   
+
+ 237   2            FADDR_REG2_D8 = (UCHAR)(stAddr>>16);
+ 238   2      
+ 239   2            INSTR_D0 = FLASH_READ_EN;                         //flash data read enable
+ 240   2      
+ 241   2            for(j = 0; j < 20; j++)
+ 242   2          {
+ 243   3              if(STATUS_DD == FLASH_READ_END)
+ 244   3            {
+ 245   4              pSysPara[i] = RDDATA_D2;
+ 246   4                break;
+ 247   4            }
+ 248   3          }
+ 249   2            stAddr++;
+ 250   2            CheckIdle();
+ 251   2        }
+ 252   1      }
+ 253          
+ 254          /************************************************************************
+ 255          *name:       WriteFlashSysData(ULONG stAddr,UINT ramdataAddr,UINT numOper)
+ 256          *input:      stAddr               flash的目标地址
+ 257                       ramdataAddr      Ram的源地址
+ 258                 numOper        写的数据的个数
+ 259          
+ 260          *output:     non
+ 261          *return:     void
+ 262          
+ 263          *description: 
+ 264                      这个模块是对读E2的保存参数到相应的系统空间
+ 265                  1.系统参数
+ 266                  2.频道的对应频点
+ 267                  3.其他    
+ 268          *history:  
+ 269          *************************************************************************/
+ 270          void WriteFlashSysPara(ULONG stAddr,UINT ramdataAddr,UINT numOper)
+ 271          {   
+ 272   1        UINT  Length;
+ 273   1        UINT maxOperNum = 0xffff;                         //这个值的大小可以由FLASH的型号来决定       
+ 274   1        
+ 275   1        EnableFlashUnprotected(stAddr);
+ 276   1        EraseFlashSector(stAddr);
+ 277   1      
+ 278   1        while(numOper > 0)
+ 279   1        {
+ 280   2            CheckIdle();
+ 281   2        
+ 282   2            CTRL_DE = FLASH_INT_EN;                     
+ 283   2            STATUS_DD = FLASH_CLEAR_STATUS;                  
+ 284   2        
+ 285   2            FADDR_REG0_D6 = (UCHAR)stAddr;
+ 286   2            FADDR_REG1_D7 = (UCHAR)(stAddr>>8);
+ 287   2            FADDR_REG2_D8 = (UCHAR)(stAddr>>16);
+ 288   2      
+ 289   2            DADDR_REG0_D9 = (UCHAR)ramdataAddr;
+ 290   2            DADDR_REG1_DA = (UCHAR)(ramdataAddr/256);
+ 291   2            DADDR_REG1_DA |= 0x80;                       //data ram
+ 292   2      
+ 293   2            if(numOper <= maxOperNum)
+ 294   2            {
+ 295   3              Length = numOper;
+ 296   3            }
+ 297   2            else
+ 298   2            {
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 6   
+
+ 299   3              Length = maxOperNum;
+ 300   3            }
+ 301   2      
+ 302   2              if(Length >= 256)   //每次写一个page
+ 303   2              {
+ 304   3                  Length = 256;
+ 305   3              }
+ 306   2      
+ 307   2            LOAD_LENGTH0_DB = Length - 1;             
+ 308   2            LOAD_LENGTH1_DC = 0;
+ 309   2      
+ 310   2            INSTR_D0 = FLASH_PROGRAM_EN;
+ 311   2      
+ 312   2            stAddr += Length;
+ 313   2            ramdataAddr += Length;
+ 314   2            numOper -= Length;
+ 315   2      
+ 316   2        }
+ 317   1        
+ 318   1        SoftwareBlockProtect();
+ 319   1        WriteDisable();
+ 320   1      }
+ 321          
+ 322          
+ 323          
+ 324          BOOL VerifyFlashDate(ULONG stAddr)
+ 325          {
+ 326   1          UCHAR XDATA i;
+ 327   1        
+ 328   1          for(i=0;i<3;i++)
+ 329   1          {
+ 330   2          ReadFlashSysPara(stAddr, (UCHAR *)&g_sysSetting, sizeof(SysWorkParaType)); 
+ 331   2          if((g_sysSetting.OXAA == 0xaa) && (g_sysSetting.OX55 == 0x55))
+ 332   2          {
+ 333   3               return TRUE;
+ 334   3          }
+ 335   2          }
+ 336   1        return FALSE;
+ 337   1      }
+ 338          
+ 339          void AutoDetectFlashType(void)
+ 340          {
+ 341   1          UCHAR XDATA i;
+ 342   1        
+ 343   1        printfStr("AutoDetectFlashType");
+ 344   1      
+ 345   1          if(!VerifyFlashDate(FLASH_DAT_ADDR)) 
+ 346   1          {   
+ 347   2              for(i=0;i<5;i++)
+ 348   2              {
+ 349   3                 g_sysSetting.Flash.erase4kComd = Flash_comd[i].FLASH_ERASE_4K;
+ 350   3                 g_sysSetting.Flash.unprotectedComd = Flash_comd[i].FLASH_UNPROTECTED_EN;
+ 351   3             g_sysSetting.OX55 = 0x55;
+ 352   3             g_sysSetting.OXAA = 0xaa;
+ 353   3             WriteFlashSysPara(FLASH_DAT_ADDR, (UCHAR *)&g_sysSetting, sizeof(SysWorkParaType));
+ 354   3             if(VerifyFlashDate(FLASH_DAT_ADDR)) 
+ 355   3             {
+ 356   4                EnableFlashUnprotected(FLASH_DAT_ADDR);
+ 357   4                EraseFlashSector(FLASH_DAT_ADDR);
+ 358   4      
+ 359   4                if(!VerifyFlashDate(FLASH_DAT_ADDR))
+ 360   4                {
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 7   
+
+ 361   5                    g_ucFlashTpye = i;
+ 362   5                break;
+ 363   5                }
+ 364   4              else
+ 365   4              { 
+ 366   5                  g_ucFlashTpye = 0;
+ 367   5              }
+ 368   4             }
+ 369   3              }
+ 370   2          }
+ 371   1      }
+ 372          
+ 373          #endif
+ 374          
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 8   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_CtrlMode. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+P0 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0080H  1
+P1 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0090H  1
+_LogoID. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ALL_INPUT_SOURCE . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+P2 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A0H  1
+INPUT_YPBPR. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+P3 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B0H  1
+PVOID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  VOID_PTR -----  3
+ProtocolData0. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SLONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+ProtocolData1. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_FM . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+ULONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+INPUT_ITU656 . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SoftwareBlockUnprotect . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  38
+_KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
+PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+AutoDetectFlashType. . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
+AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 9   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+INT8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+SoftwareBlockProtect . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+BatterAdc_Lev0 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+VDE_GREEN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+DISP_EXT0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
+_VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 10  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_ucFlashTpye. . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0000H  1
+OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ReadFlashSysPara. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  stAddr . . . . . . . . . . . . . . .  AUTO     DATA   U_LONG   0000H  4
+  pSysPara . . . . . . . . . . . . . .  AUTO     DATA   PTR      0004H  3
+  numOper. . . . . . . . . . . . . . .  AUTO     DATA   U_INT    0007H  2
+  i. . . . . . . . . . . . . . . . . .  AUTO     DATA   U_INT    0009H  2
+  j. . . . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CH1. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+_KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+_FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 11  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+WriteDisable . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+TIME_500MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_WriteFlashSysPara . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  stAddr . . . . . . . . . . . . . . .  AUTO     DATA   U_LONG   0000H  4
+  ramdataAddr. . . . . . . . . . . . .  AUTO     DATA   U_INT    0004H  2
+  numOper. . . . . . . . . . . . . . .  AUTO     DATA   U_INT    0006H  2
+  Length . . . . . . . . . . . . . . .  AUTO     DATA   U_INT    0008H  2
+  maxOperNum . . . . . . . . . . . . .  AUTO     DATA   U_INT    000AH  2
+TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+_EnableFlashUnprotected. . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  stAddr . . . . . . . . . . . . . . .  AUTO     DATA   U_LONG   0000H  4
+_printfStr . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
+_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 12  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_EraseFlashSector. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  stAddr . . . . . . . . . . . . . . .  AUTO     DATA   U_LONG   0000H  4
+UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+EIP. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
+BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+CheckIdle. . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
+_LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_VerifyFlashDate . . . . . . . . . . .  PUBLIC   CODE   PROC     0008H  -----
+  stAddr . . . . . . . . . . . . . . .  AUTO     DATA   U_LONG   0000H  4
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
+BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   FLASH                                                             02/03/2026 10:50:01 PAGE 13  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+FLASH_COMD . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  FLASH_UNPROTECTED_EN . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  FLASH_ERASE_4K . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+Flash_comd . . . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0014H  8
+TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1080    ----
+   CONSTANT SIZE    =     28    ----
+   XDATA SIZE       =      1       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      35
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

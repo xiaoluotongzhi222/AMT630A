@@ -1,7 +1,3 @@
-#define _OSD_CONTRAST_MENU_C_
-
-
-
 #include "DataType.h"
 #include "SystemConfig.h"
 #include "Global.h"
@@ -12,11 +8,12 @@
 #include "configLCDPara.h"
 #include "Debug.h"
 #include "Delay.h"
-#include "AMT_REG.H"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_MCU.h"
+#include "AMT_Mcu.h"
 #include "Osd_Menu.h"
 #include "Osd_MenuPage.h"
+#include "Osd_BitMapFontDat.h"
 
 
 
@@ -26,19 +23,7 @@
 *****************************************************************/
 UCHAR* CODE ContrastMenuStr[]=
 {
-    "CONTRAST", 
-    "CONTRASTE",
-    "CONTRASTO",
-    "CONTRASTE",
-    "KONTRAST",
-    "CONTRASTE",
-    "CONTRAST",
-    "\x010\x0B7\x013\x0B8\x024\x007\x025\x0B8\x013\x0B7\x025\x0B8\x028",
-    "#\x014#\x015#\x003",
-    "#\x06B#\x06C#\x06D#\x065#\x06E#\x06D",
-    "\x010\x024\x013\x027\x025\x007\x0B8\x027",
-    "KONTRAST",
-    "KONTRAST"
+    "CONTRAST   ",
 };
 
 
@@ -59,23 +44,24 @@ UCHAR * CODE ContrastMenu_TitelStr(void)
 AdjustType ContrastMenu_CheckCondition(void)
 {
     AdjustType XDATA adjust ={0,0,0};
+	
 	adjust.Flags |= osdVisible;
+	
 	//printfStr("ContrastMenu_CheckCondition");
 	return adjust;
 }
 
 
 
-
 BOOL ContrastMenuItem_DrawStyle(void)
 {
     //printfStr("ContrastMenuItem_DrawStyle");
-    OsdWndClear(0X00, 0X00, 0X00, 0X11);
+    OsdWndClear(0X00, 0X00, 0X00, 0X1E);
     return 0;
 }
 
 
-SWORD GetContrastVal(void)
+WORD GetContrastVal(void)
 {
      //printfStr("GetContrastVal");
      return g_sysSetting.Video.contrast;
@@ -86,6 +72,7 @@ BOOL AdjustContrast(UCHAR opratComd)
 {
     if(opratComd == COMD_IncValue)
     {
+        
 		  if(g_sysSetting.Video.contrast<MAX_VALUE)
 		  {
 		      g_sysSetting.Video.contrast++;
@@ -94,28 +81,21 @@ BOOL AdjustContrast(UCHAR opratComd)
     }
 	if(opratComd == COMD_DecValue)
 	{
+	    
 		  if(g_sysSetting.Video.contrast>0)
 		  {
 		      g_sysSetting.Video.contrast--;
 		  } 
 		 //printf("Dec Value -- =%d",g_sysSetting.Video.contrast);
 	}
-	if(opratComd == COMD_Contrast)
-    {     
-		  g_sysSetting.Video.contrast++;
-		  if(g_sysSetting.Video.contrast >MAX_VALUE)
-		  {
-		     g_sysSetting.Video.contrast = 0;
-		  }
-		  //printf("contrast Adjust Value = %d",g_sysSetting.Video.contrast);
-    }
 	return 1;
 }
 
 
 BOOL ExectContrast(void)
 {
-   UpdataPicPara(); 
+   //printfStr("ExectContrast");
+   CONTRAST_REG  =  DataCurve(CONTRAST_MIN,g_ucContrast,CONTRAST_MAX, g_sysSetting.Video.contrast,MAX_VALUE);
    return 1;
 }
 
@@ -125,12 +105,11 @@ BOOL ExectContrast(void)
 *****************************************************************/
 DrawNumberType CODE Number_Contrast[]=
 {
-    {0,14,RED,TRANSPARENCE,RED,TRANSPARENCE, GetContrastVal,osdDecNum|osdEnd},
+    {0,MAINMENU_ITEM_GUAGE,MAINMENU_ITEM_NUMFORECOLOR,MAINMENU_ITEM_NUMBACKCOLOR,MAINMENU_ITEM_NUMFORECOLOR,MAINMENU_ITEM_NUMBACKCOLOR, GetContrastVal,osdDecNum|osdEnd},
 };
-
 DrawGuageType CODE Gugae_Contrast[]=
 {
-    {1,0,WHITE,TRANSPARENCE,WHITE,TRANSPARENCE, MAX_VALUE,GetContrastVal,osdEnd},
+    {1,1,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR, MAX_VALUE,GetContrastVal,osdEnd},
 };
 
 ItemValueType CODE ContrastMenuItemVal_Contrast[]=
@@ -149,15 +128,14 @@ ItemValueType CODE ContrastMenuItemVal_Contrast[]=
 *****************************************************************/
 
 
-
-
 /*****************************************************************
                          Item  Titel table
 *****************************************************************/
 TitelType CODE ContrastMenuItem_ContrastTitelTab[]=
 {
-   {0,0,RED,TRANSPARENCE,RED,TRANSPARENCE,DWT_Text,ContrastMenu_TitelStr,osdEnd},
+   {0,1,MAINMENU_ITEM_TITELFORECOLOR,MAINMENU_ITEM_TITELBACKCOLOR,MAINMENU_ITEM_TITELFORECOLOR,MAINMENU_ITEM_TITELBACKCOLOR,DWT_Text,ContrastMenu_TitelStr,osdEnd},
 };
+
 
 
 /*****************************************************************
@@ -169,3 +147,5 @@ TitelType CODE ContrastMenuItem_ContrastTitelTab[]=
 /*****************************************************************
                          Menu  Titel table
 *****************************************************************/
+
+

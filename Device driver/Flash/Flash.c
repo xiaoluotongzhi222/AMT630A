@@ -227,7 +227,7 @@ void ReadFlashSysPara(ULONG stAddr, UCHAR *pSysPara,UINT numOper)
     SoftwareBlockProtect();
 	CheckIdle();	
 	CTRL_DE = FLASH_INT_EN;	                            
-
+	
 	for(i=0; i<numOper; i++)
 	{
 	    STATUS_DD = FLASH_CLEAR_STATUS;                  
@@ -357,7 +357,7 @@ void AutoDetectFlashType(void)
 			    EraseFlashSector(FLASH_DAT_ADDR);
 
 			    if(!VerifyFlashDate(FLASH_DAT_ADDR))
-			  	{   
+			  	{
 			  	    g_ucFlashTpye = i;
 					break;
 			  	}

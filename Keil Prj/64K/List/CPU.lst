@@ -1,0 +1,1682 @@
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE CPU
+OBJECT MODULE PLACED IN ..\Hex\CPU.obj
+COMPILER INVOKED BY: D:\App SoftWare\Keil V4\C51\BIN\C51.EXE ..\..\..\LCD Pannels\CPU init\CPU.c BROWSE INCDIR(..\..\..\
+                    -OSD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Panne
+                    -ls;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\E
+                    -2prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..\..
+                    -\..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\..\
+                    -..\Debug) DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\CPU.lst) OBJECT(..\Hex\CPU.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          *Copyright (C) 2005 深圳艾科创新有限公司产品应用一部
+   3          * All rights reserved.
+   4          
+   5          *File name: 　 SPI.h      
+   6          *Version:      0.1
+   7          *update:       2012-05-09
+   8          *Description:
+   9                                 CPU驱动屏初始化函数
+  10                            
+  11          *History:  yshuizhou  2012/12/27   0.1    build  this  moudle
+  12          ******************************************************************************/
+  13          #define _CPU_C_
+  14          
+  15          #include "DataType.h"
+  16          #include "Global.h"
+  17          #include "CPU.h"
+  18          #include "AMT_Drv.h"
+  19          #include "AMT_Reg.h"
+  20          #include "SystemConfig.h"
+  21          #include "Delay.h"
+  22          #include "Debug.h"
+  23          
+  24          #ifdef CpuInitPannelEn
+              
+              #define _18BIT_RGB666   0
+              #define _16BIT_RGB666   1
+              #define _16BIT_RGB656   2
+              #define _09BIT_RGB666   3
+              #define _08BIT_RGB656   4
+              #define _08BIT_RGB666   5
+              
+              
+              #define AMT_CPU_D0()   {XBYTE[0XFD5A] |= _BIT7;XBYTE[0XFD5A] &= ~_BIT6;}     
+              #define AMT_CPU_D1()   {XBYTE[0XFD60] &= ~ _BIT2;XBYTE[0XFD60] |= _BIT1;XBYTE[0XFD60] |= _BIT0;}
+              #define AMT_CPU_D2()   {XBYTE[0XFD60] &= ~ _BIT6;XBYTE[0XFD60] |= _BIT5;XBYTE[0XFD60] &= ~_BIT4;}
+              #define AMT_CPU_D3()   {XBYTE[0XFD61] &= ~ _BIT2;XBYTE[0XFD61] |= _BIT1;XBYTE[0XFD61] &= ~_BIT0;}
+              #define AMT_CPU_D4()   {XBYTE[0XFD5B] |= _BIT1;XBYTE[0XFD5B] &= ~_BIT0;}
+              #define AMT_CPU_D5()   {XBYTE[0XFD5B] |= _BIT3;XBYTE[0XFD5B] &= ~_BIT2;}
+              #define AMT_CPU_D6()   {XBYTE[0XFD61] |= _BIT6;XBYTE[0XFD61] &= ~ _BIT5;XBYTE[0XFD61] &= ~_BIT4;}
+              #define AMT_CPU_D7()   {XBYTE[0XFD62] |= _BIT6;XBYTE[0XFD62] &= ~ _BIT5;XBYTE[0XFD62] &= ~_BIT4;}
+              #define AMT_CPU_D8()   {XBYTE[0XFD63] |= _BIT6;XBYTE[0XFD63] &= ~ _BIT5;XBYTE[0XFD63] |= _BIT4;}
+              #define AMT_CPU_D9()   {XBYTE[0XFD65] &= ~ _BIT2;XBYTE[0XFD65] |= _BIT1;XBYTE[0XFD65] &= ~_BIT0;}
+              #define AMT_CPU_D10()  {XBYTE[0XFD65] &= ~ _BIT6;XBYTE[0XFD65] |= _BIT5;XBYTE[0XFD65] &= ~_BIT4;}
+              #define AMT_CPU_D11()  {XBYTE[0XFD66] &= ~ _BIT2;XBYTE[0XFD66] |= _BIT1;XBYTE[0XFD66] &= ~_BIT0;}
+              #define AMT_CPU_D12()  {XBYTE[0XFD5D] |= _BIT1;XBYTE[0XFD5D] &= ~_BIT0;}
+              #define AMT_CPU_D13()  {XBYTE[0XFD5D] |= _BIT3;XBYTE[0XFD5D] &= ~_BIT2;}
+              #define AMT_CPU_D14()  {XBYTE[0XFD5D] |= _BIT5;XBYTE[0XFD5D] &= ~_BIT4;}
+              #define AMT_CPU_D15()  {XBYTE[0XFD5D] |= _BIT7;XBYTE[0XFD5D] &= ~_BIT6;}
+              #define AMT_CPU_D16()  {XBYTE[0XFD5E] |= _BIT1;XBYTE[0XFD5E] &= ~_BIT0;}
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 2   
+
+              #define AMT_CPU_D17()  {XBYTE[0XFD5E] |= _BIT3;XBYTE[0XFD5E] &= ~_BIT2;}
+              
+              #define AMT630_CPU_RST()  {XBYTE[0XFD58] |= _BIT5;XBYTE[0XFD58] |= _BIT4;}
+              #define AMT630_CPU_CS()   {XBYTE[0XFD58] |= _BIT7;XBYTE[0XFD58] |= _BIT6;}
+              #define AMT630_CPU_RS()   {XBYTE[0XFD63] &= ~ _BIT2;XBYTE[0XFD63] |= _BIT1;XBYTE[0XFD63] &= ~_BIT0;}
+              #define AMT630_CPU_WR()   {XBYTE[0XFD59] |= _BIT3;XBYTE[0XFD59] |= _BIT2;}
+              #define AMT630_CPU_RD()   {XBYTE[0XFD59] |= _BIT1;XBYTE[0XFD59] |= _BIT0;}
+              
+              #define AMT628_CPU_RST()  {XBYTE[0XFD64] &= ~ _BIT2;XBYTE[0XFD64] |= _BIT1;XBYTE[0XFD64] |= _BIT0;}
+              #define AMT628_CPU_CS()   {XBYTE[0XFD62] &= ~ _BIT6;XBYTE[0XFD62] |= _BIT5;XBYTE[0XFD62] &= ~_BIT4;}
+              #define AMT628_CPU_RS()   {XBYTE[0XFD63] &= ~ _BIT2;XBYTE[0XFD63] |= _BIT1;XBYTE[0XFD63] &= ~_BIT0;}
+              #define AMT628_CPU_WR()   {XBYTE[0XFD63] &= ~ _BIT6;XBYTE[0XFD63] |= _BIT5;XBYTE[0XFD63] &= ~_BIT4;}
+              #define AMT628_CPU_RD()   {XBYTE[0XFD61] &= ~ _BIT6;XBYTE[0XFD61] |= _BIT5;XBYTE[0XFD61] &= ~_BIT4;}
+              
+              
+              void ConfigCpuPadmux(void)
+              {
+                  #if AMT_TYPE == AMT628
+                      AMT628_CPU_RST();
+                      AMT628_CPU_CS();
+                      AMT628_CPU_RS();
+                      AMT628_CPU_WR();
+                      AMT628_CPU_RD();
+                      #endif
+              
+                      #if AMT_TYPE == AMT630
+                      AMT630_CPU_RST();
+                      AMT630_CPU_CS();
+                      AMT630_CPU_RS();
+                      AMT630_CPU_WR();
+                      AMT630_CPU_RD();
+                      #endif
+              
+                      #if CpuInitPannelMode == _18BIT_MODE
+                      AMT_CPU_D0(); //DB0
+                      AMT_CPU_D1(); //DB1
+                      AMT_CPU_D2(); //DB2
+                      AMT_CPU_D3(); //DB3
+                      AMT_CPU_D4(); //DB4
+                      AMT_CPU_D5(); //DB5
+                      AMT_CPU_D6(); //DB6
+                      AMT_CPU_D7(); //DB7
+                      AMT_CPU_D8(); //DB8
+                      AMT_CPU_D9(); //DB9
+                      AMT_CPU_D10(); //DB10
+                      AMT_CPU_D11();//DB11
+                      AMT_CPU_D12(); //DB12
+                      AMT_CPU_D13(); //DB13
+                      AMT_CPU_D14(); //DB14
+                      AMT_CPU_D15(); //DB15
+                      AMT_CPU_D16(); //DB16
+                      AMT_CPU_D17(); //DB17  
+                      #endif
+              
+                      #if CpuInitPannelMode == _16BIT_MODE
+                      AMT_CPU_D1(); //DB0
+                      AMT_CPU_D2(); //DB1
+                      AMT_CPU_D3(); //DB2
+                      AMT_CPU_D4(); //DB3
+                      AMT_CPU_D5(); //DB4
+                      AMT_CPU_D6(); //DB5
+                      AMT_CPU_D7(); //DB6
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 3   
+
+                      AMT_CPU_D8(); //DB7
+                      AMT_CPU_D10(); //DB8
+                      AMT_CPU_D11();//DB9
+                      AMT_CPU_D12(); //DB10
+                      AMT_CPU_D13(); //DB11
+                      AMT_CPU_D14(); //DB12
+                      AMT_CPU_D15(); //DB13
+                      AMT_CPU_D16(); //DB14
+                      AMT_CPU_D17(); //DB15
+                  #endif
+              
+                      #if CpuInitPannelMode == _09BIT_MODE
+                      AMT_CPU_D9(); //DB0
+                      AMT_CPU_D10(); //DB1
+                      AMT_CPU_D11();//DB2
+                      AMT_CPU_D12(); //DB3
+                      AMT_CPU_D13(); //DB4
+                      AMT_CPU_D14(); //DB5
+                      AMT_CPU_D15(); //DB6
+                      AMT_CPU_D16(); //DB7
+                      AMT_CPU_D17(); //DB8
+                      #endif
+              
+                      #if CpuInitPannelMode == _08BIT_MODE
+                      AMT_CPU_D10();   //DB0
+                      AMT_CPU_D11();  //DB1
+                      AMT_CPU_D12(); //DB2
+                      AMT_CPU_D13(); //DB3
+                      AMT_CPU_D14(); //DB4
+                      AMT_CPU_D15(); //DB5
+                      AMT_CPU_D16(); //DB6
+                      AMT_CPU_D17(); //DB7
+                      #endif
+              
+              }
+              
+              
+              ULONG transfor18BitDate(UINT dat)
+              {
+                  ULONG tempDat = 0x00;
+                      
+                      #if CpuInitPannelMode == _18BIT_MODE
+                      tempDat = (dat>>8)&0xff;
+                      tempDat <<= 9;
+                      tempDat |= dat & 0xff;
+                      tempDat <<= 1;
+                      #endif
+              
+                      #if CpuInitPannelMode == _16BIT_MODE
+                      tempDat = (dat>>8)&0xff;
+                      tempDat <<= 9;
+                      tempDat |= dat & 0xff;
+                      tempDat <<= 1;
+                      #endif
+                      
+                      #if CpuInitPannelMode == _09BIT_MODE
+                      tempDat = dat&0xff;
+                      tempDat <<= 10;
+                      #endif
+              
+                      #if CpuInitPannelMode == _08BIT_MODE
+                      tempDat = dat&0xff;
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 4   
+
+                      tempDat <<= 10;
+                      #endif
+                      
+                  return tempDat;
+              }
+              
+              void CPU_Pannel_Reset(void)
+              { 
+                  printfStr("Set Cpu Pannel Reset");
+                      
+                  XBYTE[0XFD83] |= _BIT1;    //cpu reset 1
+                      DelayMs(200);
+                      
+                  XBYTE[0XFD83] &= (~_BIT1); //cpu reset 0
+                      DelayMs(200);
+                      
+                      XBYTE[0XFD83] |= _BIT1;    //cpu reset 1
+                      DelayMs(200); 
+              }
+              
+              
+              void SetCpuSoftwareMode()
+              {
+                  printfStr("Set Cpu Pannel SoftwareMode");
+                              
+                  XBYTE[0XFD80] = 0XFF;
+                      XBYTE[0XFD81] |= (_BIT0); 
+              }
+              
+              void SetCpuHardwareMode()
+              {
+                      XBYTE[0XFD81] &= (~_BIT0); 
+              }
+                              
+              
+              void WriteComdToF0(BOOL bStart,UINT comd)
+              {
+                  ULONG tmpDat;
+                      
+                      tmpDat = transfor18BitDate(comd);
+                      tmpDat &=( ~_BIT18);
+                  if(bStart)
+                  {
+                      tmpDat |= _BIT19;
+                  }
+                  else
+                  {
+                      tmpDat &= (~_BIT19);
+                  }   
+                      XBYTE[0XFDF0] = (UCHAR)((tmpDat>>16) & 0xff);
+                  XBYTE[0XFDF0] = (UCHAR)((tmpDat>>8) & 0xff);        
+                      XBYTE[0XFDF0] = (UCHAR)(tmpDat & 0xff);
+              }
+              
+              void WriteDataToF0(UINT dat)
+              {
+                  ULONG tmpDat;
+                      
+                      tmpDat = transfor18BitDate(dat);
+                      tmpDat |=(_BIT18);
+                  tmpDat &= (~_BIT19);
+                  XBYTE[0XFDF0] = (UCHAR)((tmpDat>>16) & 0xff);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 5   
+
+                  XBYTE[0XFDF0] = (UCHAR)((tmpDat>>8) & 0xff);        
+                      XBYTE[0XFDF0] = (UCHAR)(tmpDat & 0xff);
+              }
+              
+              void SetCpuBitMode(UCHAR Mode)
+              {
+                 if(_18BIT_RGB666 == Mode)
+                 {
+                         XBYTE[0XFD81] &= ~(_BIT7|_BIT6|_BIT5); 
+                         XBYTE[0XFD81] |= _BIT5; 
+                 }
+                 if(_16BIT_RGB666 == Mode)
+                 {
+                         XBYTE[0XFD81] &= ~(_BIT7|_BIT6|_BIT5); 
+                         XBYTE[0XFD81] |= _BIT5; 
+                 }
+                 if(_16BIT_RGB656 == Mode)
+                 {
+                         XBYTE[0XFD81] &= ~(_BIT7|_BIT6|_BIT5); 
+                         XBYTE[0XFD81] |= _BIT5; 
+                 }
+                 if(_09BIT_RGB666 == Mode)
+                 {
+                         XBYTE[0XFD81] &= ~(_BIT7|_BIT6|_BIT5); 
+                         XBYTE[0XFD81] |= _BIT6; 
+                 }
+                 if(_08BIT_RGB656 == Mode)
+                 {
+                         XBYTE[0XFD81] &= ~(_BIT7|_BIT6|_BIT5); 
+                         XBYTE[0XFD81] |= (_BIT6|_BIT5); 
+                 }
+                 if(_08BIT_RGB666 == Mode)
+                 {
+                         XBYTE[0XFD81] &= ~(_BIT7|_BIT6|_BIT5); 
+                         XBYTE[0XFD81] |= _BIT7; 
+                 }
+              }
+              
+              
+              
+              void WriteCpuCmd(UINT Val)
+              {
+                  ULONG tmpDat;
+                      tmpDat = transfor18BitDate(Val); 
+              
+                  #if CpuInitWrSignalMode == NORMAL_MODE_WR
+                      tmpDat &=( WR_0);
+                      #endif
+                      
+                      #if CpuInitWrSignalMode == _7414_MODE_WR
+                      tmpDat |=( WR_1);
+                      #endif
+                      
+                      tmpDat |=( RD_1);
+                      tmpDat &=( CS_0);
+                      tmpDat &=( RS_0);
+              
+                      XBYTE[0XFD7E] = (UCHAR)(tmpDat & 0xff);
+                      XBYTE[0XFD7F] = (UCHAR)((tmpDat>>8) & 0xff);
+                      XBYTE[0XFD80] = (UCHAR)((tmpDat>>16) & 0xff);
+                      
+                  DelayMs(1);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 6   
+
+                      
+                      #if CpuInitWrSignalMode == NORMAL_MODE_WR
+                      tmpDat |=( WR_1);
+                      #endif
+              
+                  #if CpuInitWrSignalMode == _7414_MODE_WR
+                      tmpDat &=( WR_0);
+                      #endif
+                      
+                      tmpDat |=( CS_1); 
+                      tmpDat |=( RS_1); 
+              
+                      XBYTE[0XFD80] = (UCHAR)((tmpDat>>16) & 0xff);
+                  DelayMs(1);
+                  
+                      printfStr("Write Cpu Pannel Cmd");
+              
+              }
+              
+              
+              
+              void WriteCpuData(UINT Val)
+              {
+                      ULONG tmpDat;
+                      tmpDat = transfor18BitDate(Val);  
+              
+                      #if CpuInitWrSignalMode == NORMAL_MODE_WR
+                      tmpDat &=( WR_0);
+                      #endif
+              
+                  #if CpuInitWrSignalMode == _7414_MODE_WR
+                      tmpDat |=( WR_1);
+                      #endif
+                      
+                      tmpDat |=( RD_1);
+                      tmpDat &=( CS_0);
+                      tmpDat |=( RS_1);
+              
+                      XBYTE[0XFD7E] = (UCHAR)(tmpDat & 0xff);
+                      XBYTE[0XFD7F] = (UCHAR)((tmpDat>>8) & 0xff);
+                      XBYTE[0XFD80] = (UCHAR)((tmpDat>>16) & 0xff);
+                      
+                      DelayMs(1);
+              
+                      #if CpuInitWrSignalMode == NORMAL_MODE_WR
+                      tmpDat |=( WR_1);
+                      #endif
+                      
+                      #if CpuInitWrSignalMode == _7414_MODE_WR
+                      tmpDat &=( WR_0);
+                      #endif
+                      
+                  tmpDat |=( CS_1);
+                  tmpDat |=( RS_1); 
+              
+                      XBYTE[0XFD80] = (UCHAR)((tmpDat>>16) & 0xff);
+                  DelayMs(1);
+              
+                  printfStr("Write Cpu Pannel Data");
+              
+              }
+              
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 7   
+
+              
+              void WriteCpuSetting(UINT Cmd,UINT Val)
+              {
+                  WriteCpuCmd(Cmd);
+                      WriteCpuData(Val);
+              }
+              
+              
+              /*************************************RM68130_16BIT **********************************/
+              #if RM68130_16BIT ==ENABLE
+              #define LCM_WR_REG(address,data)         WriteCpuCmd((UINT)(address&0xffff));\
+                                                   WriteCpuData((UINT)(data&0xffff));
+              
+              void InitalCPU_RM68130_16bit(void)
+              {   
+              
+                      printfStr("InitalCPU_RM68130_16bit");
+              
+                      LCM_WR_REG(0x0028, 0x00CE); 
+                  
+                  LCM_WR_REG(0x0001, 0x011C);
+                  LCM_WR_REG(0x0003, 0x0018);
+                  LCM_WR_REG(0x0007, 0x0017); 
+              
+                  LCM_WR_REG(0x0011, 0x1000);
+              
+                  LCM_WR_REG(0x0020, 0x0000); 
+                  LCM_WR_REG(0x0021, 0x0000); 
+              
+                  LCM_WR_REG(0x0036, 0x00AF);  
+                  LCM_WR_REG(0x0037, 0x0000);  
+                  LCM_WR_REG(0x0038, 0x00DB);  
+                  LCM_WR_REG(0x0039, 0x0000);   
+              
+                  LCM_WR_REG(0x0002, 0x0100); 
+              
+                  LCM_WR_REG(0x00E8, 0x0100);
+                  LCM_WR_REG(0x00B0, 0x1202);
+                  LCM_WR_REG(0x000B, 0x0003); 
+                  LCM_WR_REG(0x00B1, 0x0400);
+              
+                  LCM_WR_REG(0x0050, 0x0003); //L8   L1
+                  LCM_WR_REG(0x0051, 0x0802); //L43  L20
+                  LCM_WR_REG(0x0052, 0x0A0A); //L62  L55
+                  LCM_WR_REG(0x0053, 0x0400);
+               
+                  LCM_WR_REG(0x0054, 0x0003); //L8   L1
+                  LCM_WR_REG(0x0055, 0x0802); //L43  L20
+                  LCM_WR_REG(0x0056, 0x0A0A); //L62  L55
+                  LCM_WR_REG(0x0057, 0x0400);
+              
+                  LCM_WR_REG(0x0058, 0x0000);
+                  LCM_WR_REG(0x0059, 0x0000);
+                  
+                  LCM_WR_REG(0x00E8, 0x0102);
+                  LCM_WR_REG(0x00FB, 0x002A);
+                  LCM_WR_REG(0x00E8, 0x0101);
+                  LCM_WR_REG(0x00F1, 0x0040);
+                      
+                      WriteCpuCmd(0X0022);
+              
+                      /*====== TEST =======
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 8   
+
+                      TurnOnBackLight();
+                  while(1)
+                  {
+                      WriteCpuData(0X07E0);
+                      }*/
+                      
+                  
+              }       
+              
+              void InitalCpuPannel()
+              {
+                 UCHAR contWriteF0 = 0;
+                 
+                 //inital Cpu pannel reg      
+                 InitalCPU_RM68130_16bit();
+                 
+                 //inital AMT Cpu Ram
+                 WriteComdToF0(1,0x2A);
+                 contWriteF0 = 0;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;  
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0Xdf);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2B);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0X3f);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2C);
+                 contWriteF0++;
+              
+                 XBYTE[0XFD82] = (contWriteF0<<4) + 0x06; 
+                 XBYTE[0XFD81] = (_BIT4 |_BIT2);//data_refresh_en、adr_clr_en    
+                 XBYTE[0XFD83] |= _BIT0;   
+              
+                 //Set Cpu bit mode
+                 SetCpuBitMode(_16BIT_RGB666);
+              }
+              #endif//RM68130_16BIT ==ENABLE
+              
+              
+              /*************************************ILI9486L_16BIT **********************************/
+              #if ILI9486L_16BIT ==ENABLE
+              #define LCD_9486l_wr(address)           WriteCpuCmd((UINT)(address&0xff));
+              #define LCD_9486l_da(data)              WriteCpuData((UINT)(data&0xff));
+              
+              void InitalCPU_ILI9486L_16bit(void)
+              {       
+                      LCD_9486l_wr(0XF1);
+                  LCD_9486l_da(0x36);
+                  LCD_9486l_da(0x04);
+                  LCD_9486l_da(0x00);
+                  LCD_9486l_da(0x3C);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 9   
+
+                  LCD_9486l_da(0X0F);
+                  LCD_9486l_da(0x8F);
+              
+                  LCD_9486l_wr(0XF2);
+                  LCD_9486l_da(0x18);
+                  LCD_9486l_da(0xA3);
+                  LCD_9486l_da(0x12);
+                  LCD_9486l_da(0x02);
+                  LCD_9486l_da(0xB2);
+                  LCD_9486l_da(0x12);
+                  LCD_9486l_da(0xFF);
+                  LCD_9486l_da(0x10);
+                  LCD_9486l_da(0x00);
+              
+                  LCD_9486l_wr(0XF8);
+                  LCD_9486l_da(0x21);
+                  LCD_9486l_da(0x04);
+              
+                  LCD_9486l_wr(0xF9);  
+                  LCD_9486l_da(0x00);  
+                  LCD_9486l_da(0x08);  
+              
+                  LCD_9486l_wr(0xC0);
+                  LCD_9486l_da(0x0D);
+                  LCD_9486l_da(0x0B);
+              
+                  LCD_9486l_wr(0xC1);
+                  LCD_9486l_da(0x43); 
+              
+                  LCD_9486l_wr(0xC2);
+                  LCD_9486l_da(0x22); 
+              
+                  LCD_9486l_wr(0XC5);
+                  LCD_9486l_da(0x00);
+                  LCD_9486l_da(0x2E);
+                      
+                  
+                  LCD_9486l_wr(0xB1);
+                  LCD_9486l_da(0xB0);
+                  LCD_9486l_da(0x11);
+              
+                  LCD_9486l_wr(0xB4);
+                  LCD_9486l_da(0x02);
+              
+                  LCD_9486l_wr(0xB7);
+                  LCD_9486l_da(0xc6);
+              
+                  LCD_9486l_wr(0x36);
+                  LCD_9486l_da(0xC8); 
+              
+                  LCD_9486l_wr(0x3A);
+                  LCD_9486l_da(0x66);
+              
+                  LCD_9486l_wr(0xB6);
+                  LCD_9486l_da(0x00);
+                  LCD_9486l_da(0x42); 
+                  LCD_9486l_da(0x3B); 
+              
+                  LCD_9486l_wr(0xE0);
+                  LCD_9486l_da(0x0F);
+                  LCD_9486l_da(0x20);
+                  LCD_9486l_da(0x1C);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 10  
+
+                  LCD_9486l_da(0x0B);
+                  LCD_9486l_da(0x0E);
+                  LCD_9486l_da(0x08);
+                  LCD_9486l_da(0x48);
+                  LCD_9486l_da(0xA9);
+                  LCD_9486l_da(0x37);
+                  LCD_9486l_da(0x0B);
+                  LCD_9486l_da(0x15);
+                  LCD_9486l_da(0x07);
+                  LCD_9486l_da(0x0D);
+                  LCD_9486l_da(0x07);
+                  LCD_9486l_da(0x00);
+              
+                  LCD_9486l_wr(0XE1);
+                  LCD_9486l_da(0x0F);
+                  LCD_9486l_da(0x38);
+                  LCD_9486l_da(0x32);
+                  LCD_9486l_da(0x08);
+                  LCD_9486l_da(0x0A);
+                  LCD_9486l_da(0x04);
+                  LCD_9486l_da(0x48);
+                  LCD_9486l_da(0x75);
+                  LCD_9486l_da(0x37);
+                  LCD_9486l_da(0x07);
+                  LCD_9486l_da(0x11);
+                  LCD_9486l_da(0x04);
+                  LCD_9486l_da(0x23);
+                  LCD_9486l_da(0x1F);
+                  LCD_9486l_da(0x00);
+              
+                  LCD_9486l_wr(0x11);
+                  DelayMs(120);
+                  LCD_9486l_wr(0x29); 
+              
+                      /*====== TEST =======
+                      LCD_9486l_wr(0x36);
+                      TurnOnBackLight();
+                  while(1)
+                  {
+                      LCD_9486l_da(0xC8);
+                      }*/
+              }       
+              
+              void InitalCpuPannel()
+              {
+                 UCHAR contWriteF0 = 0;
+              
+                 printfStr("InitalCpuPannel");
+                 
+                 //inital Cpu pannel reg      
+                 InitalCPU_ILI9486L_16bit();
+              
+                 //inital AMT Cpu Ram
+                 WriteComdToF0(1,0x2A);
+                 contWriteF0 = 0;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;  
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0Xdf);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 11  
+
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2B);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0X3f);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2C);
+                 contWriteF0++;
+              
+                 XBYTE[0XFD82] = (contWriteF0<<4) + 0x06; 
+                 XBYTE[0XFD81] = (_BIT4 |_BIT2);//data_refresh_en、adr_clr_en    
+                 XBYTE[0XFD83] |= _BIT0;  
+              
+                 //Set Cpu bit mode
+                 SetCpuBitMode(_16BIT_RGB666);
+              }
+              #endif// ILI9486L_16BIT ==ENABLE
+              
+              
+              
+              /*************************************RM61581B_16BIT **********************************/
+              #if RM61581B_16BIT ==ENABLE
+              #define W_COM(address)          WriteCpuCmd((UINT)(address&0xff));
+              #define W_DATA(data)            WriteCpuData((UINT)(data&0xff));
+              
+              void InitalCPU_RM61581B_16bit(void)
+              {
+              
+                      printfStr("InitalCPU_RM61581B_16bit");
+                      
+                      W_COM(0xFF);
+                      W_COM(0xFF);
+                      DelayMs(5);
+                      W_COM(0xFF);
+                      W_COM(0xFF);
+                      W_COM(0xFF);
+                      W_COM(0xFF);
+                      DelayMs(10);
+              
+                      W_COM(0xB0);
+                      W_DATA(0x00);
+              
+                      W_COM(0x11);
+                      DelayMs(150);
+              
+                      W_COM(0xB3);
+                      W_DATA(0x02);
+                      W_DATA(0x00);
+                      W_DATA(0x00);
+                      W_DATA(0x00);
+              
+                      W_COM(0xC0);
+                      W_DATA(0x13);
+                      W_DATA(0x3B);//480
+                      W_DATA(0x00);
+                      W_DATA(0x02);
+                      W_DATA(0x00);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 12  
+
+                      W_DATA(0x01);
+                      W_DATA(0x00);//NW
+                      W_DATA(0x43);
+              
+                      W_COM(0xC1);
+                      W_DATA(0x08);
+                      W_DATA(0x16);//CLOCK
+                      W_DATA(0x08);
+                      W_DATA(0x08);
+              
+                      W_COM(0xC4);
+                      W_DATA(0x11);
+                      W_DATA(0x07);
+                      W_DATA(0x03);
+                      W_DATA(0x03);
+              
+                      W_COM(0xC6);
+                      W_DATA(0x00);
+              
+                      W_COM(0xC8);//GAMMA
+                      W_DATA(0x03); //3
+                      W_DATA(0x03);
+                      W_DATA(0x13);//先轉10進制
+                      W_DATA(0x5C);
+                      W_DATA(0x03);
+                      W_DATA(0x07);
+                      W_DATA(0x14);
+                      W_DATA(0x08); //正極性
+              
+                      W_DATA(0x00);
+                      W_DATA(0x21);
+              
+                      W_DATA(0x08);
+                      W_DATA(0x14);
+                      W_DATA(0x07);
+                      W_DATA(0x53);
+                      W_DATA(0x0C);
+                      W_DATA(0x13);
+                      W_DATA(0x03);
+                      W_DATA(0x03);//負極性
+              
+                      W_DATA(0x21);
+                      W_DATA(0x00);
+              
+                      W_COM(0x35);
+                      W_DATA(0x00);
+              
+                      W_COM(0x36);
+                      W_DATA(0x60); 
+              
+                      W_COM(0x3A);
+                      W_DATA(0x55);
+              
+                      W_COM(0x44);
+                      W_DATA(0x00);
+                      W_DATA(0x01);
+              
+                      W_COM(0xD0);
+                      W_DATA(0x07);
+                      W_DATA(0x07);//VCI1
+                      W_DATA(0x1D);//VRH  
+                      W_DATA(0x03);//BT
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 13  
+
+              
+                      W_COM(0xD1);
+                      W_DATA(0x03);
+                      W_DATA(0x30);//VCM
+                      W_DATA(0x10);//VDV
+              
+                      W_COM(0xD2);
+                      W_DATA(0x03);
+                      W_DATA(0x14);
+                      W_DATA(0x04);
+              
+                      W_COM(0x29);
+                      DelayMs(30);
+              
+                      W_COM(0x2A);
+                      W_DATA(0x00);
+                      W_DATA(0x00);
+                      W_DATA(0x01);
+                      W_DATA(0xDF);//480
+              
+                      W_COM(0x2B);
+                      W_DATA(0x00);
+                      W_DATA(0x00);
+                      W_DATA(0x01);
+                      W_DATA(0x3F);//320
+              
+                      W_COM(0xB4);
+                      W_DATA(0x00);
+                      DelayMs(100);
+              
+                      W_COM(0x2C);
+              
+                      // sleep in mode
+                      W_COM(0x10);
+              
+                      // sleep out mode
+                      DelayMs(150);
+                      W_COM(0x11);
+                      DelayMs(150);
+              
+                  /*====== TEST =======
+                      W_COM(0x2C);
+                      TurnOnBackLight();
+                  while(1)
+                  {
+                    // W_DATA(0xFF);
+                    // W_DATA(0x00);
+                      }
+                      */
+              }
+              
+              void InitalCpuPannel()
+              {
+                 UCHAR contWriteF0 = 0;
+              
+                 printfStr("InitalCpuPannel");
+                 
+                 //inital Cpu pannel reg      
+                 InitalCPU_RM61581B_16bit();
+              
+                 //inital AMT Cpu Ram
+                 WriteComdToF0(1,0x2A);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 14  
+
+                 contWriteF0 = 0;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;  
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0Xdf);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2B);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0X3f);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2C);
+                 contWriteF0++;
+              
+                 XBYTE[0XFD82] = (contWriteF0<<4) + 0x06; 
+                 XBYTE[0XFD81] = (_BIT4 |_BIT2);//data_refresh_en、adr_clr_en    
+                 XBYTE[0XFD83] |= _BIT0;
+              
+                 //Set Cpu bit mode
+                 SetCpuBitMode(_16BIT_RGB666);
+              }
+              #endif //#if RM61581B_16BIT ==ENABLE
+              
+              
+              /*************************************ILI9342C_16BIT **********************************/
+              #if ILI9342C_16BIT ==ENABLE
+              #define LCD_ILI9342C_CMD(address)                       WriteCpuCmd((UINT)(address&0xff));
+              #define LCD_ILI9342C_Parameter(data)    WriteCpuData((UINT)(data&0xff));
+              
+              void InitalCPU_ILI9342C_16bit(void)
+              {   
+              
+                //************* Start Initial Sequence **********//
+                DelayMs(120);
+              
+                //************* Start Initial Sequence **********//
+                LCD_ILI9342C_CMD(0xC8);       //Set EXTC
+                LCD_ILI9342C_Parameter(0xFF);
+                LCD_ILI9342C_Parameter(0x93);
+                LCD_ILI9342C_Parameter(0x42);
+                
+                LCD_ILI9342C_CMD(0x36);       //Memory Access Control
+                LCD_ILI9342C_Parameter(0xC8); //MY,MX,MV,ML,BGR,MH
+                LCD_ILI9342C_CMD(0x3A);       //Pixel Format Set
+                LCD_ILI9342C_Parameter(0x55); //DPI [2:0],DBI [2:0]
+                
+                LCD_ILI9342C_CMD(0xC0);       //Power Control 1
+                LCD_ILI9342C_Parameter(0x15); //VRH[5:0]
+                LCD_ILI9342C_Parameter(0x15); //VC[3:0]
+                
+                LCD_ILI9342C_CMD(0xC1);       //Power Control 2
+                LCD_ILI9342C_Parameter(0x01); //SAP[2:0],BT[3:0]
+                
+                LCD_ILI9342C_CMD(0xC5);       //VCOM
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 15  
+
+                LCD_ILI9342C_Parameter(0xF5);
+                
+                LCD_ILI9342C_CMD(0xB1);      
+                LCD_ILI9342C_Parameter(0x00);     
+                LCD_ILI9342C_Parameter(0x1B);
+                LCD_ILI9342C_CMD(0xB4);      
+                LCD_ILI9342C_Parameter(0x02);
+                
+                LCD_ILI9342C_CMD(0xE0);
+                LCD_ILI9342C_Parameter(0x0F);//P01-VP63   
+                LCD_ILI9342C_Parameter(0x13);//P02-VP62   
+                LCD_ILI9342C_Parameter(0x17);//P03-VP61   
+                LCD_ILI9342C_Parameter(0x04);//P04-VP59   
+                LCD_ILI9342C_Parameter(0x13);//P05-VP57   
+                LCD_ILI9342C_Parameter(0x07);//P06-VP50   
+                LCD_ILI9342C_Parameter(0x40);//P07-VP43   
+                LCD_ILI9342C_Parameter(0x39);//P08-VP27,36
+                LCD_ILI9342C_Parameter(0x4F);//P09-VP20   
+                LCD_ILI9342C_Parameter(0x06);//P10-VP13   
+                LCD_ILI9342C_Parameter(0x0D);//P11-VP6    
+                LCD_ILI9342C_Parameter(0x0A);//P12-VP4    
+                LCD_ILI9342C_Parameter(0x1F);//P13-VP2    
+                LCD_ILI9342C_Parameter(0x22);//P14-VP1    
+                LCD_ILI9342C_Parameter(0x00);//P15-VP0    
+                
+                LCD_ILI9342C_CMD(0xE1);
+                LCD_ILI9342C_Parameter(0x00);//P01
+                LCD_ILI9342C_Parameter(0x21);//P02
+                LCD_ILI9342C_Parameter(0x24);//P03
+                LCD_ILI9342C_Parameter(0x03);//P04
+                LCD_ILI9342C_Parameter(0x0F);//P05
+                LCD_ILI9342C_Parameter(0x05);//P06
+                LCD_ILI9342C_Parameter(0x38);//P07
+                LCD_ILI9342C_Parameter(0x32);//P08
+                LCD_ILI9342C_Parameter(0x49);//P09
+                LCD_ILI9342C_Parameter(0x00);//P10
+                LCD_ILI9342C_Parameter(0x09);//P11
+                LCD_ILI9342C_Parameter(0x08);//P12
+                LCD_ILI9342C_Parameter(0x32);//P13
+                LCD_ILI9342C_Parameter(0x35);//P14
+                LCD_ILI9342C_Parameter(0x0F);//P15
+                
+                LCD_ILI9342C_CMD(0x11);//Exit Sleep
+                DelayMs(120);
+                LCD_ILI9342C_CMD(0x29);//Display On
+                DelayMs(10);
+                LCD_ILI9342C_CMD(0x2C);  
+                
+                /*====== TEST ======= 
+                //TurnOnBackLight();
+                while(1)
+                {
+                        WriteCpuData(0Xff00);
+                }
+                */
+              }       
+              
+              void InitalCpuPannel()
+              {
+                 UCHAR contWriteF0 = 0;
+              
+                 printfStr("InitalCpuPannel");
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 16  
+
+                 
+                 //inital Cpu pannel reg      
+                 InitalCPU_ILI9342C_16bit();
+              
+                 //inital AMT Cpu Ram
+                 WriteComdToF0(1,0x2A);
+                 contWriteF0 = 0;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;  
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0X3f);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2B);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0XF0);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2C);
+                 contWriteF0++;
+                 
+                 XBYTE[0XFD82] = (contWriteF0<<4) + 0x06; 
+                 XBYTE[0XFD81] = (_BIT4 |_BIT2);//data_refresh_en、adr_clr_en    
+                 XBYTE[0XFD83] |= _BIT0;
+              
+                 //Set Cpu bit mode
+                 SetCpuBitMode(_16BIT_RGB666);
+                 
+              }
+              #endif// ILI9342C_16BIT ==ENABLE
+              
+              
+              /*************************************ILI9341_16bit**********************************/
+              #if ILI9341_16BIT ==ENABLE
+              #define write_reg_16bit(address)            WriteCpuCmd((UINT)(address&0xff));
+              #define write_dat_16bit(data)           WriteCpuData((UINT)(data&0xff));
+              
+              void InitalCPU_ILI9341_16bit(void)
+              {
+                      //************* Start Initial Sequence **********//
+                      write_reg_16bit(0xCF); 
+                      write_dat_16bit(0x00);
+                      write_dat_16bit(0xD9);
+                      write_dat_16bit(0x30);
+                      write_reg_16bit(0xED); 
+                      write_dat_16bit(0x64);
+                      write_dat_16bit(0x03);
+                      write_dat_16bit(0x12);
+                      write_dat_16bit(0x81);
+                      write_reg_16bit(0xCB); 
+                      write_dat_16bit(0x39);
+                      write_dat_16bit(0x2C);
+                      write_dat_16bit(0x00);
+                      write_dat_16bit(0x34);
+                      write_dat_16bit(0x02);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 17  
+
+                      write_reg_16bit(0xEA); 
+                      write_dat_16bit(0x00);
+                      write_dat_16bit(0x00);
+                      write_reg_16bit(0xE8); 
+                      write_dat_16bit(0x85);
+                      write_dat_16bit(0x00);
+                      write_dat_16bit(0x78);
+              
+                      write_reg_16bit(0xC0); //Power control
+                      write_dat_16bit(0x21); //VRH[5:0]
+              
+                      write_reg_16bit(0xC1); //Power control
+                      write_dat_16bit(0x12); //SAP[2:0];BT[3:0]
+              
+                      write_reg_16bit(0xC2);
+                      write_dat_16bit(0x11);
+              
+                      write_reg_16bit(0xC5); //VCM control
+                      write_dat_16bit(0x37); //0x40
+                      write_dat_16bit(0x30);
+              
+                      write_reg_16bit(0xC7); 
+                      write_dat_16bit(0xA8);
+                      write_reg_16bit(0x3A); 
+                      write_dat_16bit(0x55);
+              
+                      write_reg_16bit(0x36); // Memory Access Control
+                      write_dat_16bit(0x68);
+              
+                      write_reg_16bit(0xB1); // Frame Rate Control
+                      write_dat_16bit(0x00);
+                      write_dat_16bit(0x18);
+              
+                      write_reg_16bit(0xB6); // Display Function Control
+                      write_dat_16bit(0x0A);
+                      write_dat_16bit(0xA2);
+              
+                      write_reg_16bit(0xF2); // 3Gamma Function Disable
+                      write_dat_16bit(0x00);
+              
+                      write_reg_16bit(0xF7);
+                      write_dat_16bit(0x20);
+              
+                      write_reg_16bit(0x26); //Gamma curve selected
+                      write_dat_16bit(0x01);
+              
+                      write_reg_16bit(0xE0); //Set Gamma
+                      write_dat_16bit(0x1F);
+                      write_dat_16bit(0x24);
+                      write_dat_16bit(0x24);
+                      write_dat_16bit(0x0D);
+                      write_dat_16bit(0x12);
+                      write_dat_16bit(0x09);
+                      write_dat_16bit(0x52);
+                      write_dat_16bit(0xB7);
+                      write_dat_16bit(0x3F);
+                      write_dat_16bit(0x0C);
+                      write_dat_16bit(0x15);
+                      write_dat_16bit(0x06);
+                      write_dat_16bit(0x0E);
+                      write_dat_16bit(0x08);
+                      write_dat_16bit(0x00);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 18  
+
+              
+                      write_reg_16bit(0XE1); //Set Gamma
+                      write_dat_16bit(0x00);
+                      write_dat_16bit(0x1B);
+                      write_dat_16bit(0x1B);
+                      write_dat_16bit(0x02);
+                      write_dat_16bit(0x0E);
+                      write_dat_16bit(0x06);
+                      write_dat_16bit(0x2E);
+                      write_dat_16bit(0x48);
+                      write_dat_16bit(0x3F);
+                      write_dat_16bit(0x03);
+                      write_dat_16bit(0x0A);
+                      write_dat_16bit(0x09);
+                      write_dat_16bit(0x31);
+                      write_dat_16bit(0x37);
+                      write_dat_16bit(0x1F);
+              
+                      write_reg_16bit(0x11); //Exit Sleep
+                      DelayMs(120);
+                      write_reg_16bit(0x29); //display on
+                  DelayMs(10);
+                      
+                      /*****TEST****
+                      write_reg_16bit(0x2C);
+                      TurnOnBackLight();
+                  while(1)
+                  {
+                     write_dat_16bit(0x0080);    
+                      }
+                      */
+              }
+              
+              void InitalCpuPannel()
+              {
+                 UCHAR contWriteF0 = 0;
+              
+                 printfStr("InitalCpuPannel");
+                 
+                 //inital Cpu pannel reg      
+                 InitalCPU_ILI9341_16bit();
+              
+                 //inital AMT Cpu Ram
+                 WriteComdToF0(1,0x2A);
+                 contWriteF0 = 0;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;  
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0X40);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2B);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0XF0);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 19  
+
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2C);
+                 contWriteF0++;
+              
+                 XBYTE[0XFD82] = (contWriteF0<<4) + 0x06; 
+                 XBYTE[0XFD81] = (_BIT4 |_BIT2);//data_refresh_en、adr_clr_en    
+                 XBYTE[0XFD83] |= _BIT0;
+              
+                 //Set Cpu bit mode
+                 SetCpuBitMode(_16BIT_RGB666);
+              }
+              #endif //#if ILI9341_16BIT ==ENABLE
+              
+              
+              /*************************************HX8357C_16BIT **********************************/
+              #if HX8357C_16BIT ==ENABLE
+              #define WR_Com(address)     WriteCpuCmd((UINT)(address&0xff));
+              #define WR_D(data)              WriteCpuData((UINT)(data&0xff));
+              
+              void InitalCPU_HX8357C_16bit(void)
+              {
+                      WR_Com(0xB9);  // SET password          
+                      WR_D(0xFF);
+                      WR_D(0x83);
+                      WR_D(0x57);
+                      DelayMs(1);
+                      WR_Com(0xC6);  // SET password          
+                      WR_D(0x00);
+                      WR_D(0xFF);
+                      WR_Com(0xB6); 
+                      WR_D(0x3f);
+                      DelayMs(1);             
+              
+                      /******gamma******/
+                      WR_Com(0xE0);
+                      WR_D(0x01); 
+                      WR_D(0x08);     
+                      WR_D(0x10); //3  
+                      WR_D(0x1B); //4  
+                      WR_D(0x27); 
+                      WR_D(0x39); 
+                      WR_D(0x46); 
+                      WR_D(0x50); 
+                      WR_D(0x48); 
+                      WR_D(0x42);     
+                      WR_D(0x3d);     
+                      WR_D(0x34);     
+                      WR_D(0x32);     
+                      WR_D(0x29);     
+                      WR_D(0x2a); 
+                      WR_D(0x03); 
+                      WR_D(0x01); 
+                      WR_D(0x08); 
+                      WR_D(0x10); //3  
+                      WR_D(0x1B); //4  
+                      WR_D(0x27); 
+                      WR_D(0x39); 
+                      WR_D(0x46); 
+                      WR_D(0x50); 
+                      WR_D(0x48); 
+                      WR_D(0x42); 
+                      WR_D(0x3d); 
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 20  
+
+                      WR_D(0x34); 
+                      WR_D(0x32); 
+                      WR_D(0x29); 
+                      WR_D(0x2a); 
+                      WR_D(0x03); 
+                      WR_D(0x00);
+                      WR_D(0x01);
+                      DelayMs(1);
+                      WR_Com(0x35);     //TE ON
+                      DelayMs(1);
+                      
+                      WR_Com(0x36);     //TE ON
+                      WR_D(0x20);     
+              
+                      WR_Com(0x51);     //Brigthness
+                      WR_D(0xFF);     
+              
+                      WR_Com(0x53);     //Brigthness
+                      WR_D(0xFF);     
+              
+                      WR_Com(0xB0);
+                      WR_D(0x66);      //70Hz
+                      DelayMs(1);             
+                      WR_Com(0xCC);  //Set Panel
+                      WR_D(0x01);         //BGR_Panel
+                      DelayMs(1);             
+                      WR_Com(0xB1);
+                      WR_D(0x00);
+                      WR_D(0x15);
+                      WR_D(0x1C);
+                      WR_D(0x1C);
+                      WR_D(0x83);
+                      WR_D(0x48);
+                      DelayMs(1);             
+                      WR_Com(0xC0);
+                      WR_D(0x50);
+                      WR_D(0x50);
+                      WR_D(0x01);
+                      WR_D(0x3C);
+                      WR_D(0x1E);
+                      WR_D(0x08);
+                      DelayMs(1);             
+                      WR_Com(0xB4);
+                      WR_D(0x01);
+                      WR_D(0x40);
+                      WR_D(0x00);
+                      WR_D(0x2A);
+                      WR_D(0x2A);
+                      WR_D(0x07);
+                      WR_D(0x5C);
+                      DelayMs(1);             
+                      WR_Com(0x11);  //Sleep Out
+                      DelayMs(200);
+                      WR_Com(0x3A);
+                      WR_D(0x55);
+                      DelayMs(1);             
+                      WR_Com(0x29); //Display On
+                      DelayMs(10);
+              
+                      #if 1
+                  WR_Com(0x13);
+              
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 21  
+
+                      WR_Com(0x2A);    
+                      WR_D(0x00);
+                      WR_D(0x00);
+                  WR_D(0x01);
+                      WR_D(0xDF);
+                      
+                      WR_Com(0x2b);
+                      WR_D(0x00);
+                      WR_D(0x00);
+                      WR_D(0x01);
+                      WR_D(0x3f);
+                  #endif
+              
+                      WR_Com(0x2c); //write memrry
+              
+                      /*****TEST****
+                      TurnOnBackLight();
+                      while(1)
+                      {
+                      WR_D(0x01f00); //write memrry
+                      }*/
+              }
+              
+              void InitalCpuPannel()
+              {
+                 UCHAR contWriteF0 = 0;
+              
+                 printfStr("InitalCpuPannel");
+                 
+                 //inital Cpu pannel reg      
+                 InitalCPU_HX8357C_16bit();
+              
+                 //inital AMT Cpu Ram
+                 WriteComdToF0(1,0x2A);
+                 contWriteF0 = 0;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;  
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0Xdf);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2B);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X00);
+                 contWriteF0++;
+                 WriteDataToF0(0X01);
+                 contWriteF0++;
+                 WriteDataToF0(0X3f);
+                 contWriteF0++;
+                 WriteComdToF0(0,0X2C);
+                 contWriteF0++;
+              
+                 XBYTE[0XFD82] = (contWriteF0<<4) + 0x06; 
+                 XBYTE[0XFD81] = (_BIT4 |_BIT2);//data_refresh_en、adr_clr_en    
+                 XBYTE[0XFD83] |= _BIT0;
+              
+                 //Set Cpu bit mode
+                 SetCpuBitMode(_16BIT_RGB666);
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 22  
+
+              }
+              #endif //#if HX8357C_16BIT ==ENABLE
+              
+              
+              
+              void CPU_Pannel_Initial(void)
+              {  
+                      printfStr("Inital Cpu Pannel");
+              
+                      ConfigCpuPadmux();
+                      
+                      CPU_Pannel_Reset();
+              
+                      SetCpuSoftwareMode();
+              
+                      InitalCpuPannel();
+              
+                      SetCpuHardwareMode();
+              
+              }
+              #endif//CpuInitPannelEn
+1312          
+1313          
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 23  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_CtrlMode. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_LogoID. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ALL_INPUT_SOURCE . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_YPBPR. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+PVOID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  VOID_PTR -----  3
+ProtocolData0. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SLONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+ProtocolData1. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_FM . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+ULONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+INPUT_ITU656 . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  12
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0012H  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001BH  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001FH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
+TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 24  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+INT8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+BatterAdc_Lev0 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  vcomAC . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  vcomDC . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0009H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000BH  1
+InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+VDE_GREEN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CH1. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 25  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
+  block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+_KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+_FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+TIME_500MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  12
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 26  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  vcomAC . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  vcomDC . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0009H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000BH  1
+TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+  mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
+  logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+C51 COMPILER V9.00   CPU                                                                   07/02/2013 14:00:51 PAGE 27  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  StarAddr . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
+  OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
+  Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
+  Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  12
+  Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0012H  9
+  Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001BH  4
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001FH  8
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
+  storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
+UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

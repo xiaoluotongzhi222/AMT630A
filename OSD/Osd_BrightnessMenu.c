@@ -1,7 +1,3 @@
-#define _OSD_BRIGHTNESS_MENU_C_
-
-
-
 #include "DataType.h"
 #include "SystemConfig.h"
 #include "Global.h"
@@ -12,11 +8,12 @@
 #include "configLCDPara.h"
 #include "Debug.h"
 #include "Delay.h"
-#include "AMT_REG.H"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_MCU.h"
+#include "AMT_Mcu.h"
 #include "Osd_Menu.h"
 #include "Osd_MenuPage.h"
+#include "Osd_BitMapFontDat.h"
 
 
 
@@ -25,21 +22,8 @@
 *****************************************************************/
 UCHAR* CODE BrightnessMenuStr[]=
 {
-    "BRIGHTNESS",  
-    "LUMINOSIT\x072",
-    "LUMINOSIT\x06B",
-    "BRILHO",
-    "HELLIGKEIT",
-    "BRILHO",
-    "HELDER",
-    "\x01F\x024\x010\x0B7\x025\x0B8\x028",
-    "#\x064#\x003",
-    "#\x086#\x06F#\x070",
-    "\x01F\x025\x010\x024\x0B8\x027",
-    "JASNO\x000\x001",
-    "PARlAKlIK"
+    "BRIGHT",
 };
-
 
 
 
@@ -47,7 +31,7 @@ UCHAR* CODE BrightnessMenuStr[]=
                             String
 *****************************************************************/
 UCHAR * CODE BrightnessMenu_TitelStr(void)
-{   
+{
     return BrightnessMenuStr[g_sysSetting.Osd.curlanguage];
 }
 
@@ -58,34 +42,25 @@ UCHAR * CODE BrightnessMenu_TitelStr(void)
 *****************************************************************/
 AdjustType BrightnessMenu_CheckCondition (void)
 {
-    AdjustType XDATA adjust = {0,0,0};
-	if(g_ucOsdEixt & OsdMenu)
-	{  
-	   adjust.Flags |= osdVisible;
-	}
-	else
-	{
-	  adjust.Flags |= osdInvisible;
-	}
-	g_ucOsdEixt &= ~OsdMenu;
-	g_ucOsdEixt |= OsdSource;
-	
-	adjust.XPos= g_sysSetting.Osd.xOffset;
-	adjust.YPos= g_sysSetting.Osd.yOffset;
-	//printfStr("BrightnessMenu_CheckCondition");
+    AdjustType XDATA adjust={0,0,0};
+	adjust.Flags |= osdVisible;
+	printfStr("BrightnessMenu_CheckCondition");
 	return adjust;
 }
 
 
+
+
 BOOL BrightnessMenuItem_DrawStyle(void)
 {
+
 	//printfStr("BrightnessMenuItem_DrawStyle");
-    OsdWndClear(0X00, 0X00, 0X00, 0X11);
+	OsdWndClear(0X00, 0X00, 0X00, 0X1E);
 	return 0;
 }
 
 
-SWORD GetBrightnessVal(void)
+WORD GetBrightnessVal(void)
 {
      //printfStr("GetBrightnessVal");
      return g_sysSetting.Video.brigthness;
@@ -93,29 +68,23 @@ SWORD GetBrightnessVal(void)
 
 
 BOOL AdjustBrightness(UCHAR opratComd)
-{	
+{
     if(opratComd == COMD_IncValue)
     {
 		  if(g_sysSetting.Video.brigthness<MAX_VALUE)
 		  {
 		      g_sysSetting.Video.brigthness++;
 		  } 
+		  //printf("brigthness Inc Value ++ = %d",g_sysSetting.Video.brigthness);
     }
 	if(opratComd == COMD_DecValue)
 	{
+	    
 		  if(g_sysSetting.Video.brigthness>0)
 		  {
 		      g_sysSetting.Video.brigthness--;
 		  } 
-	}
-	if(opratComd == COMD_Brightness)
-    {     
-		  g_sysSetting.Video.brigthness++;
-		  if(g_sysSetting.Video.brigthness >MAX_VALUE)
-		  {
-		     g_sysSetting.Video.brigthness = 0;
-		  }
-		  //printf("brigthness Adjust Value = %d",g_sysSetting.Video.brigthness);
+		 //printf("brigthness Dec Value -- =%d",g_sysSetting.Video.brigthness);
 	}
 	return 1;
 }
@@ -124,7 +93,7 @@ BOOL AdjustBrightness(UCHAR opratComd)
 BOOL ExectBrightness(void)
 {
    //printfStr("ExectBrightness");
-   UpdataPicPara(); 
+   BRIGHT_REG    =  DataCurve(BRIGHT_MIN,g_ucbrightness,BRIGHT_MAX,  g_sysSetting.Video.brigthness,MAX_VALUE);
    return 1;
 }
 
@@ -134,13 +103,13 @@ BOOL ExectBrightness(void)
 *****************************************************************/
 DrawNumberType CODE Number_Brightness[]=
 {
-    {0,14,RED,TRANSPARENCE,RED,TRANSPARENCE, GetBrightnessVal,osdDecNum|osdEnd},
+	{0,MAINMENU_ITEM_GUAGE,MAINMENU_ITEM_NUMFORECOLOR,MAINMENU_ITEM_NUMBACKCOLOR,MAINMENU_ITEM_NUMFORECOLOR,MAINMENU_ITEM_NUMBACKCOLOR, GetBrightnessVal,osdDecNum|osdEnd},
 };
-
 DrawGuageType CODE Gugae_Brightness[]=
 {
-    {1,0,WHITE,TRANSPARENCE,WHITE,TRANSPARENCE, MAX_VALUE,GetBrightnessVal,osdEnd},
+	{1,1,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR, MAX_VALUE,GetBrightnessVal,osdEnd},
 };
+
 
 ItemValueType CODE BrightnessMenuItemVal_Brightness[]=
 {
@@ -158,14 +127,14 @@ ItemValueType CODE BrightnessMenuItemVal_Brightness[]=
 *****************************************************************/
 
 
-
 /*****************************************************************
                          Item  Titel table
 *****************************************************************/
 TitelType CODE BrightnessMenuItem_BrightnessTitelTab[]=
 {
-   {0,0,RED,TRANSPARENCE,RED,TRANSPARENCE,DWT_Text,BrightnessMenu_TitelStr,osdEnd},
+   {0,1,MAINMENU_ITEM_TITELFORECOLOR,MAINMENU_ITEM_TITELBACKCOLOR,MAINMENU_ITEM_TITELFORECOLOR,MAINMENU_ITEM_TITELBACKCOLOR,DWT_Text,BrightnessMenu_TitelStr,osdEnd},
 };
+
 
 
 /*****************************************************************
@@ -177,3 +146,5 @@ TitelType CODE BrightnessMenuItem_BrightnessTitelTab[]=
 /*****************************************************************
                          Menu  Titel table
 *****************************************************************/
+
+

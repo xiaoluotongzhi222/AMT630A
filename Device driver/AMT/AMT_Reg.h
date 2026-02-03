@@ -8,7 +8,7 @@
 *Description:
 *          这个文件是AMT 的特殊寄存器及其地址的定义. 
 
-*History:  yshuizhou   2011/12/06    1.0    build  this  moudle
+*History:  yshuizhou   2011/12/06    0.1    build  this  moudle
 ****************************************************************/
 
 
@@ -103,7 +103,7 @@
 #define OSD_BLINK2_Y_STOP		    	XBYTE[0xFB86]
 #define OSD_BLINK2_X_START		    XBYTE[0xFB87]
 #define OSD_BLINK2_X_STOP		    	XBYTE[0xFB88]
-#define OSD_HE_CTRL               XBYTE[0xFB96]
+
 #define OSD_COLOR		        		XBYTE[0xFB2A]
 
 #define	OSD_V_SCALE_L_BK0				XBYTE[0xFB2B]
@@ -185,16 +185,17 @@
 
 
 /*************************************VP CONTROL REG*********************************/
-#define VP_EN_REG                      XBYTE[0XFFB0]
 #define BRIGHT_REG               		XBYTE[0XFFD4]
 #define CONTRAST_REG            		XBYTE[0XFFD3]   
 #define SATURATION_REG          		XBYTE[0XFFD6]
 #define TINT_REG                       XBYTE[0XFFD5]
 #define VDE_REG                    		XBYTE[0XFFD2]
-#define SNOW_BIG_SEL                  	XBYTE[0XFFDA] 
+#define VP_EN_REG              		XBYTE[0XFFB0]
+
 
 
 /****************************************Global *******************************/
+#define ANA_DIVA                       XBYTE[0XFD0A]
 #define ENH_PLL                        XBYTE[0XFD0E]
 #define CLK_GATE0_EN                  	XBYTE[0XFD11]
 #define CLK_GATE1_EN                  	XBYTE[0XFD12]
@@ -232,12 +233,6 @@
 #define SelPWM1                      	XBYTE[0XFD42]
 #define SelPWM2                      	XBYTE[0XFD43]
 #define SelBOOTUART              		XBYTE[0XFD43] 
-#define Variable_Year0                	XBYTE[0XFD5C] 
-#define Variable_Year1					XBYTE[0XFD5D] 
-#define Variable_Month					XBYTE[0XFD5E] 
-#define Variable_Date					XBYTE[0XFD5F] 
-#define Variable_Hour					XBYTE[0XFFDB] 
-#define Variable_Minute				XBYTE[0XFFDC] 
 
 
 /*****************************************Decoder *******************************/
@@ -252,6 +247,8 @@
 #define VIDEO_LINE_625_525         	XBYTE[0XFE28]
 #define AUTO_TV_STANDARD              XBYTE[0XFE2A]
 #define DECODER_RST                  	XBYTE[0XFEA0]
+#define NOISE_LEVEL                   	XBYTE[0XFEb1]
+
 
 /*****************************************Scaler *******************************/
 #define SCALER_HSYNC_UPDATE   		XBYTE[0XFCE4]
@@ -262,7 +259,6 @@
 #define VIDEO_SOG_EN              		XBYTE[0XFED7]
 #define VIDEO_SOG_SEL               	XBYTE[0XFED8]
 #define VIDEO_CH_D0                 	XBYTE[0XFEDC]
-
 
 #endif
 

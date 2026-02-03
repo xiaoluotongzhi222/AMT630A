@@ -3,12 +3,12 @@
 * All rights reserved.
 
 *File name: 　 Delay.h	  
-*Version:      1.0
+*Version:      0.1
 *update:       2011-12-16
 *Description:
   		    延时时间函数的定义。
   		  
-*History:  Jordan.chen   2011/12/16    1.0    build  this  moudle
+*History:  Jordan.chen   2011/12/16    0.1    build  this  moudle
 ******************************************************************************/
 #ifndef _DELAY_H__
 #define _DELAY_H__
@@ -21,6 +21,7 @@
 #endif
 
 
-_DELAY_EXTERN_ void DelayMs(UINT contTime);
 
+_DELAY_EXTERN_ void DelayUs(UINT contTime);
+_DELAY_EXTERN_ void DelayMs(UINT contTime);
 #endif

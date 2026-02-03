@@ -14,22 +14,21 @@
 ************************************************************************/
 #define _EVENT_HANDLE_C_
 
-/* include head files*/
+/* include head file s*/
 #include "DataType.h"
-#include "systemConfig.h"
+#include "SystemConfig.h"
 #include "Global.h"
 #include "MsgMap.h"
 #include "Osd_Menu.h"
-#include "Osd_MenuPage.h"
 #include "configLcdPara.h"
 #include "EventHandle.h"
 #include "Debug.h"
 #include "Delay.h"
 #include "VideoProc.h"
 #include "sysPower.h" 
-#include "AMT_REG.h"
+#include "AMT_Reg.h"
 #include "AMT_Drv.h"
-#include "AMT_MCU.h"
+#include "AMT_Mcu.h"
 
 
 
@@ -52,23 +51,16 @@ void  OsdMsgHandle(MSG curMsg)
     UCHAR ucComd= COMD_Nothing;
 	
     ucComd = KeyMsgProcess(curMsg);	
-	
-	#ifdef QuickParaSaveEn 
-	if(ucComd!= COMD_Nothing)
-	{
-      g_sysSetting.Osd.storageTime = 0;
-	}
-	#endif//QuickParaSaveEn
 
-	#ifdef NoSignalPowerOffEn
 	if(ucComd!= COMD_Nothing)
 	{
-       g_ucContNoSignalSecond = 0X00;
+	  g_ucContNoSignalSecond = 0X00;
+      g_sysSetting.Osd.storageTime = 0X00;
 	}
-	#endif
 	
     MenuProcessKey(ucComd);
 }
+
 
 /***********************************************************
 *name:       SignalMsgHandle(MSG curMsg)
@@ -86,62 +78,44 @@ void  OsdMsgHandle(MSG curMsg)
 ************************************************************/
 void  SignalMsgHandle(MSG curMsg)
 {
-    if(curMsg == MSG_SIGNAL_OK)
-    { 	  
-		  /*表示有信号*/
-	      printfStr("MSG_SIGNAL_OK");
 
-	      #ifdef NoSignalEn
-	      ExectComd(COMD_ClearNoSignal); 
-	      #endif//NoSignalEn
+     if(curMsg == MSG_SIGNAL_OK)
+     {
+        printfStr("MSG_SIGNAL_OK");
+		
+        #ifdef NoSignalBLOffEn
+	    ExectComd(COMD_TurnOnBackLight); 
+		#endif
 
-          #ifdef LogoEn 
-          #if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
-          ExectComd(COMD_ClearLogo); 
-          #endif
-          #endif
+		#ifdef LogoEn 
+		g_bLogoDisplayFlag = 0;
+		
+		#if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
+		ExectComd(COMD_ClearLogo); 
+		#endif
+		
+		#endif
 
-		  #ifdef AudioCtrlEn
-		  OpenAudio();   
-	      #endif//AudioCtrlEn 
+     }
 
-		  XBYTE[0XFC9A] = 0X96;
+	 if(curMsg == MSG_NO_SIGNAL)
+	 {  
+	    printfStr("MSG_NO_SIGNAL");
 
-		  if(IsPowerOn())
-		  {
-		     //MenuProcessKey(COMD_ShowSource);
-		  }
-    }
+	    #ifdef NoSignalBLOffEn
+	    ExectComd(COMD_TurnOffBackLight);
+		#endif
 
-	
-	if(curMsg == MSG_NO_SIGNAL)
-	{
-	      /*表示无信号*/
-		  printfStr("MSG_NO_SIGNAL");
-		  
-		  #ifdef NoSignalSnowEn
-		  //ExectComd(COMD_RedrawSnow); 
-		  #endif
-
-          #ifdef LogoEn 
-          #if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
-         // ExectComd(COMD_RedrawLogo); 
-          #endif
-          #endif
-
-		  #ifdef AudioCtrlEn
-	     // SetAudioMute();
-	      #endif//AudioCtrlEn
-
-		 XBYTE[0XFC9A] = 0X68;
-
-		  if(IsPowerOn())
-		  {
-		 //    MenuProcessKey(COMD_ShowSource);
-		  }	 
-	}
+		#ifdef LogoEn 
+		g_bLogoDisplayFlag = 1;
+		
+		#if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
+		ExectComd(COMD_RedrawLogo); 
+		#endif
+		
+		#endif
+	 }
 }
-
 /***********************************************************
 *name:       ColorSysMsgHandle(MSG curMsg)
 *input:      curMsg
@@ -159,8 +133,8 @@ void  SignalMsgHandle(MSG curMsg)
 void  ColorSysMsgHandle(MSG curMsg)
 {
      if(curMsg == MSG_CONFIG_COLOR_SYS)
-     {
-		 ConfigColorSysDynPara(g_sysSetting.Video.colorSys); 
+     {   
+		ConfigColorSysDynPara(g_sysSetting.Video.colorSys); 
      }
 }
 
@@ -173,7 +147,7 @@ void  ColorSysMsgHandle(MSG curMsg)
 *state:      allright
 
 *description:   
-         处理系统设置时间消息，主要有 定时开关机，定时睡眠模式。
+         处理系统设置时间消息，主要有定时开关机，定时睡眠模式。
          
 *history:
                                 
@@ -182,7 +156,7 @@ void  TimeMsgHandle(MSG curMsg)
 {
 			
     if(MSG_OSD_EXIT == curMsg) 
-    {   
+    {
         printfStr("MSG_OSD_EXIT");
         MenuProcessKey(COMD_OsdExit);
     }
@@ -196,7 +170,7 @@ void  TimeMsgHandle(MSG curMsg)
 	if(MSG_NOSIGNALPOWEROFF == curMsg) 
     {   
         printfStr("MSG_NOSIGNALPOWEROFF");
-        MenuProcessKey(COMD_Power);
+		MenuProcessKey(COMD_Power);
     }
 }
 
@@ -225,6 +199,7 @@ void  BatteryAdcMsgHandle(MSG curMsg)
 }
 
 
+
 /***********************************************************
 *name:       UserDefinedMsgHandle(MSG curMsg)
 *input:      curMsg
@@ -241,148 +216,17 @@ void  BatteryAdcMsgHandle(MSG curMsg)
 ************************************************************/
 void  UserDefinedMsgHandle(MSG curMsg)
 {
-    /*关机状态下无倒车*/
-    if(MSG_CAR_POF_GO_AHEAD ==  curMsg)
-    {
-         printfStr("MSG_CAR_POF_GO_AHEAD");
-		 g_sysSetting.Car.DetecMode = AV_CAR_NO_SIGANL; 
-         g_sysSetting.Car.status = CAR_POF_GO_AHEAD;
-		 g_sysSetting.Video.curSource = g_sysSetting.Car.RemberSource;
-		 SetPowerOn();
-         ExectComd(COMD_Power); 
-    }
 
-	/*开机状态下无倒车*/
-	if(MSG_CAR_PON_GO_AHEAD ==  curMsg)
-    {
-         printfStr("MSG_CAR_PON_GO_AHEAD");
-		 g_sysSetting.Car.DetecMode = AV_CAR_NO_SIGANL; 
-         g_sysSetting.Car.status = CAR_PON_GO_AHEAD;
-		 g_sysSetting.Video.curSource = g_sysSetting.Car.RemberSource; 
-		 SetCarReversingEn();
-		 MenuProcessKey(COMD_SelSource);
-		 ClrCarReversingEn();
-		 if(IsSignalOk())
-		 {
-		    g_sysSetting.Car.DetecMode = AV_SIGNAL_OK; 
-		 }
+	if(MSG_TURNON_BACKLIGHT == curMsg) 
+    {   
+        printfStr("MSG_TURNON_BACKLIGHT");
+        ExectComd(COMD_TurnOnBackLight);
     }
-
-	/*关机状态下倒车*/
-	if(MSG_CAR_POF_REVERSING ==  curMsg)
-    {
-         printfStr("MSG_CAR_POF_REVERSING");
-         g_sysSetting.Video.curSource = INPUT_CAMERA_Car;
-		 g_sysSetting.Car.DetecMode = CAR_SIGNAL_OK;
-         g_sysSetting.Car.status = CAR_POF_REVERSING;
-         SetCarReversingEn();
-         ExectComd(COMD_SelSource);
-		 ClrCarReversingEn();
-		 g_sysSetting.Osd.dispTime= CurrentMenu->TimeOut;
-    }
-
-	/*开机状态下倒车*/
-	if(MSG_CAR_PON_REVERSING ==  curMsg)
-    {
-         printfStr("MSG_CAR_PON_REVERSING");
-         g_sysSetting.Video.curSource = INPUT_CAMERA_Car;
-		 g_sysSetting.Car.DetecMode = CAR_SIGNAL_OK;
-         g_sysSetting.Car.status = CAR_PON_REVERSING;
-		 SetCarReversingEn();
-         MenuProcessKey(COMD_SelSource);
-		 ClrCarReversingEn();
-	}
 		
-	/*上电状态倒车*/
-	if(MSG_PON_REVERSING ==  curMsg)  
-	{  
-        printfStr("MSG_PON_REVERSING");
-	    g_sysSetting.Video.curSource = INPUT_CAMERA_Car;
-	    g_sysSetting.Car.DetecMode = CAR_SIGNAL_OK;
-        g_sysSetting.Car.status = CAR_PON_REVERSING;
-		SetCarReversingEn();
-	    MenuProcessKey(COMD_ShowSource);
-		ClrCarReversingEn();
-	    TurnOnBackLight();
-    }
-}
-
-
-
-/***********************************************************
-*name:       BTMsgHandle(MSG curMsg)
-*input:      curMsg
-*output:     void 
-
-*update:     2011-11-27 
-*state:      allright
-
-*description:   
-        处理蓝牙连接、释放，接听、挂断消息。
-         
-*history:
-                                
-************************************************************/
-void  BTMsgHandle(MSG curMsg)
-{
-    #ifdef BTEn
-  	if(MSG_BT_CONN ==  curMsg)
-	{
-	    printfStr("MSG_BT_CONN");
-		g_bBTConnFlg = FALSE;
-	    ExectComd(COMD_BTConn);
-	}
-
-	if(MSG_BT_DISC ==  curMsg)
-	{
-	    printfStr("MSG_BT_DISC");
-		g_bBTDiscFlg = FALSE;
-	    ExectComd(COMD_BTDisc);
-	}
-
-	if(MSG_BT_CALLERID ==  curMsg)
-	{
-	    printfStr("MSG_BT_CALLERID");
-		g_bBTCinFlg = FALSE;
-	    ExectComd(COMD_BTCallerID);
-	}
-
-	if(MSG_BT_CALLERDROP ==  curMsg)
-	{
-	    printfStr("MSG_BT_CALLERDROP");
-		g_bBTCdropFlg = FALSE;
-	    ExectComd(COMD_BTCallerDrop);
-	}
-	#endif
-}
-
-
-
-/***********************************************************
-*name:       MiscMsgHandle(MSG curMsg)
-*input:      curMsg
-*output:     void 
-
-*update:     2011-11-27 
-*state:      allright
-
-*description:   
-        处理一些不好分类的消息。
-         
-*history:
-                                
-************************************************************/
-void  MiscMsgHandle(MSG curMsg)
-{   
-    if(MSG_TURNON_BACKLIGHT == curMsg) 
-    {
-        printfStr("MSG_TURNON_BACKLIGHT");		
-        ExectComd(COMD_TurnOnBacklight);
-    }
-	
-	if(MSG_TURNOFF_BACKLIGHT == curMsg) 
+    if(MSG_TURNOFF_BACKLIGHT == curMsg) 
     {   
         printfStr("MSG_TURNOFF_BACKLIGHT");
-        ExectComd(COMD_TurnOffBacklight);
-    }  
+        ExectComd(COMD_TurnOffBackLight);
+    }    
 }
+

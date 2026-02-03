@@ -27,6 +27,5 @@ _HANDLE_EXTERN_ void  ColorSysMsgHandle(MSG curMsg);
 _HANDLE_EXTERN_ void  TimeMsgHandle(MSG curMsg);
 _HANDLE_EXTERN_ void  BatteryAdcMsgHandle(MSG curMsg);
 _HANDLE_EXTERN_ void  UserDefinedMsgHandle(MSG curMsg);
-_HANDLE_EXTERN_ void  BTMsgHandle(MSG curMsg);
-_HANDLE_EXTERN_ void  MiscMsgHandle(MSG curMsg);
+
 #endif

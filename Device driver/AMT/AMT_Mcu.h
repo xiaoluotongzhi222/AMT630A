@@ -92,7 +92,7 @@ sfr WDT_COUNTH  	= 0xbd;
 sfr WDT_RSTEN  	= 0xba;
 sfr WDT_CLR    		= 0xbb;
 sfr MCU_CLK_REG	= 0xb9;
-sfr WDT_UPDATE_EN 	= 0xbe;
+sfr WDT_UPDATE_EN 	= 0xbE;
 
 /* TIMER34 REGISTER */
 sfr T3_CNTL 		= 0xb1;
@@ -142,7 +142,7 @@ sbit PX0   = IP^0;
 
 // P0
 sbit LED2  = P0^7;
-sbit LED1  = P0^6;		 
+sbit LED1  = P0^6;
 sbit TXD   = P0^3;
 sbit RXD   = P0^2;
 sbit REMOTE   = P0^1;
@@ -248,11 +248,5 @@ sbit P3_5  = P3^5;
 sbit P3_6  = P3^6;
 sbit P3_7  = P3^7;
 
-/*****************************REMOTE REG*********************************/
-sfr R_BUFF1 		= 0xe1;
-sfr R_BUFF0 		= 0xe2;
-sfr R_VALUE 		= 0xe3;
-sfr R_KEY_VALUE 	= 0xe4;
-sfr R_FLAG 			= 0xe5;
 
 #endif

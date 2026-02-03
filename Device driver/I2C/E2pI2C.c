@@ -64,7 +64,7 @@ void E2pI2CStart(void)
     SetSclOutput();
 
 	DelayE2pI2c(5);
-						//___
+                         //___
 	SetSda(1);			//	 |
 	SetScl(1);			//	 |___SDA
 	DelayE2pI2c(10);		//____	
@@ -143,7 +143,7 @@ FLAG E2pACKCheck(void)
 *history:
 ************************************************************/
 void E2pACKSend(void)
-{
+{	
     SetSdaOutput();
 	
 	SetSda(0);            //"发送应答位"
@@ -165,7 +165,7 @@ void E2pACKSend(void)
 *history:
 ************************************************************/
 void E2pNACKSend(void)
-{
+{	
     SetSdaOutput();
 	
 	SetSda(1);           //"发送非应答位"
@@ -191,7 +191,7 @@ void E2pNACKSend(void)
 void E2pI2CWrite(UCHAR tempdata)
 {
 	UCHAR XDATA num;                           //"发送数据位数"
-	
+		
 	SetSdaOutput();
 	
 	for(num = 0;num < 8;num ++)

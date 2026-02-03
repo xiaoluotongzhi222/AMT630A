@@ -172,10 +172,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>21</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>175</TopLine>
-      <CurrentLine>175</CurrentLine>
+      <TopLine>572</TopLine>
+      <CurrentLine>584</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Osd_LogoFontDat.c</PathWithFileName>
       <FilenameWithoutPath>Osd_LogoFontDat.c</FilenameWithoutPath>
@@ -1527,9 +1527,9 @@
       <Documents>
         <Doc>
           <Name>..\Osd_LogoFontDat.c</Name>
-          <ColumnNumber>21</ColumnNumber>
-          <TopLine>175</TopLine>
-          <CurrentLine>175</CurrentLine>
+          <ColumnNumber>0</ColumnNumber>
+          <TopLine>4851</TopLine>
+          <CurrentLine>4881</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>
