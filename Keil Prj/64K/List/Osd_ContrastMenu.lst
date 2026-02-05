@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_CONTRASTMENU
@@ -62,7 +62,7 @@ line level    source
   48   1        adjust.Flags |= osdVisible;
   49   1        
   50   1        //printfStr("ContrastMenu_CheckCondition");
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 2   
 
   51   1        return adjust;
   52   1      }
@@ -126,7 +126,7 @@ line level    source
              -R,MAINMENU_ITEM_NUMBACKCOLOR, GetContrastVal,osdDecNum|osdEnd},
  109          };
  110          DrawGuageType CODE Gugae_Contrast[]=
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 3   
 
  111          {
  112              {1,1,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_I
@@ -171,7 +171,7 @@ line level    source
  149          *****************************************************************/
  150          
  151          
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -234,7 +234,7 @@ CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DWT_FullText . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockDown . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -297,7 +297,7 @@ TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -360,7 +360,7 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
 ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -423,7 +423,7 @@ DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
   DrawNumber . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
   DrawGuage. . . . . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -486,7 +486,7 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
 ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -549,7 +549,7 @@ KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
 _CommandType . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 OsdBlock2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MAX_COLOR. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -612,7 +612,7 @@ PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
 _KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -675,7 +675,7 @@ PUTOYA . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -738,7 +738,7 @@ COMD_ContrastInc . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 g_ucContrast . . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
 VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 16:40:42 PAGE 13  
+C51 COMPILER V9.60.7.0   OSD_CONTRASTMENU                                                  02/05/2026 17:33:48 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

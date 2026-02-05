@@ -252,9 +252,23 @@ void Update_Radar_Logic(UCHAR dist_val, char angle, UCHAR blink_state)
 
 void Update_Radar_Distance(UCHAR dist_int, UCHAR dist_dec,UCHAR color)
 {
-		Draw_Big_Number(0, 12, dist_int, color);
-    Draw_Big_Dot(2, 14, color);
-    Draw_Big_Number(0, 15, dist_dec, color);
+    UCHAR tens, units;
+
+    tens = dist_int / 10;
+    units = dist_int % 10;
+
+    if (dist_int >= 10)
+    {
+        Draw_Big_Number(0, 12, tens, color);
+			
+    }
+    else
+    {
+        Draw_Big_Number(0, 12, 0, 0x00); 
+    }
+    Draw_Big_Number(0, 15, units, color);
+    Draw_Big_Dot(2, 17, color);
+    Draw_Big_Number(0, 18, dist_dec, color);
 }
 
 
@@ -413,7 +427,7 @@ void main(void)
             {
                 show_int = (UCHAR)current_range;
                 show_dec = (UCHAR)((current_range - show_int) * 10);
-                if(show_int > 9) show_int=9; if(show_dec > 9) show_dec=9;
+                if(show_int > 99) show_int=99; if(show_dec > 9) show_dec=9;
 
                 if(current_range < 2.0)
                 {
@@ -438,9 +452,16 @@ void main(void)
                 }
                 else
                 {
+									if(is_red_phase){ 
                     color = COL_GREEN;
                     SetP0_4(0);
+                    seg_state = 1;
+									}else{
+										 color = COL_GREEN;
+                    SetP0_4(0);
                     seg_state = 0;
+									
+									}
                 }
 
                 Update_Radar_Distance(show_int, show_dec, color);
