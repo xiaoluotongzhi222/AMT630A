@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 1   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ARKCHIP
@@ -47,7 +47,7 @@ line level    source
 *** WARNING C235 IN LINE 1179 OF ..\..\..\OSD\AMT_OsdBootDrv.c: parameter 4: different types
 *** WARNING C235 IN LINE 1253 OF ..\..\..\OSD\AMT_OsdBootDrv.c: parameter 4: different types
   30          
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 2   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 2   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -110,7 +110,7 @@ Osd_BatteryAdcMenu . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ASCIIMap . . . . . . . . . . . . . . .  STATIC   CODE   ARRAY    00A6H  512
 PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 3   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 3   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -173,7 +173,7 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 4   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -236,7 +236,7 @@ INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 5   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -299,7 +299,7 @@ Osd_QuicklyBrightnessMenu. . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RUSSIAN. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_OSD_STORAGE. . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BLUE . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 6   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -362,7 +362,7 @@ IconType . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
 MSG_BATTERYADC . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 _OsdConfigColorChangWndSize. . . . . .  PUBLIC   CODE   PROC     0000H  -----
   Length . . . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 7   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -425,7 +425,7 @@ OsdBlockType . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 _VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 8   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -488,7 +488,7 @@ _KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 COMD_BrightnessInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 9   
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -551,7 +551,7 @@ LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
   logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 10  
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -614,7 +614,7 @@ MenuItemType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  32
   ItemIcons. . . . . . . . . . . . . .  MEMBER   -----  PTR      000BH  3
   ItemTitels . . . . . . . . . . . . .  MEMBER   -----  PTR      000EH  3
   ItemValue. . . . . . . . . . . . . .  MEMBER   -----  PTR      0011H  3
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 11  
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -677,7 +677,7 @@ _SetPWM1 . . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   tmpfreq. . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0000H  4
   tmpduty. . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0004H  4
   tmppercent . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0008H  1
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 12  
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -707,7 +707,6 @@ _SetPWM3 . . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   tmpduty. . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0004H  4
   tmppercent . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0008H  1
 MCU_CFG_REG. . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C6H  1
-SetI2CDebug. . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
 WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
@@ -740,13 +739,13 @@ OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
   yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 13  
+SetUartPrint . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
-SetUartPrint . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
 DWT_CenterText . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_TURNOFF_BACKLIGHT. . . . . . . . .  E_CONST  -----  CHAR     -----  1
 PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
@@ -803,13 +802,13 @@ COMD_ContrastDec . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ConfigUserParaSetting. . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 14  
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
-TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 OsdCofigPalette. . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
 T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
 MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
@@ -866,13 +865,13 @@ _OsdDrawStr. . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   wcStartIndexAddr . . . . . . . . . .  AUTO     XDATA  U_INT    0000H  2
   wcColorStartIndexAddr. . . . . . . .  AUTO     XDATA  U_INT    0002H  2
   ucIndexOffset. . . . . . . . . . . .  AUTO     XDATA  U_INT    0004H  2
-C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/03/2026 10:50:00 PAGE 15  
+_OsdConfigBlockColor . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+C51 COMPILER V9.60.7.0   ARKCHIP                                                           02/05/2026 16:40:34 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
-_OsdConfigBlockColor . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   fbColor. . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0004H  1
   wcIndexAddr. . . . . . . . . . . . .  AUTO     XDATA  U_INT    0000H  2
   wcWinSize. . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0002H  2
@@ -915,7 +914,7 @@ fpDrawStyle. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   6561    ----
+   CODE SIZE        =   6539    ----
    CONSTANT SIZE    =   1840    ----
    XDATA SIZE       =     11     111
    PDATA SIZE       =   ----    ----

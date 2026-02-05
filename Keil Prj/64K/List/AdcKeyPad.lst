@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 1   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADCKEYPAD
@@ -62,7 +62,7 @@ line level    source
                 UINT XDATA s_offset1 = 0,s_offset2 = 0;
                 
                  for(i=0; i<Length; i++)
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 2   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 2   
 
                  {
                     s_offset1 += Abs(AdcBuf[i], AdcBuf[0]);
@@ -126,7 +126,7 @@ line level    source
                   else
                   {
                    CurrentKey = clrFlg(CurrentKey,KeyOkFlg);
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 3   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 3   
 
                   }
                 return(CurrentKey);   
@@ -190,7 +190,7 @@ line level    source
                    CurrentAdcVal |= (((UINT)(ChannelBuf[AdcChannel]))<<12);//添加通道信息。
               
                    if(readFlg(CurrentAdcVal , KeyOkFlg) == KeyOkFlg)
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 4   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 4   
 
                    {    
                          #if TP1_ADC
@@ -254,7 +254,7 @@ line level    source
                   if(readFlg(SysAdcKeyCmdMap[i].KeyVal,AdcChannelBit) == readFlg(KeyVal,AdcChannelBit))
                   {     
                       if( 0X00 == KeyVal)
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 5   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 5   
 
                       {
                            for(j = 0; j < sizeof(SysAdcKeyCmdMap)/sizeof(SysAdcKeyCmdMap[0]); j++)
@@ -318,7 +318,7 @@ line level    source
                       if(SysAdcKeyMsgMap[i].KeyCmd == NULL_CMD)
                       {
                           continue;
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 6   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 6   
 
                       }
               
@@ -359,7 +359,7 @@ line level    source
               #endif   //#if KEY_TYPE == ADC_KEY
               #endif   //#ifdef KeyDetectEn 
  337          
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 7   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -422,7 +422,7 @@ TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 8   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -485,7 +485,7 @@ _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 9   
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -548,7 +548,7 @@ DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
 LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 10  
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -611,7 +611,7 @@ UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 11  
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -674,7 +674,7 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
   OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
   xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
-C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/03/2026 10:50:03 PAGE 12  
+C51 COMPILER V9.60.7.0   ADCKEYPAD                                                         02/05/2026 16:40:38 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

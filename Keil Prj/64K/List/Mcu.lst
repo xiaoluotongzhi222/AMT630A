@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 1   
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MCU
@@ -62,7 +62,7 @@ line level    source
   48                  4.reserve
   49          
   50          *history:
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 2   
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 2   
 
   51          ************************************************************/
   52          void InitialPPort(void)
@@ -126,7 +126,7 @@ line level    source
  110          mcu 频率：24MHz   T4 = 4096 *(1/24M) = 170.66us   1024*4分频       170.66us 加1
  111          
  112          *history:
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 3   
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 3   
 
  113          ************************************************************/
  114          void InitialTimer(void)
@@ -188,181 +188,180 @@ line level    source
  170          {
  171   1          TR2  = OFF;
  172   1        
- 173   1        SetT2BaudRate(57600); 
+ 173   1        SetT2BaudRate(9600); 
  174   1        TR2  = ON;  
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 4   
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 4   
 
  175   1          ET2  = OFF;        //T2中断禁止
- 176   1          
- 177   1        TI = 0;
- 178   1        RI = 0;
- 179   1        
- 180   1        /*串口中断设置*/
- 181   1          ES   = OFF;        // Serial  interrupt disable
- 182   1      }
+ 176   1        TI = 0;
+ 177   1        RI = 0;
+ 178   1        
+ 179   1        SCON |= 0x10; 
+ 180   1          ES   = 0;        // Serial  interrupt disable
+ 181   1      }
+ 182          
  183          
  184          
- 185          
- 186          /***********************************************************
- 187          *name:       DisableWatchdog()
- 188          *input:      non
- 189          *output:     
- 190          *update:     2009-03-23  
- 191          *state:      allright
- 192          
- 193          *description:   
- 194                   禁止看门狗
- 195          *history:
- 196          ************************************************************/
- 197          void DisableWatchdog(void)
- 198          {
- 199   1          /*watchdog Setting*/ 
- 200   1        WDT_UPDATE_EN = 0X55;
- 201   1          WDT_RSTEN   = DISABLE;   // reset mcu disable
- 202   1          WDT_UPDATE_EN = 0XAA;
- 203   1      }
+ 185          /***********************************************************
+ 186          *name:       DisableWatchdog()
+ 187          *input:      non
+ 188          *output:     
+ 189          *update:     2009-03-23  
+ 190          *state:      allright
+ 191          
+ 192          *description:   
+ 193                   禁止看门狗
+ 194          *history:
+ 195          ************************************************************/
+ 196          void DisableWatchdog(void)
+ 197          {
+ 198   1          /*watchdog Setting*/ 
+ 199   1        WDT_UPDATE_EN = 0X55;
+ 200   1          WDT_RSTEN   = DISABLE;   // reset mcu disable
+ 201   1          WDT_UPDATE_EN = 0XAA;
+ 202   1      }
+ 203          
  204          
  205          
- 206          
- 207          /***********************************************************
- 208          *name:       InitialWatchdog()
- 209          *input:      non
- 210          *output:     
- 211          *update:     2009-03-23  
- 212          *state:      allright
- 213          
- 214          *description:   
- 215                   看门狗设置
- 216          *history:
- 217          ************************************************************/
- 218          void InitialWatchDog(void)
- 219          {
- 220   1          /*watchdog Setting*/ 
- 221   1        WDT_UPDATE_EN = 0X55;
- 222   1          MCU_CLK_REG = 0x03;      // 4分频  
- 223   1          WDT_COUNTH  = 0xFF;     // 4分频  65535* 85.36us = 5.6s  
- 224   1          WDT_COUNTL  = 0xFF; 
- 225   1          WDT_RSTEN   = DISABLE;   // reset mcu enable
- 226   1          WDT_UPDATE_EN = 0XAA;
- 227   1      }
+ 206          /***********************************************************
+ 207          *name:       InitialWatchdog()
+ 208          *input:      non
+ 209          *output:     
+ 210          *update:     2009-03-23  
+ 211          *state:      allright
+ 212          
+ 213          *description:   
+ 214                   看门狗设置
+ 215          *history:
+ 216          ************************************************************/
+ 217          void InitialWatchDog(void)
+ 218          {
+ 219   1          /*watchdog Setting*/ 
+ 220   1        WDT_UPDATE_EN = 0X55;
+ 221   1          MCU_CLK_REG = 0x03;      // 4分频  
+ 222   1          WDT_COUNTH  = 0xFF;     // 4分频  65535* 85.36us = 5.6s  
+ 223   1          WDT_COUNTL  = 0xFF; 
+ 224   1          WDT_RSTEN   = DISABLE;   // reset mcu enable
+ 225   1          WDT_UPDATE_EN = 0XAA;
+ 226   1      }
+ 227          
  228          
  229          
- 230          
- 231          /***********************************************************
- 232          *name:       POS_ClearWatchDog()
- 233          *input:      non
- 234          *output:     
- 235          *update:     2009-03-23  
- 236          *state:      allright
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 5   
+ 230          /***********************************************************
+ 231          *name:       POS_ClearWatchDog()
+ 232          *input:      non
+ 233          *output:     
+ 234          *update:     2009-03-23  
+ 235          *state:      allright
+ 236          
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 5   
 
- 237          
- 238          *description:   
- 239                   清除看门狗设置
- 240          *history:
- 241          ************************************************************/
- 242          void POS_ClearWatchDog(void)
- 243          {
- 244   1          WDT_UPDATE_EN = 0X55;
- 245   1          WDT_CLR    = 0xbb;            // 清WatchDog，若不清，5.6s 复位。喂狗  
- 246   1          WDT_CLR    =~WDT_CLR;
- 247   1          WDT_CLR    = 0x00; 
- 248   1        WDT_UPDATE_EN = 0XAA;
- 249   1      }
+ 237          *description:   
+ 238                   清除看门狗设置
+ 239          *history:
+ 240          ************************************************************/
+ 241          void POS_ClearWatchDog(void)
+ 242          {
+ 243   1          WDT_UPDATE_EN = 0X55;
+ 244   1          WDT_CLR    = 0xbb;            // 清WatchDog，若不清，5.6s 复位。喂狗  
+ 245   1          WDT_CLR    =~WDT_CLR;
+ 246   1          WDT_CLR    = 0x00; 
+ 247   1        WDT_UPDATE_EN = 0XAA;
+ 248   1      }
+ 249          
  250          
  251          
- 252          
- 253          /***********************************************************
- 254          *name:      Initial805xInterrupt()
- 255          *input:      non
- 256          *output:     设置系统的中断使能
- 257          *update:     2009-03-23   
- 258          *state:      allright
- 259          
- 260          *description:   
- 261                      mcu805x 的中断设置初始化
- 262                  1.外部中断设置 
- 263                2.timer中断设置
- 264                3.串口中断设置 
- 265                4.reserve
- 266          
- 267          *history:
- 268          ************************************************************/
- 269          void InitialExtInterrupt(void)
- 270          {
- 271   1        IP = 0X00; 
- 272   1                
- 273   1          /*外部中断0设置*/
- 274   1          IT0 = 1;             //外部中断请求1边沿触发,此边沿触发会导致IE1 = 1.(8118 ERROR)
- 275   1          IE0 = 0;             //一上电由IT0 引起 IE0 = 1
- 276   1      
- 277   1        /*外部中断2设置*/
- 278   1        EXIF = EXIF&0xEF; //IE2 = 0
- 279   1      
- 280   1        /*外部中断3设置*/
- 281   1        EXIF = EXIF&0xDF; //IE3 = 0
- 282   1      
- 283   1        /*外部中断4设置*/
- 284   1        EXIF = EXIF&0xBF; //IE4 = 0
- 285   1        
- 286   1          /*外部中断5设置*/
- 287   1        EXIF = EXIF&0x7F; //IE5 = 0
- 288   1      
- 289   1         /*设置外部中断2优先级*/
- 290   1        PX2 =0; //若要使用外部中断2，则要置为1
- 291   1      
- 292   1        /*设置外部中断3优先级*/
- 293   1        PX3 = 0; //若要使用外部中断3，则要置为1
- 294   1        
- 295   1        /*设置外部中断4优先级*/
- 296   1        PX4 = 0; //若要使用外部中断4，则要置为1
- 297   1      
- 298   1        /*设置外部中断5优先级*/
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 6   
+ 252          /***********************************************************
+ 253          *name:      Initial805xInterrupt()
+ 254          *input:      non
+ 255          *output:     设置系统的中断使能
+ 256          *update:     2009-03-23   
+ 257          *state:      allright
+ 258          
+ 259          *description:   
+ 260                      mcu805x 的中断设置初始化
+ 261                  1.外部中断设置 
+ 262                2.timer中断设置
+ 263                3.串口中断设置 
+ 264                4.reserve
+ 265          
+ 266          *history:
+ 267          ************************************************************/
+ 268          void InitialExtInterrupt(void)
+ 269          {
+ 270   1        IP = 0X00; 
+ 271   1                
+ 272   1          /*外部中断0设置*/
+ 273   1          IT0 = 1;             //外部中断请求1边沿触发,此边沿触发会导致IE1 = 1.(8118 ERROR)
+ 274   1          IE0 = 0;             //一上电由IT0 引起 IE0 = 1
+ 275   1      
+ 276   1        /*外部中断2设置*/
+ 277   1        EXIF = EXIF&0xEF; //IE2 = 0
+ 278   1      
+ 279   1        /*外部中断3设置*/
+ 280   1        EXIF = EXIF&0xDF; //IE3 = 0
+ 281   1      
+ 282   1        /*外部中断4设置*/
+ 283   1        EXIF = EXIF&0xBF; //IE4 = 0
+ 284   1        
+ 285   1          /*外部中断5设置*/
+ 286   1        EXIF = EXIF&0x7F; //IE5 = 0
+ 287   1      
+ 288   1         /*设置外部中断2优先级*/
+ 289   1        PX2 =0; //若要使用外部中断2，则要置为1
+ 290   1      
+ 291   1        /*设置外部中断3优先级*/
+ 292   1        PX3 = 0; //若要使用外部中断3，则要置为1
+ 293   1        
+ 294   1        /*设置外部中断4优先级*/
+ 295   1        PX4 = 0; //若要使用外部中断4，则要置为1
+ 296   1      
+ 297   1        /*设置外部中断5优先级*/
+ 298   1        PX5 = 0; //若要使用外部中断5，则要置为1
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 6   
 
- 299   1        PX5 = 0; //若要使用外部中断5，则要置为1
- 300   1      
- 301   1          /*外部中断开关*/
- 302   1          EX0 = OFF;         //IR  interrupt enable
- 303   1        EX2 = OFF;       //ADC  interrupt enable
- 304   1          EX3 = OFF;
- 305   1        EX4 = OFF;
- 306   1          EX5 = OFF;       //OSD VSYN interrupt enable
- 307   1      
- 308   1       
- 309   1          /*总中断使能*/
- 310   1        EA  = OFF;          
- 311   1      }
+ 299   1      
+ 300   1          /*外部中断开关*/
+ 301   1          EX0 = OFF;         //IR  interrupt enable
+ 302   1        EX2 = OFF;       //ADC  interrupt enable
+ 303   1          EX3 = OFF;
+ 304   1        EX4 = OFF;
+ 305   1          EX5 = OFF;       //OSD VSYN interrupt enable
+ 306   1      
+ 307   1       
+ 308   1          /*总中断使能*/
+ 309   1        EA  = OFF;          
+ 310   1      }
+ 311          
  312          
  313          
  314          
- 315          
- 316          /***********************************************************
- 317          *name:       InitMcu(void);
- 318          *input:      non
- 319          *output:     初始化MCU 的IO TIMER INT
- 320          *update:     2009-03-23   
- 321          *state:      allright
- 322          
- 323          *description:   805x的初始化
- 324                          1.IO初始化
- 325                  2.计数器/定时器，串口初始化
- 326                  3.中断使能初始化
- 327                  4.初始化串口
- 328                  4.reserve
- 329          *history:
- 330                                          
- 331          ************************************************************/
- 332          void InitMcu(void)
- 333          {
- 334   1        InitialPPort();
- 335   1        InitialTimer();
- 336   1        InitialSerialPort();
- 337   1        InitialWatchDog();
- 338   1        InitialExtInterrupt();
- 339   1        printfStr("mcu init ok!\n");
- 340   1      }
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 7   
+ 315          /***********************************************************
+ 316          *name:       InitMcu(void);
+ 317          *input:      non
+ 318          *output:     初始化MCU 的IO TIMER INT
+ 319          *update:     2009-03-23   
+ 320          *state:      allright
+ 321          
+ 322          *description:   805x的初始化
+ 323                          1.IO初始化
+ 324                  2.计数器/定时器，串口初始化
+ 325                  3.中断使能初始化
+ 326                  4.初始化串口
+ 327                  4.reserve
+ 328          *history:
+ 329                                          
+ 330          ************************************************************/
+ 331          void InitMcu(void)
+ 332          {
+ 333   1        InitialPPort();
+ 334   1        InitialTimer();
+ 335   1        InitialSerialPort();
+ 336   1        InitialWatchDog();
+ 337   1        InitialExtInterrupt();
+ 338   1        printfStr("mcu init ok!\n");
+ 339   1      }
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -425,7 +424,7 @@ TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 T3_CNTH. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B2H  1
 RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 8   
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -488,7 +487,7 @@ VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 WDT_CLR. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00BBH  1
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 9   
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -551,7 +550,7 @@ TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 10  
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -614,7 +613,7 @@ INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 EX5. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EBH  1
 _printfStr . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 11  
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -677,7 +676,7 @@ _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 12  
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -741,9 +740,9 @@ PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.60.7.0   MCU                                                               02/03/2026 10:50:01 PAGE 13  
+C51 COMPILER V9.60.7.0   MCU                                                               02/05/2026 16:40:34 PAGE 13  
 
-   CODE SIZE        =    307    ----
+   CODE SIZE        =    310    ----
    CONSTANT SIZE    =     14    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

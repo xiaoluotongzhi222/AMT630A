@@ -170,15 +170,14 @@ void InitialSerialPort(void)
 {
     TR2  = OFF;
 	
-	SetT2BaudRate(57600); 
+	SetT2BaudRate(9600); 
 	TR2  = ON;  
     ET2  = OFF;		     //T2中断禁止
-    
 	TI = 0;
 	RI = 0;
 	
-	/*串口中断设置*/
-    ES   = OFF;		     // Serial  interrupt disable
+	SCON |= 0x10; 
+    ES   = 0;		     // Serial  interrupt disable
 }
 
 

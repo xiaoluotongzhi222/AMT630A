@@ -23,17 +23,34 @@
 #include "AMT_Reg.h"
 #include "ConfigLcdPara.h"
 #include "Interrupt.h"
-
-
+extern UCHAR XDATA g_RxBuf[];
+extern UCHAR XDATA g_RxCnt;
+extern UCHAR XDATA g_RxTimeoutCnt; // ????
+extern bit g_FrameReady;           // ????
+#define RX_BUF_SIZE 128
 
 void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
 {
+	ES = 0;
+    if (RI)
+    {
+        RI = 0;
+        if (g_RxCnt < RX_BUF_SIZE) 
+        {
+            g_RxBuf[g_RxCnt++] = SBUF; 
+        }
+    }
+    
+    if (TI)
+    {
+        TI = 0;
+    }
    #ifdef SpiInitPannelEn
    #ifdef SpiAdjRegEn
    POS_RecUartSpiInfor();
    #endif
    #endif
-
+		ES = 1;
 }
 
 
@@ -63,7 +80,6 @@ void POS_IrqServerTimer1(void) interrupt 3	   //timer 1
 	TR1  = ON;
 
 	s_ucSysTimer++;	
-
     POS_VideoProcess(VdLibCmd);
 
 	#ifdef Clk_AdjustEn

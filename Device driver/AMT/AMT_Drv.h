@@ -114,7 +114,7 @@ AMTDRV_EXTERN_ void OsdBlockClear(UCHAR ucOsdBlockId);
 AMTDRV_EXTERN_ void OsdConfigBlockColor(UCHAR fbColor);
 AMTDRV_EXTERN_ void OsdConfigWndColor(UCHAR starRow,UCHAR starLine, UCHAR xSize,UCHAR ySize, UCHAR fbColor);
 AMTDRV_EXTERN_ void OsdConfigWndPosition(UINT xPos, UINT yPos);
-AMTDRV_EXTERN_ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str);
+AMTDRV_EXTERN_ void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str) small;
 AMTDRV_EXTERN_ void OsdDrawIcon(UCHAR starRow,UCHAR starLine,UCHAR xSize,UCHAR ySize,UCHAR BackColor,UINT *pIconStr);
 AMTDRV_EXTERN_ void OsdWriteCharToFontram(BYTE indexAddr, UCHAR *pCharData);
 AMTDRV_EXTERN_ void LoadMulCharToFontram(BYTE indexAddr, UCHAR Size,UCHAR *pCharData);

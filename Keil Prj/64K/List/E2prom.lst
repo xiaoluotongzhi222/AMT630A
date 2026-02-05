@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 1   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE E2PROM
@@ -62,7 +62,7 @@ line level    source
               start:
               
                 #if 1
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 2   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 2   
 
                 E2pI2CStart(); 
                 E2pI2CWrite(0xa0);
@@ -126,7 +126,7 @@ line level    source
                   E2pACKCheck();
               
                   if(number >= 32)
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 3   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 3   
 
                   {
                     for(j=0;j<32;j++,pos++)
@@ -185,7 +185,7 @@ line level    source
               }
               #endif
  169          
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 4   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -248,7 +248,7 @@ TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 5   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -311,7 +311,7 @@ OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 6   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -374,7 +374,7 @@ _ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 7   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -437,7 +437,7 @@ KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 8   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -500,7 +500,7 @@ _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
   alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
-C51 COMPILER V9.60.7.0   E2PROM                                                            02/03/2026 10:50:01 PAGE 9   
+C51 COMPILER V9.60.7.0   E2PROM                                                            02/05/2026 16:40:35 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

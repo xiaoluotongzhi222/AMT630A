@@ -1,0 +1,872 @@
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UDSF_TINYFRAME
+OBJECT MODULE PLACED IN ..\Hex\udsf_tinyframe.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE ..\..\..\Kernel\udsf_tinyframe.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\O
+                    -SD;..\..\..\OSD\Logo;../../../Inc;../../../UserConfig;../../../ARKLib;../../../UserConfig/Prj config;..\..\..\LCD Pannel
+                    -s;..\..\..\LCD Pannels\LCD parameter;..\..\..\Device driver\AMT;..\..\..\Device driver\ArkChip;..\..\..\Device driver\E2
+                    -prom;..\..\..\Device driver\Flash;..\..\..\Device driver\I2C;..\..\..\Device driver\Mcu;..\..\..\GetUserInput\Key;..\..\
+                    -..\GetUserInput\GPIO;..\..\..\GetUserInput\DianWeiQi;..\..\..\LCD Pannels\SPI init;..\..\..\LCD Pannels\CPU init;..\..\.
+                    -.\Debug) LARGE DEBUG OBJECTEXTEND SYMBOLS PRINT(..\List\udsf_tinyframe.lst) TABS(2) OBJECT(..\Hex\udsf_tinyframe.obj)
+
+line level    source
+
+   1          /**
+   2           * *****************************************************************
+   3           * @file    udsf_tinyframe.c (Fixed Redefinition & Order)
+   4           * *****************************************************************
+   5           */
+   6          
+   7          #ifndef __TINY_FRAME_C
+   8          #define __TINY_FRAME_C
+   9          
+  10          /*------------------------------- include ------------------------------------*/
+  11          #include "udsf_tinyframe.h"
+*** WARNING C322 IN LINE 252 OF ..\..\..\Kernel\udsf_tinyframe.h: unknown identifier
+*** WARNING C322 IN LINE 289 OF ..\..\..\Kernel\udsf_tinyframe.h: unknown identifier
+*** WARNING C322 IN LINE 320 OF ..\..\..\Kernel\udsf_tinyframe.h: unknown identifier
+  12          #include <stddef.h> 
+  13          #include <stdlib.h>
+  14          
+  15          // 全局变量放在 XDATA
+  16          static TinyFrame xdata *s_ftRx;
+  17          static TinyFrame xdata *s_ftTx;
+  18          
+  19          // 外部发送函数
+  20          extern void TF_Platform_Send(uart_port_t port, const uint8* buf, uint32 len);
+  21          
+  22          /*------------------------------- macros -------------------------------------*/
+  23          #define COLLECT_NUMBER(dest, type) \
+  24              do { \
+  25                  if (tf->rxi == 0) dest = 0; \
+  26                  dest |= ((type)c) << (8 * tf->rxi++); \
+  27              } while (0); \
+  28              if (tf->rxi == sizeof(type))
+  29              
+  30          #define RADAR_COLLECT_NUMBER(dest, type) dest = (type)(((dest) << 8) | c); \
+  31                                                      if (++tf->rxi == sizeof(type))
+  32          
+  33          #define TF_MIN(a, b) ((a)<(b)?(a):(b))
+  34          #define TF_TRY(func) do { if(!(func)) return false; } while (0)
+  35          
+  36          #define TF_ID_MASK (TF_ID)(((TF_ID)1 << (sizeof(TF_ID)*8 - 1)) - 1)
+  37          #define TF_ID_PEERBIT (TF_ID)((TF_ID)1 << ((sizeof(TF_ID)*8) - 1))
+  38          
+  39          #define WRITENUM_BASE(type, num, xtra) \
+  40              for (si = 0; si < sizeof(type); si++) { \
+  41                  b = (uint8_t)((num) >> (si*8) & 0xFF); \
+  42                  outbuff[pos++] = b; \
+  43                  xtra; \
+  44              }
+  45          
+  46          #define _NOOP()
+  47          #define WRITENUM(type, num)       WRITENUM_BASE(type, num, _NOOP())
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 2   
+
+  48          #define WRITENUM_CKSUM(type, num) WRITENUM_BASE(type, num, CKSUM_ADD(cksum, b))
+  49          
+  50          /*------------------------------ checksums -----------------------------------*/
+  51          #if TF_CKSUM_TYPE == TF_CKSUM_NONE
+              static TF_CKSUM udsf_TF_CksumStart(void) large { return 0; }
+              static TF_CKSUM udsf_TF_CksumAdd(TF_CKSUM cksum, uint8_t byte) large { return cksum; }
+              static TF_CKSUM udsf_TF_CksumEnd(TF_CKSUM cksum) large { return cksum; }
+              
+              #elif TF_CKSUM_TYPE == TF_CKSUM_XOR
+  57          static TF_CKSUM udsf_TF_CksumStart(void) large { return 0; }
+  58          static TF_CKSUM udsf_TF_CksumAdd(TF_CKSUM cksum, uint8_t byte) large { return cksum ^ byte; }
+  59          static TF_CKSUM udsf_TF_CksumEnd(TF_CKSUM cksum) large { return (TF_CKSUM) ~cksum; }
+  60          
+  61          // ... (其他 CRC 类型省略，如果你用了请补上，加上 large 即可) ...
+  62          #endif
+  63          
+  64          #define CKSUM_RESET(cksum)     do { (cksum) = udsf_TF_CksumStart(); } while (0)
+  65          #define CKSUM_ADD(cksum, byte) do { (cksum) = udsf_TF_CksumAdd((cksum), (byte)); } while (0)
+  66          #define CKSUM_FINALIZE(cksum)  do { (cksum) = udsf_TF_CksumEnd((cksum)); } while (0)
+  67          
+  68          
+  69          /*------------------------------ Static Functions (Forward Implementation) ----*/
+  70          // 把所有 static 函数直接实现在这里，这样就不需要额外的声明了，避免冲突
+  71          
+  72          static void udsf_tinyFrameTxInit(TinyFrame *ftTx, TF_Sender_Cb uartsend) large
+  73          {
+  74   1          s_ftTx = ftTx;
+  75   1          s_ftTx->sender_cb = uartsend;
+  76   1      }
+  77          
+  78          static void udsf_TF_ResetParser(TinyFrame *tf) large { tf->state = TFState_SOF; }
+  79          static void RADAR_TF_ResetParser(TinyFrame_Radar *tf) large { tf->state = TFState_SOF; }
+  80          
+  81          static void udsf_pars_begin_frame(TinyFrame *tf) large {
+  82   1          CKSUM_RESET(tf->cksum);
+  83   1      #if TF_USE_SOF_BYTE
+                  CKSUM_ADD(tf->cksum, TF_SOF_BYTE);
+              #endif
+  86   1          tf->discard_data = false;
+  87   1          tf->state = TFState_ADDR;
+  88   1          tf->rxi = 0;
+  89   1      }
+  90          
+  91          static void RADAR_pars_begin_frame(TinyFrame_Radar *tf) large {
+  92   1          CKSUM_RESET(tf->cksum);
+  93   1      #if RADAR_TF_USE_SOF_BYTE
+  94   1          CKSUM_ADD(tf->cksum, TF_SOF_BYTE);
+  95   1      #endif
+  96   1          tf->discard_data = false;
+  97   1          tf->state = TFState_ID;
+  98   1          tf->rxi = 0;
+  99   1      }
+ 100          
+ 101          static uint32_t udsf_TF_ComposeHead(TinyFrame *tf, uint8_t *outbuff, TF_Msg *msg) large {
+ 102   1          int8_t si       = 0;
+ 103   1          uint8_t b       = 0;
+ 104   1          TF_ID id        = 0;
+ 105   1          TF_CKSUM cksum  = 0;
+ 106   1          uint32_t pos    = 0;
+ 107   1          (void)cksum; 
+*** WARNING C275 IN LINE 107 OF ..\..\..\Kernel\udsf_tinyframe.c: expression with possibly no effect
+ 108   1          CKSUM_RESET(cksum);
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 3   
+
+ 109   1          if (msg->is_response) { id = msg->frame_id; } 
+ 110   1          else {
+ 111   2              tf->next_id += 1;
+ 112   2              id = (TF_ID)(tf->next_id & TF_ID_MASK);
+ 113   2              if (tf->peer_bit) { id |= TF_ID_PEERBIT; }
+ 114   2          }
+ 115   1          msg->frame_id = id;
+ 116   1          CKSUM_RESET(cksum);
+ 117   1      #if TF_USE_SOF_BYTE
+                  outbuff[pos++] = TF_SOF_BYTE;
+                  CKSUM_ADD(cksum, TF_SOF_BYTE);
+              #endif
+ 121   1          WRITENUM_CKSUM(TF_ADDR,   msg->addr);
+ 122   1          WRITENUM_CKSUM(TF_ID,   id);
+ 123   1          WRITENUM_CKSUM(TF_LEN,  msg->len);
+ 124   1          WRITENUM_CKSUM(TF_TYPE, msg->type);
+ 125   1      #if TF_CKSUM_TYPE != TF_CKSUM_NONE
+ 126   1          CKSUM_FINALIZE(cksum);
+ 127   1          WRITENUM(TF_CKSUM, cksum);
+ 128   1      #endif
+ 129   1          return pos;
+ 130   1      }
+ 131          
+ 132          static uint32_t udsf_TF_ComposeBody(uint8_t *outbuff, const uint8_t *pData, TF_LEN data_len, TF_CKSUM *cks
+             -um) large {
+ 133   1          TF_LEN i        = 0;
+ 134   1          uint8_t b       = 0;
+ 135   1          uint32_t pos    = 0;
+ 136   1          for (i = 0; i < data_len; i++) {
+ 137   2              b = pData[i];
+ 138   2              outbuff[pos++] = b;
+ 139   2              CKSUM_ADD(*cksum, b);
+ 140   2          }
+ 141   1          return pos;
+ 142   1      }
+ 143          
+ 144          static uint32_t udsf_TF_ComposeTail(uint8_t *outbuff, TF_CKSUM *cksum) large {
+ 145   1          int8_t si = 0; 
+ 146   1          uint8_t b = 0;
+ 147   1          uint32_t pos = 0;
+ 148   1      #if TF_CKSUM_TYPE != TF_CKSUM_NONE
+ 149   1          CKSUM_FINALIZE(*cksum);
+ 150   1          WRITENUM(TF_CKSUM, *cksum);
+ 151   1      #endif
+ 152   1          return pos;
+ 153   1      }
+ 154          
+ 155          static void udsf_TF_WriteImpl(TinyFrame *tf, const uint8_t *buff, uint32_t len) large {
+ 156   1          TF_Platform_Send(tf->uart_port, buff, len);
+ 157   1      }
+ 158          
+ 159          #if !TF_USE_MUTEX
+*** WARNING C322 IN LINE 159 OF ..\..\..\Kernel\udsf_tinyframe.c: unknown identifier
+ 160          static bool udsf_TF_ClaimTx(TinyFrame *tf) large {
+ 161   1          if (tf->soft_lock) { TF_Error("TF already locked for tx!"); return false; }
+ 162   1          tf->soft_lock = true;
+ 163   1          return true;
+ 164   1      }
+ 165          static void udsf_TF_ReleaseTx(TinyFrame *tf) large {
+ 166   1          tf->soft_lock = false;
+ 167   1      }
+ 168          #endif
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 4   
+
+ 169          
+ 170          // 这些函数需要先定义，因为 SendFrame 会用到
+ 171          static void udsf_TF_SendFrame_Chunk(TinyFrame *tf, const uint8_t *buff, uint32_t length) large {
+ 172   1          uint32_t remain;
+ 173   1          uint32_t chunk;
+ 174   1          uint32_t sent = 0;
+ 175   1          remain = length;
+ 176   1          while (remain > 0) {
+ 177   2              chunk = TF_MIN(TF_SENDBUF_LEN - tf->tx_pos, remain);
+ 178   2              tf->tx_pos += udsf_TF_ComposeBody(tf->sendbuf + tf->tx_pos, buff + sent, (TF_LEN) chunk, &tf->tx_c
+             -ksum);
+ 179   2              remain  -= chunk;
+ 180   2              sent    += chunk;
+ 181   2              if (tf->tx_pos == TF_SENDBUF_LEN) {
+ 182   3                  udsf_TF_WriteImpl(tf, (const uint8_t *)tf->sendbuf, tf->tx_pos);
+ 183   3                  tf->tx_pos = 0;
+ 184   3              }
+ 185   2          }
+ 186   1      }
+ 187          
+ 188          static void udsf_TF_SendFrame_End(TinyFrame *tf) large {
+ 189   1          if (tf->tx_len > 0) {
+ 190   2              if ((TF_SENDBUF_LEN - tf->tx_pos) < sizeof(TF_CKSUM)) {
+ 191   3                  udsf_TF_WriteImpl(tf, (const uint8_t *) tf->sendbuf, tf->tx_pos);
+ 192   3                  tf->tx_pos = 0;
+ 193   3              }
+ 194   2              tf->tx_pos += udsf_TF_ComposeTail((tf->sendbuf + tf->tx_pos), &tf->tx_cksum);
+ 195   2          }
+ 196   1          udsf_TF_WriteImpl(tf, (const uint8_t *) tf->sendbuf, tf->tx_pos);
+ 197   1          udsf_TF_ReleaseTx(tf);
+ 198   1      }
+ 199          
+ 200          static bool udsf_TF_SendFrame_Begin(TinyFrame *tf, TF_Msg *msg, TF_TICKS timeout) large {
+ 201   1          TF_TRY(udsf_TF_ClaimTx(tf));
+ 202   1          tf->tx_pos = (uint32_t) udsf_TF_ComposeHead(tf, tf->sendbuf, msg); 
+ 203   1          tf->tx_len = msg->len;
+ 204   1          CKSUM_RESET(tf->tx_cksum);
+ 205   1          return true;
+ 206   1      }
+*** WARNING C280 IN LINE 200 OF ..\..\..\Kernel\udsf_tinyframe.c: 'timeout': unreferenced local variable
+ 207          
+ 208          static bool udsf_TF_SendFrame(TinyFrame *tf, TF_Msg *msg, TF_TICKS timeout) large {
+ 209   1          TF_TRY(udsf_TF_SendFrame_Begin(tf, msg, timeout));
+ 210   1          if ((msg->len == 0) || (msg->pData != NULL)) {
+ 211   2             udsf_TF_SendFrame_Chunk(tf, msg->pData, msg->len);
+ 212   2             udsf_TF_SendFrame_End(tf);
+ 213   2          }
+ 214   1          return true;
+ 215   1      }
+ 216          
+ 217          
+ 218          /*------------------------------ Public Functions (Implemented) --------------*/
+ 219          
+ 220          int8 udsf_TF_AcceptChar(TinyFrame *tf, unsigned char c) large
+ 221          {
+ 222   1          int32 result = -100;
+ 223   1          {
+ 224   2              if (tf->parser_timeout_ticks >= TF_PARSER_TIMEOUT_TICKS)
+ 225   2              {
+ 226   3                  if (tf->state != TFState_SOF)
+ 227   3                  {
+ 228   4                      udsf_TF_ResetParser(tf);
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 5   
+
+ 229   4                      TF_Error("Parser timeout");
+ 230   4                  }
+ 231   3              }
+ 232   2              tf->parser_timeout_ticks = 0;
+ 233   2      
+ 234   2          #if !TF_USE_SOF_BYTE
+ 235   2              if (tf->state == TFState_SOF)
+ 236   2              {
+ 237   3                  udsf_pars_begin_frame(tf);
+ 238   3              }
+ 239   2          #endif
+ 240   2      
+ 241   2              switch (tf->state)
+ 242   2              {
+ 243   3              case TFState_SOF:
+ 244   3                  if (c == TF_SOF_BYTE) { udsf_pars_begin_frame(tf); result = 1; }
+ 245   3                  else { result = -1; }
+ 246   3                  break;
+ 247   3              case TFState_ADDR:
+ 248   3                  CKSUM_ADD(tf->cksum, c);
+ 249   3                  COLLECT_NUMBER(tf->addr, TF_ADDR) {
+ 250   4                      tf->state = TFState_ID; tf->rxi = 0; result = 9;
+ 251   4                  } else { result = -9; }
+ 252   3                  break;
+ 253   3              case TFState_ID:
+ 254   3                  CKSUM_ADD(tf->cksum, c);
+ 255   3                  COLLECT_NUMBER(tf->id, TF_ID) {
+ 256   4                      tf->state = TFState_LEN; tf->rxi = 0; result = 2;
+ 257   4                  } else { result = -2; }
+ 258   3                  break;
+ 259   3              case TFState_LEN:
+ 260   3                  CKSUM_ADD(tf->cksum, c);
+ 261   3                  COLLECT_NUMBER(tf->len, TF_LEN) {
+ 262   4                      tf->state = TFState_TYPE; tf->rxi = 0; result = 3;
+ 263   4                  } else { result = -3; }
+ 264   3                  break;
+ 265   3              case TFState_TYPE:
+ 266   3                  CKSUM_ADD(tf->cksum, c);
+ 267   3                  COLLECT_NUMBER(tf->type, TF_TYPE) {
+ 268   4                  #if TF_CKSUM_TYPE == TF_CKSUM_NONE
+                              tf->state = TFState_DATA; tf->rxi = 0;
+                          #else
+ 271   4                      tf->state = TFState_HEAD_CKSUM; tf->rxi = 0; tf->ref_cksum = 0;
+ 272   4                  #endif
+ 273   4                      result = 4;
+ 274   4                  } else { result = -4; }
+ 275   3                  break;
+ 276   3              case TFState_HEAD_CKSUM:
+ 277   3                  COLLECT_NUMBER(tf->ref_cksum, TF_CKSUM) {
+ 278   4                      CKSUM_FINALIZE(tf->cksum);
+ 279   4                      if (tf->cksum != tf->ref_cksum) {
+ 280   5                          TF_Error("Rx head cksum mismatch");
+ 281   5                          udsf_TF_ResetParser(tf);
+ 282   5                          result = -8;
+ 283   5                      } else if (tf->len == 0) {
+ 284   5                          udsf_TF_ResetParser(tf);
+ 285   5                          result = 0;
+ 286   5                      } else {
+ 287   5                          result = 5;
+ 288   5                          tf->state = TFState_DATA; tf->rxi = 0;
+ 289   5                          CKSUM_RESET(tf->cksum); 
+ 290   5                      }
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 6   
+
+ 291   4                      if (tf->len > TF_MAX_PAYLOAD_RX) {
+ 292   5                          tf->discard_data = true; result = -9;
+ 293   5                      }
+ 294   4                  } else { result = -5; }
+ 295   3                  break;
+ 296   3              case TFState_DATA:
+ 297   3                  if (tf->discard_data) {
+ 298   4                      tf->rxi++; result = -6;
+ 299   4                  } else {
+ 300   4                      CKSUM_ADD(tf->cksum, c);
+ 301   4                      tf->payload[tf->rxi++] = c;
+ 302   4                      result = 6;
+ 303   4                  }
+ 304   3                  if (tf->rxi == tf->len) {
+ 305   4                  #if TF_CKSUM_TYPE == TF_CKSUM_NONE
+                              result = 0; udsf_TF_ResetParser(tf);
+                          #else
+ 308   4                      tf->state = TFState_DATA_CKSUM; tf->rxi = 0; tf->ref_cksum = 0;
+ 309   4                  #endif
+ 310   4                  }
+ 311   3                  break;
+ 312   3              case TFState_DATA_CKSUM:
+ 313   3                  COLLECT_NUMBER(tf->ref_cksum, TF_CKSUM) {
+ 314   4                      CKSUM_FINALIZE(tf->cksum);
+ 315   4                      if (!tf->discard_data) {
+ 316   5                          if (tf->cksum == tf->ref_cksum) result = 0;
+ 317   5                          else { TF_Error("Body cksum mismatch"); result = -10; }
+ 318   5                      }
+ 319   4                      udsf_TF_ResetParser(tf);
+ 320   4                  } else { result = -7; }
+ 321   3                  break;
+ 322   3              }
+ 323   2          }
+ 324   1          return result;
+ 325   1      }
+ 326          
+ 327          int8 Radar_TF_AcceptChar(TinyFrame_Radar *tf, unsigned char c) large
+ 328          {
+ 329   1          int32 result = -100;
+ 330   1          {
+ 331   2              if (tf->parser_timeout_ticks >= TF_PARSER_TIMEOUT_TICKS) {
+ 332   3                  if (tf->state != TFState_SOF) {
+ 333   4                      RADAR_TF_ResetParser(tf);
+ 334   4                      TF_Error("Parser timeout");
+ 335   4                  }
+ 336   3              }
+ 337   2              tf->parser_timeout_ticks = 0;
+ 338   2      
+ 339   2          #if !RADAR_TF_USE_SOF_BYTE
+                      if (tf->state == TFState_SOF) udsf_pars_begin_frame(tf);
+                  #endif
+ 342   2      
+ 343   2              switch (tf->state ) {
+ 344   3              case TFState_SOF:
+ 345   3                  if (c == TF_SOF_BYTE) { RADAR_pars_begin_frame(tf); result = 1; }
+ 346   3                  else { result = -1; }
+ 347   3                  break;
+ 348   3              case TFState_ID:
+ 349   3                  CKSUM_ADD(tf->cksum, c);
+ 350   3                  RADAR_COLLECT_NUMBER(tf->id, TF_ID) {
+ 351   4                      tf->state = TFState_LEN; tf->rxi = 0; result = 2;
+ 352   4                  } else { result = -2; }
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 7   
+
+ 353   3                  break;
+ 354   3              case TFState_LEN:
+ 355   3                  CKSUM_ADD(tf->cksum, c);
+ 356   3                  RADAR_COLLECT_NUMBER(tf->len, TF_LEN) {
+ 357   4                      tf->state = TFState_TYPE; tf->rxi = 0; result = 3;
+ 358   4                  } else { result = -3; }
+ 359   3                  break;
+ 360   3              case TFState_TYPE:
+ 361   3                  CKSUM_ADD(tf->cksum, c);
+ 362   3                  RADAR_COLLECT_NUMBER(tf->type, Radar_TF_TYPE) {
+ 363   4                  #if TF_CKSUM_TYPE == TF_CKSUM_NONE
+                              tf->state = TFState_DATA; tf->rxi = 0;
+                          #else
+ 366   4                      tf->state = TFState_HEAD_CKSUM; tf->rxi = 0; tf->ref_cksum = 0;
+ 367   4                  #endif
+ 368   4                      result = 4;
+ 369   4                  } else { result = -4; }
+ 370   3                  break;
+ 371   3              case TFState_HEAD_CKSUM:
+ 372   3                  RADAR_COLLECT_NUMBER(tf->ref_cksum, TF_CKSUM) {
+ 373   4                      CKSUM_FINALIZE(tf->cksum);
+ 374   4                      if (tf->cksum != tf->ref_cksum) {
+ 375   5                          TF_Error("Rx head cksum mismatch");
+ 376   5                          RADAR_TF_ResetParser(tf);
+ 377   5                          result = 10;
+ 378   5                      } else if (tf->len == 0) {
+ 379   5                          RADAR_TF_ResetParser(tf);
+ 380   5                          result = 0;
+ 381   5                      } else {
+ 382   5                          result = 5;
+ 383   5                          tf->state = TFState_DATA; tf->rxi = 0;
+ 384   5                          CKSUM_RESET(tf->cksum); 
+ 385   5                      }
+ 386   4                      if (tf->len > TF_MAX_PAYLOAD_RX) {
+ 387   5                          tf->discard_data = true; result = -9;
+ 388   5                      }
+ 389   4                  } else { result = -5; }
+ 390   3                  break;
+ 391   3              case TFState_DATA:
+ 392   3                  if (tf->discard_data) {
+ 393   4                      tf->rxi++; result = -6;
+ 394   4                  } else {
+ 395   4                      CKSUM_ADD(tf->cksum, c);
+ 396   4                      tf->payload[tf->rxi++] = c;
+ 397   4                      result = 6;
+ 398   4                  }
+ 399   3                  if (tf->rxi == tf->len) {
+ 400   4                  #if TF_CKSUM_TYPE == TF_CKSUM_NONE
+                              result = 0; RADAR_TF_ResetParser(tf);
+                          #else
+ 403   4                      tf->state = TFState_DATA_CKSUM; tf->rxi = 0; tf->ref_cksum = 0;
+ 404   4                  #endif
+ 405   4                  }
+ 406   3                  break;
+ 407   3              case TFState_DATA_CKSUM:
+ 408   3                  RADAR_COLLECT_NUMBER(tf->ref_cksum, TF_CKSUM) {
+ 409   4                      CKSUM_FINALIZE(tf->cksum);
+ 410   4                      if (!tf->discard_data) {
+ 411   5                          if (tf->cksum == tf->ref_cksum) result = 0;
+ 412   5                          else { TF_Error("Body cksum mismatch"); result = -10; }
+ 413   5                      }
+ 414   4                      RADAR_TF_ResetParser(tf);
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 8   
+
+ 415   4                  } else { result = -7; }
+ 416   3                  break;
+ 417   3              case TFState_ADDR: 
+ 418   3                  result = 12; break;
+ 419   3              }
+ 420   2          }
+ 421   1          return result;
+ 422   1      }
+ 423          
+ 424          void udsf_TF_ClearMsg(TF_Msg *msg) large {
+ 425   1          memset(msg, 0, sizeof(TF_Msg));
+ 426   1      }
+ 427          
+ 428          bool udsf_TF_SendSimple(TinyFrame *tf, TF_TYPE type, const uint8_t *pData, TF_LEN len) large {
+ 429   1          TF_Msg msg;
+ 430   1          udsf_TF_ClearMsg(&msg);
+ 431   1          msg.type    = type;
+ 432   1          msg.pData   = pData;
+ 433   1          msg.len     = len;
+ 434   1          return udsf_TF_Send(tf, &msg);
+ 435   1      }
+ 436          
+ 437          bool udsf_TF_Send(TinyFrame *tf, TF_Msg *msg) large {
+ 438   1          return udsf_TF_SendFrame(tf, msg, 0);
+ 439   1      }
+ 440          
+ 441          bool udsf_TF_QuerySimple(TinyFrame *tf, TF_TYPE type, const uint8_t *pData, TF_LEN len, TF_TICKS timeout) 
+             -large {
+ 442   1          TF_Msg msg;
+ 443   1          udsf_TF_ClearMsg(&msg);
+ 444   1          msg.type    = type;
+ 445   1          msg.pData   = pData;
+ 446   1          msg.len     = len;
+ 447   1          return udsf_TF_SendFrame(tf, &msg, timeout);
+ 448   1      }
+ 449          
+ 450          bool udsf_TF_Query(TinyFrame *tf, TF_Msg *msg, TF_TICKS timeout) large {
+ 451   1          return udsf_TF_SendFrame(tf, msg, timeout);
+ 452   1      }
+ 453          
+ 454          bool udsf_TF_Respond(TinyFrame *tf, TF_Msg *msg) large {
+ 455   1          msg->is_response = true;
+ 456   1          return udsf_TF_Send(tf, msg);
+ 457   1      }
+ 458          
+ 459          static void udsf_tinyFramefTx(TF_TYPE type, uint8 *pData, TF_LEN len) large {
+ 460   1          udsf_TF_SendSimple(s_ftTx, type, pData, len);
+ 461   1      }
+ 462          
+ 463          #endif
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 9   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_udsf_tinyFramefTx . . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  type . . . . . . . . . . . . . . . .  AUTO     DATA   U_INT    0006H  2
+  pData. . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0002H  3
+  len. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0005H  2
+uint16_t . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+TF_CKSUM . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TFState_DATA_CKSUM . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+TF_Msg_. . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  17
+  frame_id . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  is_response. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0003H  2
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  pData. . . . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+  len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
+  userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 000BH  3
+  userdata2. . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 000EH  3
+_udsf_TF_SendFrame_End . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+PVOID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  VOID_PTR -----  3
+int8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+SLONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+TF_COUNT . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+int32_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+ULONG. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+_udsf_TF_ResetParser . . . . . . . . .  STATIC   CODE   PROC     000BH  -----
+  tf . . . . . . . . . . . . . . . . .  * REG *  DATA   PTR      0001H  3
+TF_ID. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+TF_Peer. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+int16_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_udsf_TF_SendFrame . . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  timeout. . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0006H  2
+_udsf_TF_SendSimple. . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  type . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0003H  2
+  pData. . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0005H  3
+  len. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0008H  2
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  STRUCT   000AH  17
+Radar_TF_TYPE. . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+TFState_ID . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+TinyFrame. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  170
+  userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
+  usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
+  peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  next_id. . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+  state. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  parser_timeout_ticks . . . . . . . .  MEMBER   -----  U_INT    000BH  2
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
+  id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000EH  2
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 10  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0010H  2
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0012H  64
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0052H  2
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0055H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0056H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0058H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0059H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0099H  4
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009DH  4
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A2H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A3H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A9H  1
+TF_ADDR. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_udsf_TF_QuerySimple . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  type . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0003H  2
+  pData. . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0005H  3
+  len. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0008H  2
+  timeout. . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    000AH  2
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  STRUCT   000CH  17
+targetInfo . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  16
+  rng. . . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
+  vel. . . . . . . . . . . . . . . . .  MEMBER   -----  LONG     0004H  4
+  ang. . . . . . . . . . . . . . . . .  MEMBER   -----  LONG     0008H  4
+  power. . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   000CH  4
+TFState_DATA . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+_udsf_TF_Send. . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     DATA   PTR      0001H  3
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+TFState_ADDR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+LP_UART_NUM_0. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_Radar_TF_AcceptChar . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  c. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0003H  1
+  result . . . . . . . . . . . . . . .  AUTO     XDATA  LONG     0004H  4
+UART_NUM_0 . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+UART_NUM_1 . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_udsf_TF_CksumAdd. . . . . . . . . . .  STATIC   CODE   PROC     0017H  -----
+  cksum. . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+  byte . . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0005H  1
+UART_NUM_2 . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+UART_NUM_3 . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_udsf_TF_ReleaseTx . . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  * REG *  DATA   PTR      0001H  3
+_udsf_TF_ClearMsg. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  msg. . . . . . . . . . . . . . . . .  * REG *  DATA   PTR      0001H  3
+TF_Msg . . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  17
+  frame_id . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  is_response. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0003H  2
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 11  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  pData. . . . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
+  len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
+  userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 000BH  3
+  userdata2. . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 000EH  3
+INT8 . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_udsf_pars_begin_frame . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  * REG *  DATA   PTR      0001H  3
+UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+udsf_TF_CksumStart . . . . . . . . . .  STATIC   CODE   PROC     0006H  -----
+uint32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+_udsf_TF_Query . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     DATA   PTR      0001H  3
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  timeout. . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0006H  2
+UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+uint16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+bool . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_udsf_tinyFrameTxInit. . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  ftTx . . . . . . . . . . . . . . . .  AUTO     DATA   PTR      0001H  3
+  uartsend . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+_udsf_TF_CksumEnd. . . . . . . . . . .  STATIC   CODE   PROC     0012H  -----
+  cksum. . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+OneTargetInfoStrTypedef. . . . . . . .  TYPEDEF  -----  STRUCT   -----  16
+  rng. . . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
+  vel. . . . . . . . . . . . . . . . .  MEMBER   -----  LONG     0004H  4
+  ang. . . . . . . . . . . . . . . . .  MEMBER   -----  LONG     0008H  4
+  power. . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   000CH  4
+_TF_Platform_Send. . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+int32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+_udsf_TF_WriteImpl . . . . . . . . . .  STATIC   CODE   PROC     003BH  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     DATA   PTR      0001H  3
+  buff . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  len. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0006H  4
+int16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TF_NEXT. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+uart_port_t. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TF_STAY. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+TF_TYPE. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+_RADAR_TF_ResetParser. . . . . . . . .  STATIC   CODE   PROC     000BH  -----
+  tf . . . . . . . . . . . . . . . . .  * REG *  DATA   PTR      0001H  3
+SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+TinyFrame_Radar_ . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  169
+  userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
+  usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
+  peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  next_id. . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+  state. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  parser_timeout_ticks . . . . . . . .  MEMBER   -----  U_INT    000BH  2
+  id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000DH  2
+  len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000FH  2
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0011H  64
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0051H  2
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 12  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0053H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0055H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0057H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0058H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0098H  4
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009CH  4
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A0H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A2H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A5H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
+TFState_TYPE . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+_udsf_TF_ClaimTx . . . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  * REG *  DATA   PTR      0001H  3
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+TF_MASTER. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+uint8_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+multTargetInfoStrTypedef . . . . . . .  TYPEDEF  -----  STRUCT   -----  2052
+  targetNum. . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
+  multTargetStr. . . . . . . . . . . .  MEMBER   -----  ARRAY    0004H  2048
+INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+_udsf_TF_SendFrame_Begin . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  timeout. . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0006H  2
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
+UartTypeDef. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  20
+  REG_DATA . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
+  STATE. . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
+  CTRL . . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0008H  4
+  INTSTATUS. . . . . . . . . . . . . .  MEMBER   -----  U_LONG   000CH  4
+  BAUDDIV. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0010H  4
+SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+UART_NUM_MAX . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+int8_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+TF_LEN . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+_RADAR_pars_begin_frame. . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  * REG *  DATA   PTR      0001H  3
+TF_State_. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+_udsf_TF_ComposeHead . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  outbuff. . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0006H  3
+  si . . . . . . . . . . . . . . . . .  AUTO     XDATA  CHAR     0009H  1
+  b. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   000AH  1
+  id . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    000BH  2
+  cksum. . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   000DH  1
+  pos. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   000EH  4
+TFState_LEN. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
+TinyFrame_Radar. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  169
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 13  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
+  usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
+  peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  next_id. . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+  state. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  parser_timeout_ticks . . . . . . . .  MEMBER   -----  U_INT    000BH  2
+  id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000DH  2
+  len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000FH  2
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0011H  64
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0051H  2
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0053H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0055H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0057H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0058H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0098H  4
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009CH  4
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A0H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A2H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A5H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
+_udsf_TF_AcceptChar. . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  c. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0003H  1
+  result . . . . . . . . . . . . . . .  AUTO     XDATA  LONG     0004H  4
+TF_Sender_Cb . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+_udsf_TF_SendFrame_Chunk . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  buff . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  length . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0006H  4
+  remain . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   000AH  4
+  chunk. . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   000EH  4
+  sent . . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0012H  4
+TFState_SOF. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+_udsf_TF_Respond . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  tf . . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  msg. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+TF_CLOSE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  170
+  userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
+  usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
+  peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+  next_id. . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
+  state. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
+  parser_timeout_ticks . . . . . . . .  MEMBER   -----  U_INT    000BH  2
+  addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
+  id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000EH  2
+  len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0010H  2
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0012H  64
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0052H  2
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0055H  1
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    02/05/2026 16:40:37 PAGE 14  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0056H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0058H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0059H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0099H  4
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009DH  4
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A2H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A3H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A9H  1
+UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_udsf_TF_ComposeTail . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  outbuff. . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  cksum. . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  si . . . . . . . . . . . . . . . . .  AUTO     XDATA  CHAR     0006H  1
+  b. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0007H  1
+  pos. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0008H  4
+TF_SLAVE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TFState_HEAD_CKSUM . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+s_ftRx . . . . . . . . . . . . . . . .  STATIC   XDATA  PTR      0000H  2
+UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TF_TICKS . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+uint8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_udsf_TF_ComposeBody . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  outbuff. . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
+  pData. . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0003H  3
+  data_len . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    0006H  2
+  cksum. . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0008H  3
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_INT    000BH  2
+  b. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   000DH  1
+  pos. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   000EH  4
+s_ftTx . . . . . . . . . . . . . . . .  STATIC   XDATA  PTR      0002H  2
+uint32_t . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+TF_Result. . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TF_RENEW . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   5964    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4     204
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  6 WARNING(S),  0 ERROR(S)

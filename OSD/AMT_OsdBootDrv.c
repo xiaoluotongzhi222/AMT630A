@@ -803,7 +803,7 @@ void Draw_Radar_Segment(UCHAR row_idx, UCHAR seg_idx, UCHAR color, UCHAR screen_
 
     for(i = 0; i < 2; i++)
     {
-        if(color == 0x30) 
+        if(color == 0x00) 
         {
  
             charData = 0x00;					
@@ -867,7 +867,7 @@ void Clear_Half_Screen(UCHAR half)
         }
     }
 }
-void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str)
+void OsdDrawStr(UCHAR starRow,UCHAR starLine,UCHAR fbColor, UCHAR *str) small
 {
      UINT XDATA wcStartIndexAddr;
 	 UINT XDATA wcColorStartIndexAddr;

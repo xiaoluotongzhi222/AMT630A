@@ -18,8 +18,8 @@ Hex Converter:   OH51.exe V2.7.0.0
 CPU DLL:         S8051.DLL V3.125.1.0
 Dialog DLL:      DP51.DLL V2.69.0.0 
 <h2>Project:</h2>
-D:\0_Company documents\AMT630A\AMT630A_DBell_SDK_V2.3_20150703\AMT630A_DBell_SDK_V2.3_20150703\Keil Prj\64K\Prj\ARK_SDK_Ver2.0.uvproj
-Project File Date:  02/01/2026
+D:\PROJECT\test\FPV_AMT630A_RX5808\AMT630A_Project\Keil Prj\64K\Prj\ARK_SDK_Ver2.0.uvproj
+Project File Date:  02/03/2026
 
 <h2>Output:</h2>
 Rebuild target 'ARK-SDK'
@@ -40,12 +40,27 @@ compiling E2prom.c...
 compiling Flash.c...
 compiling E2pI2C.c...
 compiling Main.c...
-..\..\..\Kernel\Main.c(58): warning C206: 'OsdGetStartIndexAddr': missing function-prototype
+..\..\..\Kernel\udsf_tinyframe.h(252): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.h(289): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.h(320): warning C322: unknown identifier
+..\..\..\Kernel\Main.c(54): warning C259: pointer: different mspace
+..\..\..\Kernel\Main.c(84): warning C206: 'OsdGetStartIndexAddr': missing function-prototype
 compiling Global.c...
 compiling GetSysMsg.c...
 compiling Delay.c...
 compiling Interrupt.c...
 compiling EventHandle.c...
+compiling udsf_tinyframe.c...
+..\..\..\Kernel\udsf_tinyframe.h(252): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.h(289): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.h(320): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.c(107): warning C275: expression with possibly no effect
+..\..\..\Kernel\udsf_tinyframe.c(159): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.c(200): warning C280: 'timeout': unreferenced local variable
+compiling prase_radar.c...
+..\..\..\Kernel\udsf_tinyframe.h(252): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.h(289): warning C322: unknown identifier
+..\..\..\Kernel\udsf_tinyframe.h(320): warning C322: unknown identifier
 compiling GetUserInputMsg.c...
 compiling AdcKeyPad.c...
 compiling DianWeiQiKeyPad.c...
@@ -71,6 +86,15 @@ compiling Osd_BatteryAdcMenu.c...
 compiling Osd_Menu.c...
 compiling Debug.c...
 linking...
+*** WARNING L14: INCOMPATIBLE MEMORY MODEL
+    MODULE:  ..\Hex\Main.obj (MAIN)
+    MODEL:   LARGE
+*** WARNING L14: INCOMPATIBLE MEMORY MODEL
+    MODULE:  ..\Hex\udsf_tinyframe.obj (UDSF_TINYFRAME)
+    MODEL:   LARGE
+*** WARNING L14: INCOMPATIBLE MEMORY MODEL
+    MODULE:  ..\Hex\prase_radar.obj (PRASE_RADAR)
+    MODEL:   LARGE
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_POS_ENABLECHIPADC?ARKCHIP
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
@@ -132,19 +156,31 @@ linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_USERDEFINEDMSGHANDLE?EVENTHANDLE
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UDSF_TINYFRAMETXINIT?UDSF_TINYFRAME
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UDSF_TF_ACCEPTCHAR?UDSF_TINYFRAME
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UDSF_TF_QUERYSIMPLE?UDSF_TINYFRAME
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UDSF_TF_QUERY?UDSF_TINYFRAME
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UDSF_TF_RESPOND?UDSF_TINYFRAME
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UDSF_TINYFRAMEFTX?UDSF_TINYFRAME
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?CO?OSD_LOGOMENU
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_IRQPUTSTR?DEBUG
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_IRQPRINTF?DEBUG
-Program Size: data=121.0 xdata=184 code=34330
+Program Size: data=113.2 xdata=819 code=44426
 creating hex file from "..\Hex\AMT_DB_HEX"...
 User command #1: ..\..\..\PC Tool\18X9_Function_Location "\\List"
 AMT Function Location Start...
 M51File List is AMT_DB_HEX.M51
 the Using M51File is AMT_DB_HEX.M51
 AMT Function Location End...
-"..\Hex\AMT_DB_HEX" - 0 Error(s), 39 Warning(s).
+"..\Hex\AMT_DB_HEX" - 0 Error(s), 61 Warning(s).
 Build Time Elapsed:  00:00:12
 </pre>
 </body>

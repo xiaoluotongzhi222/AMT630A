@@ -22,27 +22,33 @@
 #ifdef UartPrintfEn
 
 #define _EOS_ '\0' 
-
+//luo changed
 void putSIOChar(unsigned char sendData)
 {
-	TI = 0; 
+    ES = 0;
+    TI = 0; 
 	SBUF = sendData; 
 	while(!TI);
+	    TI = 0;
+    ES = 1;
 }
 
-
+//luo changed
 void putchar(UCHAR ucVal)
 {
-	TI = 0;
+    ES = 0;
+    TI = 0; 
 	SBUF = ucVal; 
 	while(!TI);
+		    TI = 0;
+    ES = 1;
 }
 
 void IrqPutstr(UCHAR *pFmt)
 {
     UCHAR XDATA ucBff; 
 
-	SetUartPrint();
+	//SetUartPrint(); luo changed
 	
     while(1)
     {
@@ -54,7 +60,7 @@ void IrqPutstr(UCHAR *pFmt)
 
          pFmt++; 
     } 
-	SetI2CDebug();
+	//SetI2CDebug(); luo changed
 }
 
 
@@ -62,7 +68,7 @@ void printfStr(char *str)
 {
     BYTE XDATA ucBff;
 	
-	SetUartPrint();
+	//SetUartPrint(); //luo changed
 	
   	putSIOChar((char)'\r');
   	putSIOChar((char)'\n');
@@ -75,13 +81,13 @@ void printfStr(char *str)
          putSIOChar(ucBff);
          str++;
     }
-	SetI2CDebug();
+	//SetI2CDebug(); luo changed
 }
 void IrqPrintf(char *str, WORD value)
 {
 	char XDATA sendData;
 
-	SetUartPrint();
+	//SetUartPrint(); luo changed
 	
   	while(sendData=*(str++))
     {
@@ -127,14 +133,14 @@ void IrqPrintf(char *str, WORD value)
       	else
         	putSIOChar(sendData);
     }
-	SetI2CDebug();
+	//SetI2CDebug(); //luo changed
 }
 
 void printf(char *str, WORD value)
 {
 	char XDATA sendData;
 
-	SetUartPrint();
+	//SetUartPrint();luo changed
 	
   	putSIOChar((char)'\r');
   	putSIOChar((char)'\n');
@@ -183,7 +189,7 @@ void printf(char *str, WORD value)
       	else
         	putSIOChar(sendData);
     }
-	SetI2CDebug();
+	//SetI2CDebug(); luo changed
 }
 
 #endif

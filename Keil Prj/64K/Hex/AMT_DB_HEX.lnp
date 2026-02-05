@@ -13,6 +13,8 @@
 "..\Hex\Delay.obj",
 "..\Hex\Interrupt.obj",
 "..\Hex\EventHandle.obj",
+"..\Hex\udsf_tinyframe.obj",
+"..\Hex\prase_radar.obj",
 "..\Hex\GetUserInputMsg.obj",
 "..\Hex\AdcKeyPad.obj",
 "..\Hex\DianWeiQiKeyPad.obj",
@@ -50,5 +52,5 @@ CODE(
        ?PR?POS_GETBATTERYADCMSG?GETSYSMSG(0X02F6),&
        ?PR?POS_CLEARWATCHDOG?MCU(0X0306),&
        ?PR?POS_IRQSERVERREC?INTERRUPT(0X0316),&
-       ?PR?_POS_VIDEOPROCESS?AMT_VIDEOPROCESS(0X0317)
+       ?PR?_POS_VIDEOPROCESS?AMT_VIDEOPROCESS(0X0356)
     )

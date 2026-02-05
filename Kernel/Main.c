@@ -29,35 +29,60 @@
 #include "AMT_Reg.h"
 #include "AMT_Drv.h"
 #include "AMT_Mcu.h"
-
+#include "udsf_tinyframe.h"
+#include "prase_radar.h"
 #define FONTRAM_PREFIX  '&' 
-#define WAVE_START_COL 4  
+#define WAVE_START_COL 2  
 //#define COL_RED     (0x01|0x30)
 //#define COL_YELLOW  (0x04|0x30)
 //#define COL_GREEN   (0x02|0x30)
 #define COL_RED     (0x01)
 #define COL_YELLOW  (0x04)
 #define COL_GREEN   (0x02)
+#define COL_WHITE   (0x0E)
 UCHAR XDATA g_Right_BG_Color = 0x30;
-
-extern void Draw_Big_Number(UCHAR startRow, UCHAR startLine, UCHAR num,UCHAR color);
-extern void Draw_Radar_Segment(UCHAR row_idx, UCHAR seg_idx, UCHAR color, UCHAR screen_row, UCHAR screen_col_start);
-extern void Clear_Half_Screen(UCHAR half,UCHAR color);
-extern void Draw_Big_Dot(UCHAR startRow, UCHAR startLine,UCHAR color);
-
+#define RX_BUF_SIZE 128
+UCHAR XDATA g_RxBuf[RX_BUF_SIZE];
+UCHAR XDATA g_RxCnt = 0;
+UCHAR XDATA g_RxTimeoutCnt = 0; 
+bit g_FrameReady = 0;
+RadarFrame XDATA g_RadarData;
+extern void Draw_Big_Number(UCHAR startRow, UCHAR startLine, UCHAR num,UCHAR color) small;
+extern void Draw_Radar_Segment(UCHAR row_idx, UCHAR seg_idx, UCHAR color, UCHAR screen_row, UCHAR screen_col_start) small;
+extern void Clear_Half_Screen(UCHAR half,UCHAR color) small;
+extern void Draw_Big_Dot(UCHAR startRow, UCHAR startLine,UCHAR color) small;
+extern void OsdDrawStr(UCHAR x, UCHAR y, UCHAR color, UCHAR code *ptr) small;
 UCHAR XDATA g_last_int = 0xFF;
 UCHAR XDATA g_last_dec = 0xFF;
+void TF_Platform_Send(uart_port_t port, const uint8* buf, uint32 len)
+{
+    uint32 XDATA i;
+    if (port == UART_NUM_0)
+    {
+        ES = 0; 
+        
+        for(i = 0; i < len; i++)
+        {
+            TI = 0; 
+            SBUF = buf[i];
+            while(!TI);
+            TI = 0;
+        }
+        
+
+        ES = 1; 
+    }
+}
 void Init_Split_Screen(void)
 {
     UINT XDATA wcIndexAddr = 0;
     UINT XDATA curAddr = 0;
     UCHAR XDATA row, col;
     
-    // 假设你用的是 Block 1
+
     OsdBlockEnable(1); 
-    wcIndexAddr = OsdGetStartIndexAddr(); // 获取显存起始地址
+    wcIndexAddr = OsdGetStartIndexAddr();
     
-    // 1. 先把内容全清为空格 (保持之前的逻辑)
     curAddr = wcIndexAddr;
     for(row = 0; row < 16; row++)
     {
@@ -66,13 +91,12 @@ void Init_Split_Screen(void)
             INDEX_RAM_ADD_H = (curAddr >> 8);
             INDEX_RAM_ADD_L = (curAddr & 0xff);
             INDEX_RAM_DATA_H = 0;
-            INDEX_RAM_DATA_L = 0; // 0号字是空字符
+            INDEX_RAM_DATA_L = 0;
             curAddr++;
         }
     }
 
-    // 2. [关键] 分区设置颜色属性
-    curAddr = wcIndexAddr; // 重置地址指针
+    curAddr = wcIndexAddr;
     for(row = 0; row < 16; row++)
     {
         for(col = 0; col < 32; col++)
@@ -99,9 +123,8 @@ void Update_Right_Screen_Blue(UCHAR is_blue)
 {
     UINT XDATA wcIndexAddr = 0;
     UINT XDATA curAddr = 0;
-    UCHAR row, col;
-    
-    // 假设用 Block 1
+    UCHAR XDATA row, col;
+
     OsdBlockEnable(1); 
     wcIndexAddr = OsdGetStartIndexAddr(); 
     
@@ -113,19 +136,14 @@ void Update_Right_Screen_Blue(UCHAR is_blue)
         {
             INDEX_RAM_ADD_H = (curAddr >> 8);
             INDEX_RAM_ADD_L = (curAddr & 0xff);
-            
-            // 我们只改右边 (col >= 16)
             if(col >= 16) 
             {
                 if(is_blue)
                 {
-                    // 没信号：右边刷成跟左边一样的蓝底 (0x30)
-                    // 这样左右两边都是 OSD 蓝，颜色绝对一致！
                     EACH_ICON_COLOR = 0x30; 
                 }
                 else
                 {
-                    // 有信号：右边刷成透明 (0x00)，透出视频
                     EACH_ICON_COLOR = 0x00; 
                 }
             }
@@ -142,14 +160,14 @@ void Radar_Set_Segment(UCHAR r, UCHAR s, UCHAR state)
     if(r > 5 || s > 3) return;
 
 
-    if(r == 0 || r == 5)      color = COL_GREEN;
+    if(r == 0 || r == 5)      color = COL_RED;
     else if(r == 2 || r == 3) color = COL_RED;
-    else                      color = COL_YELLOW;
+    else                      color = COL_RED;
 
 
     if(state == 0)
     {
-        color = 0x00; 
+        color = COL_WHITE; 
     }
 
     switch(r)
@@ -202,19 +220,19 @@ void Update_Radar_Logic(UCHAR dist_val, char angle, UCHAR blink_state)
             is_target_seg = 0;
 
 
-            if (angle > 30 &&s == 3)
+            if (angle > 30 &&s == 0)
             {
 							is_target_seg = 1;
             }
-            else if(angle>0&&angle<=30&&s==2)
+            else if(angle>0&&angle<=30&&s==1)
             {
 							is_target_seg = 1;
             }
-            else if(angle<=0&&angle>=-30&&s==1)
+            else if(angle<=0&&angle>=-30&&s==2)
             {
 							is_target_seg = 1;
             }
-						else if(angle<-30&&s==0)
+						else if(angle<-30&&s==3)
             {
 							is_target_seg = 1;
             }
@@ -224,7 +242,7 @@ void Update_Radar_Logic(UCHAR dist_val, char angle, UCHAR blink_state)
             }
             else
             {
-                Radar_Set_Segment(r, s, 1);
+                Radar_Set_Segment(r, s, 0x00);
             }
         }
     }
@@ -234,9 +252,9 @@ void Update_Radar_Logic(UCHAR dist_val, char angle, UCHAR blink_state)
 
 void Update_Radar_Distance(UCHAR dist_int, UCHAR dist_dec,UCHAR color)
 {
-		Draw_Big_Number(2, 21, dist_int, color);
-    Draw_Big_Dot(4, 23, color);
-    Draw_Big_Number(2, 24, dist_dec, color);
+		Draw_Big_Number(0, 12, dist_int, color);
+    Draw_Big_Dot(2, 14, color);
+    Draw_Big_Number(0, 15, dist_dec, color);
 }
 
 
@@ -249,10 +267,12 @@ void Draw_All_Radar_Demo(void)
 
     for(r = 0; r < 6; r++)
     {
-        if(r == 0 || r == 5)      color = COL_GREEN; 
-        else if(r == 2 || r == 3) color = COL_RED;
-        else                      color = COL_YELLOW;
-
+//        if(r == 0 || r == 5)      color = COL_GREEN; 
+//        else if(r == 2 || r == 3) color = COL_RED;
+//        else                      color = COL_YELLOW;
+        if(r == 0 || r == 5)      color = COL_WHITE; 
+        else if(r == 2 || r == 3) color = COL_WHITE;
+        else                      color = COL_WHITE;
         switch(r)
         {
             case 0: screen_row = 0; break; 
@@ -295,126 +315,161 @@ void ShowRadarDemo(void)
         UCHAR code R4[] = {'&', 0x12, '&', 0x13, '&', 0x14, '&', 0x15, '&', 0x16, '&', 0x17, 0x00};
         UCHAR code R5[] = {'&', 0x18, '&', 0x19, '&', 0x1A, '&', 0x1B, '&', 0x1C, '&', 0x1D, 0x00};
         UCHAR code R6[] = {'&', 0x1E, '&', 0x1F, '&', 0x20, '&', 0x21, '&', 0x22, '&', 0x23, 0x00};
-			  OsdDrawStr(3, 5, 0x0E, R1);
-        OsdDrawStr(4, 5, 0x0E  ,R2);
-        OsdDrawStr(5, 5, 0x0E , R3);
-        OsdDrawStr(6, 5, 0x0E, R4);
-        OsdDrawStr(7, 5, 0x0E, R5);
-        OsdDrawStr(8, 5, 0x0E, R6);
+			  OsdDrawStr(3, 3, COL_WHITE, R1);
+        OsdDrawStr(4, 3, COL_WHITE  ,R2);
+        OsdDrawStr(5, 3, COL_WHITE , R3);
+        OsdDrawStr(6, 3, COL_WHITE, R4);
+        OsdDrawStr(7, 3, COL_WHITE, R5);
+        OsdDrawStr(8, 3, COL_WHITE, R6);
         Draw_All_Radar_Demo();
         OsdBlockShow(1); 
         DelayMs(50);
-        TurnOnBackLight(); // 此时画面已经准备完美，开灯即成品！
+        TurnOnBackLight(); 
     }
 }
 
 
-void main(void)																 										   
-{  	
-	UCHAR XDATA current_has_signal = 1; 
-  UCHAR XDATA last_has_signal = 2;
-	UCHAR XDATA signal_debounce_cnt = 0;
-	UINT  i = 0;
-	UINT  j = 0;
-	UCHAR XDATA sim_angle = 0;
-	UCHAR XDATA angle_dir = 1; 
-	UCHAR XDATA blink = 0;
-	UCHAR XDATA time_slice = 0; 
-	UCHAR XDATA is_alarm = 0;
 
-  DisableWatchdog();
+void main(void)
+{
+    UCHAR XDATA last_rx_cnt = 0;
+    UCHAR XDATA idle_cnt = 0;
+    UCHAR XDATA current_has_signal = 1; 
+    UCHAR XDATA last_has_signal = 2;
+		UINT  XDATA signal_debounce_cnt = 0;
+    UINT  XDATA blink_timer = 0;
+    UCHAR XDATA is_red_phase = 1;
+    UINT  XDATA timer_limted = 200;
+    float current_range = 0.0;
+    float current_sin_val = 0.0;
+    UCHAR has_target = 0;
+    
+    bit   need_draw = 0; 
+    
+    UCHAR show_int, show_dec, color, seg_state;
 
-	InitSystem();
+    DisableWatchdog();
+    InitSystem();
+    Radar_init_tinyframe();
+    MenuProcessKey(COMD_SelPowerOnMode);
+    ShowRadarDemo();
+    
+    g_RxCnt = 0;
+    g_FrameReady = 0;
+    ES = 1;
+    EA = 1;
+    SetP0_5(1);
+    SetUartPrint();
 
-	printfStr("<<<<<<<<<<<<<<  Welcom to ARK >>>>>>>>>>>>\n");
-
-	MenuProcessKey(COMD_SelPowerOnMode);
-	
-	printfStr("<<<<<<<<<<<<<<  Enter main loop >>>>>>>>>>>>\n");	
-	ShowRadarDemo(); 
-    while(1) { 
-        WDT_CLR = 0xbb; 
-        WDT_CLR = 0x44;
-        WDT_CLR = 0x00;
-		if(IsHlockOk()) 
+    while(1)
+    {
+        blink_timer++;
+        if(blink_timer > timer_limted) 
         {
-            if(signal_debounce_cnt < 20) 
+            blink_timer = 0;
+            is_red_phase = !is_red_phase; 
+
+            if(has_target) need_draw = 1;
+        }
+
+        if (g_RxCnt > 0)
+        {
+            if (g_RxCnt == last_rx_cnt)
             {
-                signal_debounce_cnt++; 
+                idle_cnt++;
+                if (idle_cnt > 20)
+                {
+                    if(parse_radar(g_RxBuf, g_RxCnt, &g_RadarData))
+                    {
+                        if(g_RadarData.user_count > 0)
+                        {
+                            has_target = 1;
+                            current_range = g_RadarData.users[0].range;
+													if(current_range<1){
+													   timer_limted = 50;
+													}else if(current_range>1){
+														 timer_limted = 150;
+													}
+													
+                            current_sin_val = g_RadarData.users[0].sin_value;
+                        }
+                        else
+                        {
+                            has_target = 0;
+                            current_range = 0.0;
+                        }
+                        need_draw = 1;
+                    }
+                    g_RxCnt = 0; last_rx_cnt = 0; idle_cnt = 0;
+                }
             }
+            else { last_rx_cnt = g_RxCnt; idle_cnt = 0; }
         }
-        else
+        if(need_draw)
         {
-           
-            signal_debounce_cnt = 0; 
-        }
+            need_draw = 0;
 
-        if(signal_debounce_cnt >= 20)
-        {
-            current_has_signal = 1;
-        }
-        else
-        {
-            current_has_signal = 0;
-        }
-        // =========================================================
-
-        if(current_has_signal != last_has_signal)
-        {
-            if(current_has_signal == 1)
+            if(has_target)
             {
-                SetVDETestSwitch(VDE_CLOSE); 
+                show_int = (UCHAR)current_range;
+                show_dec = (UCHAR)((current_range - show_int) * 10);
+                if(show_int > 9) show_int=9; if(show_dec > 9) show_dec=9;
+
+                if(current_range < 2.0)
+                {
+									if(current_range<0.4)
+									{
+										SetP0_4(1);
+									}
+									else{
+                    if(is_red_phase) 
+                    {
+                        color = COL_RED;
+                        SetP0_4(1);
+                        seg_state = 1;
+                    }
+                    else
+                    {
+                        color = COL_GREEN; 
+                        SetP0_4(0); 
+                        seg_state = 0;
+                    }
+									}
+                }
+                else
+                {
+                    color = COL_GREEN;
+                    SetP0_4(0);
+                    seg_state = 0;
+                }
+
+                Update_Radar_Distance(show_int, show_dec, color);
+                {
+                    char angle_cmd = 0;
+                    if (current_sin_val > 0.5)      angle_cmd = 40;
+                    else if (current_sin_val > 0)   angle_cmd = 15;
+                    else if (current_sin_val >= -0.5) angle_cmd = -15;
+                    else                            angle_cmd = -40;
+                    Update_Radar_Logic(show_int, angle_cmd, seg_state);
+                }
             }
             else
             {
-                SetVDETestSwitch(VDE_BLACK); 
+                Update_Radar_Distance(0, 0, COL_GREEN);
+                Update_Radar_Logic(0, 0, 0);
+                SetP0_4(0);
             }
+        }
+        
+        if(IsHlockOk()) { if(signal_debounce_cnt < 6000) signal_debounce_cnt++; } 
+        else { signal_debounce_cnt = 0; }
+        if(signal_debounce_cnt >= 6000) current_has_signal = 1; else current_has_signal = 0;
+        if(current_has_signal != last_has_signal) {
+            if(current_has_signal == 1) SetVDETestSwitch(VDE_CLOSE); 
+            else SetVDETestSwitch(VDE_BLACK); 
             last_has_signal = current_has_signal;
         }
-				is_alarm = (j < 2) ? 1 : 0; 
-        if(is_alarm && blink == 0) 
-        {
 
-            Update_Radar_Distance(j, i,0x01); 
-					   Update_Radar_Logic(j, sim_angle, blink);
-					    SetP0_4(1);
-        }
-        else 
-        {
-            Update_Radar_Distance(j, i,0x02); 
-					    SetP0_4(0);
-            Update_Radar_Logic(j, sim_angle, blink);
-        }
-
-        DelayMs(100); 
-
-        blink = !blink;
-
-        time_slice++;
-        if(time_slice >= 6)
-        {
-            time_slice = 0;
-
-            i++;
-            if(i > 9) 
-						{
-							i = 0;
-							j++;
-							if(j>9)
-							{
-								j=0;
-							}
-						}
-
-            sim_angle += (angle_dir * 20);
-            if(sim_angle >= 60) {
-                sim_angle = 60;
-                angle_dir = -1; 
-            }
-            else if(sim_angle <= -60) {
-                sim_angle = -60;
-                angle_dir = 1; 
-            }
-        }
+        DelayMs(1);
     }
 }

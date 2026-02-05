@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 1   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE INTERRUPT
@@ -37,52 +37,68 @@ line level    source
   23          #include "AMT_Reg.h"
   24          #include "ConfigLcdPara.h"
   25          #include "Interrupt.h"
-  26          
-  27          
-  28          
-  29          void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
-  30          {
-  31   1         #ifdef SpiInitPannelEn
+  26          extern UCHAR XDATA g_RxBuf[];
+  27          extern UCHAR XDATA g_RxCnt;
+  28          extern UCHAR XDATA g_RxTimeoutCnt; // ????
+  29          extern bit g_FrameReady;           // ????
+  30          #define RX_BUF_SIZE 128
+  31          
+  32          void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
+  33          {
+  34   1        ES = 0;
+  35   1          if (RI)
+  36   1          {
+  37   2              RI = 0;
+  38   2              if (g_RxCnt < RX_BUF_SIZE) 
+  39   2              {
+  40   3                  g_RxBuf[g_RxCnt++] = SBUF; 
+  41   3              }
+  42   2          }
+  43   1          
+  44   1          if (TI)
+  45   1          {
+  46   2              TI = 0;
+  47   2          }
+  48   1         #ifdef SpiInitPannelEn
                  #ifdef SpiAdjRegEn
                  POS_RecUartSpiInfor();
-                 #endif
-                 #endif
-  36   1      
-  37   1      }
-  38          
-  39          
-  40          /***********************************************************
-  41          *name:       IrqServerTimer1(void)
-  42          *input:      non
-  43          *output:     对系统的实时事件进行检测.
-  44          *update:     2011-12-23 
-  45          *state:      try out
-  46          
-  47          *description:  
-  48                   对系统的实时事件进行检测，并置事件标志。
-  49          *NOTE:
-  50                   这个计数器可以从0-255分频
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 2   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 2   
 
-  51          *history:
-  52          ************************************************************/
-  53          void POS_IrqServerTimer1(void) interrupt 3     //timer 1
-  54          {  
-  55   1          static UCHAR s_ucSysTimer;
-  56   1      
-  57   1        #ifdef LargeSignalEn
+                 #endif
+                 #endif
+  53   1          ES = 1;
+  54   1      }
+  55          
+  56          
+  57          /***********************************************************
+  58          *name:       IrqServerTimer1(void)
+  59          *input:      non
+  60          *output:     对系统的实时事件进行检测.
+  61          *update:     2011-12-23 
+  62          *state:      try out
+  63          
+  64          *description:  
+  65                   对系统的实时事件进行检测，并置事件标志。
+  66          *NOTE:
+  67                   这个计数器可以从0-255分频
+  68          *history:
+  69          ************************************************************/
+  70          void POS_IrqServerTimer1(void) interrupt 3     //timer 1
+  71          {  
+  72   1          static UCHAR s_ucSysTimer;
+  73   1      
+  74   1        #ifdef LargeSignalEn
                 static UCHAR ucContAgcStable = 0;
                 #endif
-  60   1      
-  61   1          TR1  = OFF;
-  62   1        SetTimer1(_ms(5));
-  63   1        TR1  = ON;
-  64   1      
-  65   1        s_ucSysTimer++; 
-  66   1      
-  67   1          POS_VideoProcess(VdLibCmd);
-  68   1      
-  69   1        #ifdef Clk_AdjustEn
+  77   1      
+  78   1          TR1  = OFF;
+  79   1        SetTimer1(_ms(5));
+  80   1        TR1  = ON;
+  81   1      
+  82   1        s_ucSysTimer++; 
+  83   1          POS_VideoProcess(VdLibCmd);
+  84   1      
+  85   1        #ifdef Clk_AdjustEn
                 if(IsSignalOk())
                   { 
                     UINT XDATA wcNoiseLevel = 0;
@@ -110,6 +126,8 @@ line level    source
                      //IrqPrintf("current NoiseLevel = %x\n", wcNoiseLevel);
               
                      if(contClkChange<=10)
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 3   
+
                      {
                            contClkChange++;
                                  if(minWcNoiseLevel>wcNoiseLevel)
@@ -126,8 +144,6 @@ line level    source
                            ANA_DIVA = g_ucPalPllClkDefVal;
                          }
                          else
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 3   
-
                          {
                                      ANA_DIVA = g_ucNtscPllClkDefVal+1;
                            _nop_();
@@ -174,6 +190,8 @@ line level    source
                      s_ucIndex =0;   
                   }
                 }
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 4   
+
                 
                   /*实时监测时钟*/
                 if(IsPAL())
@@ -190,11 +208,9 @@ line level    source
                     ANA_DIVA = g_ucNtscPllClkDefVal;
                   } 
                 }
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 4   
-
                 #endif
- 176   1        
- 177   1        #ifdef GrayBar_DetectEn
+ 192   1        
+ 193   1        #ifdef GrayBar_DetectEn
                   /*灰阶*/
                 if(XBYTE[0XFED0]&_BIT4)
                 {
@@ -207,8 +223,8 @@ line level    source
                    XBYTE[0XFFBA]=0X20;
                 }
                 #endif
- 190   1      
- 191   1        #ifdef Same_Color_AdjustEn
+ 206   1      
+ 207   1        #ifdef Same_Color_AdjustEn
                   if(Is100ms(s_ucSysTimer))
                   { 
                        static XDATA UCHAR contSame = 0 ;
@@ -228,80 +244,82 @@ line level    source
                    }
                 }
                 #endif
- 211   1      
- 212   1        if(Is5ms(s_ucSysTimer))
- 213   1        {
- 214   2            HFZ_LR_BLANK_WR = 0X00;
- 215   2            g_bGetSignalFlg = 1;  
- 216   2            g_bGetUserInputFlg = 1;
- 217   2          g_bGetBatteryAdcFlg = 1;
- 218   2        }
- 219   1          
- 220   1        if(Is20ms(s_ucSysTimer))
- 221   1        {
- 222   2            g_bGetColorSysFlg = 1;
- 223   2        }
- 224   1        if(Is30ms(s_ucSysTimer))
- 225   1        {
- 226   2            g_bGetTimeFlg = 1;
- 227   2            g_bGetUserDefFlg = 1;
- 228   2        }
- 229   1      
- 230   1        /**********图像制式消息处理*********/
- 231   1        if(g_bGetColorSysFlg)
- 232   1        {
- 233   2              #define StableTimes   20
- 234   2      
- 235   2          static UCHAR  s_ucPreSys = PAL;
- 236   2          UCHAR  ucCurSys;
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 5   
+ 227   1      
+ 228   1        if(Is5ms(s_ucSysTimer))
+ 229   1        {
+ 230   2            HFZ_LR_BLANK_WR = 0X00;
+ 231   2            g_bGetSignalFlg = 1;  
+ 232   2            g_bGetUserInputFlg = 1;
+ 233   2          g_bGetBatteryAdcFlg = 1;
+ 234   2        }
+ 235   1          
+ 236   1        if(Is20ms(s_ucSysTimer))
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 5   
 
- 237   2        
- 238   2            if(IsSignalOk()||(0XFF == g_ucColorSys))
- 239   2          {
- 240   3             ucCurSys = GetSignalSys();
- 241   3             if(ucCurSys != s_ucPreSys)
- 242   3               {
- 243   4                  s_ucPreSys = ucCurSys;
- 244   4                  g_ucStableTime = 0;
- 245   4               }
- 246   3             else
- 247   3             {
- 248   4                 if(g_ucStableTime < StableTimes)
- 249   4               {
- 250   5                       if(++g_ucStableTime == StableTimes)
- 251   5                       {
- 252   6                          switch(ucCurSys)
- 253   6                          {
- 254   7                              case 0X00:
- 255   7                       ucCurSys = NTSC;
- 256   7                     break;
- 257   7      
- 258   7                    case 0X01:
- 259   7                       ucCurSys = PAL;
- 260   7                       break;
- 261   7      
- 262   7                    default:
- 263   7                       ucCurSys = PAL;
- 264   7                       break;
- 265   7                          }
- 266   6                 g_ucColorSys = ucCurSys;
- 267   6                       }
- 268   5                 }
- 269   4             }
- 270   3          }
- 271   2          else
- 272   2          {
- 273   3             g_ucStableTime = 0X00;
- 274   3          }
- 275   2        }
- 276   1      
- 277   1        #ifdef SignalChangeBLOffEn
+ 237   1        {
+ 238   2            g_bGetColorSysFlg = 1;
+ 239   2        }
+ 240   1        if(Is30ms(s_ucSysTimer))
+ 241   1        {
+ 242   2            g_bGetTimeFlg = 1;
+ 243   2            g_bGetUserDefFlg = 1;
+ 244   2        }
+ 245   1      
+ 246   1        /**********图像制式消息处理*********/
+ 247   1        if(g_bGetColorSysFlg)
+ 248   1        {
+ 249   2              #define StableTimes   20
+ 250   2      
+ 251   2          static UCHAR  s_ucPreSys = PAL;
+ 252   2          UCHAR  ucCurSys;
+ 253   2        
+ 254   2            if(IsSignalOk()||(0XFF == g_ucColorSys))
+ 255   2          {
+ 256   3             ucCurSys = GetSignalSys();
+ 257   3             if(ucCurSys != s_ucPreSys)
+ 258   3               {
+ 259   4                  s_ucPreSys = ucCurSys;
+ 260   4                  g_ucStableTime = 0;
+ 261   4               }
+ 262   3             else
+ 263   3             {
+ 264   4                 if(g_ucStableTime < StableTimes)
+ 265   4               {
+ 266   5                       if(++g_ucStableTime == StableTimes)
+ 267   5                       {
+ 268   6                          switch(ucCurSys)
+ 269   6                          {
+ 270   7                              case 0X00:
+ 271   7                       ucCurSys = NTSC;
+ 272   7                     break;
+ 273   7      
+ 274   7                    case 0X01:
+ 275   7                       ucCurSys = PAL;
+ 276   7                       break;
+ 277   7      
+ 278   7                    default:
+ 279   7                       ucCurSys = PAL;
+ 280   7                       break;
+ 281   7                          }
+ 282   6                 g_ucColorSys = ucCurSys;
+ 283   6                       }
+ 284   5                 }
+ 285   4             }
+ 286   3          }
+ 287   2          else
+ 288   2          {
+ 289   3             g_ucStableTime = 0X00;
+ 290   3          }
+ 291   2        }
+ 292   1      
+ 293   1        #ifdef SignalChangeBLOffEn
                 #define ContBackLightOff        15
                 #define ContSyncStableTimes       10
               
                 if(g_bBLCtrlEnFlg)
                 {
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 6   
+
                     static UCHAR ucContSignal = 0xff;
               
                   if(g_bPreSignalFlg)
@@ -318,8 +336,6 @@ line level    source
                       }
                     }
                   }
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 6   
-
                   
                   if(g_bPreSignalFlg != IsSignalOk())
                     {
@@ -354,24 +370,26 @@ line level    source
                   }
                 }
                 #endif
- 333   1        
- 334   1        #ifdef NoSignalBLOffEn
- 335   1        if((!IsHlockOk()) || (!IsVlockOk()))
- 336   1          {
- 337   2              if(g_bBackLightFlg)
- 338   2              {
- 339   3                //IrqPutstr("bl off2\n");
- 340   3                #ifdef BacklightEn
- 341   3      //      hw_clrBacklight(); 
- 342   3      //      g_bBackLightFlg = OFF; 
- 343   3                #endif
- 344   3              }
- 345   2        }
- 346   1        #endif
- 347   1      }
- 348          
- 349          
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 7   
+ 349   1        
+ 350   1        #ifdef NoSignalBLOffEn
+ 351   1        if((!IsHlockOk()) || (!IsVlockOk()))
+ 352   1          {
+ 353   2              if(g_bBackLightFlg)
+ 354   2              {
+ 355   3                //IrqPutstr("bl off2\n");
+ 356   3                #ifdef BacklightEn
+ 357   3      //      hw_clrBacklight(); 
+ 358   3      //      g_bBackLightFlg = OFF; 
+ 359   3                #endif
+ 360   3              }
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 7   
+
+ 361   2        }
+ 362   1        #endif
+ 363   1      }
+ 364          
+ 365          
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -434,7 +452,7 @@ MSG_NOSIGNALPOWEROFF . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 8   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -448,6 +466,7 @@ RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+ES . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ACH  1
 MSG_UPK_BRIGHTNESS . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POS_IrqServerRec . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
@@ -457,10 +476,12 @@ g_bGetUserDefFlg . . . . . . . . . . .  PUBLIC   DATA   BIT      0000H  1
 MSG_UPK_RIGHT. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+RI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
 FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
 VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 g_bGetUserInputFlg . . . . . . . . . .  PUBLIC   DATA   BIT      0001H  1
+TI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
 _ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -494,21 +515,23 @@ BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
 VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 9   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
   ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 InputSourceType. . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 MSG_BATTERYADC . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+g_RxBuf. . . . . . . . . . . . . . . .  EXTERN   XDATA  ARRAY    -----  -----
+SBUF . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
 g_bVideoChSelOk. . . . . . . . . . . .  PUBLIC   DATA   BIT      0003H  1
 _POS_VideoProcess. . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 POS_IrqServerTimer1. . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
@@ -535,6 +558,7 @@ _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_RxCnt. . . . . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
 NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 _VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
@@ -554,18 +578,18 @@ CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 11  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 _KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 MSG_CONFIG_COLOR_SYS . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 10  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 _FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -617,18 +641,18 @@ _VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 12  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 TH1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008DH  1
 MSG_UPK_MENU . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 g_bGetBatteryAdcFlg. . . . . . . . . .  PUBLIC   DATA   BIT      0005H  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 11  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 TL1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008BH  1
 INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
@@ -680,18 +704,18 @@ g_ucColorSys . . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0001H  1
 _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 13  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
 LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
 _LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 12  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
   logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
@@ -743,15 +767,19 @@ _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
   yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/05/2026 16:40:37 PAGE 14  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    212    ----
+   CODE SIZE        =    275    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      2    ----
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         02/03/2026 10:50:03 PAGE 13  
-
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      2       1
    IDATA SIZE       =   ----    ----

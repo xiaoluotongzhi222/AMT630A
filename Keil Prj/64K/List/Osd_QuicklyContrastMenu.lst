@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_QUICKLYCONTRASTMENU
@@ -62,7 +62,7 @@ line level    source
   47   1        adjust.Flags |= osdVisible;
   48   1        
   49   1        //printfStr("QuicklyContrastMenu_CheckCondition");
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 2   
 
   50   1        return adjust;
   51   1      }
@@ -126,7 +126,7 @@ line level    source
  109   2            //printf("contrast Adjust Value = %d",g_sysSetting.Video.contrast);
  110   2          }
  111   1        else 
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 3   
 
  112   1        {    
  113   2              switch(opratComd)
@@ -190,7 +190,7 @@ line level    source
  168          };
  169          
  170          
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 4   
 
  171          ItemValueType CODE QuicklyContrastMenuItemVal_QuicklyContrast[]=
  172          {
@@ -243,7 +243,7 @@ line level    source
  218                                     Menu 
  219          *****************************************************************/
  220          
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -306,7 +306,7 @@ ENGLISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DWT_FullText . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -369,7 +369,7 @@ MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -432,7 +432,7 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
 ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -495,7 +495,7 @@ DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -558,7 +558,7 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
   block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -621,7 +621,7 @@ TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   cConditions. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Comd . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -684,7 +684,7 @@ INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 COMD_SaturationInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -747,7 +747,7 @@ PUTOYA . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 13  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -810,7 +810,7 @@ QuicklyContrastMenu_TitelStr . . . . .  PUBLIC   CODE   PROC     0000H  -----
 COMD_BlockRight. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_ContrastInc . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 g_ucContrast . . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/03/2026 10:50:08 PAGE 14  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYCONTRASTMENU                                           02/05/2026 16:40:43 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

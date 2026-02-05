@@ -120,7 +120,7 @@ void SetReset(UCHAR Data)
 *description: 此函数设置SCL、SDA使能。
 *history:   yshuizhou   2014/10/23    1.0    build   this  function
 *****************************************************************************/
-#ifdef UartPrintfEn  
+#ifdef IICPrintfEn  //luo changed
 void SetI2CDebug(void)
 {
    I2C_SCL();
