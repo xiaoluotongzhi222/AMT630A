@@ -357,10 +357,11 @@ void main(void)
     float current_range = 0.0;
     float current_sin_val = 0.0;
     UCHAR has_target = 0;
-    
-    bit   need_draw = 0; 
-    
     UCHAR show_int, show_dec, color, seg_state;
+
+    UINT  adc_debug_val = 0;
+    UCHAR d3, d2, d1, d0;
+    bit   need_draw = 0; 
 
     DisableWatchdog();
     InitSystem();
@@ -377,6 +378,17 @@ void main(void)
 
     while(1)
     {
+			adc_debug_val = POS_EnableChipAdc(0); 
+        
+        d3 = adc_debug_val / 1000;
+        d2 = (adc_debug_val % 1000) / 100;
+        d1 = (adc_debug_val % 100) / 10;
+        d0 = adc_debug_val % 10;
+
+        Draw_Big_Number(0, 12, d3, COL_RED);
+        Draw_Big_Number(0, 15, d2, COL_RED);
+        Draw_Big_Number(0, 18, d1, COL_RED);
+        Draw_Big_Number(0, 21, d0, COL_RED);
         blink_timer++;
         if(blink_timer > timer_limted) 
         {

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 1   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE DIANWEIQIKEYPAD
@@ -62,7 +62,7 @@ line level    source
                  for(i=0; i<Length; i++)
                  {
                     s_offset1 += Abs(AdcBuf[i], AdcBuf[0]);
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 2   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 2   
 
                  }
                 index = 0;
@@ -126,7 +126,7 @@ line level    source
                        这个函数获取ADC各个通道的电位器电压值。 
               
                        
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 3   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 3   
 
               *history:yshuizhou   2011/12/20    0.2    build  this  function 
               ************************************************************/
@@ -190,7 +190,7 @@ line level    source
                          #endif
                          
                         }
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 4   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 4   
 
               
                       if(CH1 == ChannelBuf[AdcChannel])
@@ -254,7 +254,7 @@ line level    source
                              }
                        if(CH2 == ChannelBuf[AdcChannel])
                              {
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 5   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 5   
 
                                 if(Abs(CurrentAdcVal &0X00FF,PreAd2Val &0X00FF) >AdcOffSet)
                                 {
@@ -318,7 +318,7 @@ line level    source
                         {
                          if(ChannelWaitTime < SwtichWaitTime)  
                          {
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 6   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 6   
 
                              if(++ChannelWaitTime == SwtichWaitTime)
                              {   
@@ -382,7 +382,7 @@ line level    source
                      break;
               
               
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 7   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 7   
 
                   default:
                     ChannelStatus = AllChannelInit;
@@ -446,7 +446,7 @@ line level    source
                      printf("the g_uiInitDianWeiQiCH1Val is %x:\r\n",g_uiInitDianWeiQiCH1Val);
                      #endif
               
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 8   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 8   
 
                      }
               
@@ -510,7 +510,7 @@ line level    source
                      g_ucDianWeiQiVal = KeyVal & 0X00FF;
                        break;
                      
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 9   
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 9   
 
                   case ContrastChannel:      // 对比度调节电位器
                        Key.KeyMsg = MSG_UPK_CONTRAST;
@@ -574,7 +574,7 @@ line level    source
                   default:
                       break;
                 }
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 10  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 10  
 
                 return curChannelVal;
               }
@@ -638,7 +638,7 @@ line level    source
                         g_sysSetting.Video.saturation = SelDianWeiQiChannelVal(SaturationChannel)>>1;
                     if(g_sysSetting.Video.saturation > DianWeiQiAdjMaxStep)
                     {
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 11  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 11  
 
                        g_sysSetting.Video.saturation = DianWeiQiAdjMaxStep;
                     }
@@ -698,7 +698,7 @@ line level    source
               
               #endif   //#if KEY_TYPE == DIANWEIQI_KEY
               #endif   //#ifdef KeyDetectEn 
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 12  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -761,7 +761,7 @@ TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 13  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -824,7 +824,7 @@ _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 14  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -887,7 +887,7 @@ DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
 LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 15  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -950,7 +950,7 @@ UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 16  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 16  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1013,7 +1013,7 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
   OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
   xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
-C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/05/2026 17:33:45 PAGE 17  
+C51 COMPILER V9.60.7.0   DIANWEIQIKEYPAD                                                   02/06/2026 11:25:58 PAGE 17  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

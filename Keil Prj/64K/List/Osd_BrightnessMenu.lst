@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_BRIGHTNESSMENU
@@ -62,7 +62,7 @@ line level    source
   48   1        return adjust;
   49   1      }
   50          
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 2   
 
   51          
   52          
@@ -126,7 +126,7 @@ line level    source
  108          DrawGuageType CODE Gugae_Brightness[]=
  109          {
  110            {1,1,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 3   
 
              -_GUAGEBACKCOLOR, MAX_VALUE,GetBrightnessVal,osdEnd},
  111          };
@@ -170,7 +170,7 @@ line level    source
  148          *****************************************************************/
  149          
  150          
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -233,7 +233,7 @@ COMD_BlockDown . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
 PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 _AdjustBrightness. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -296,7 +296,7 @@ TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -359,7 +359,7 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
 ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_OvpBackLight. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -422,7 +422,7 @@ ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
   DrawNumber . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
   DrawGuage. . . . . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
   DrawOption . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -485,7 +485,7 @@ ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 fpDisplayIcon. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -548,7 +548,7 @@ MAX_COLOR. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 KEY_BRIGHTNESS . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -611,7 +611,7 @@ _KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -674,7 +674,7 @@ _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
 LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -737,7 +737,7 @@ KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
 COMD_BlockRight. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_ContrastInc . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/05/2026 17:33:48 PAGE 13  
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                02/06/2026 11:26:00 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

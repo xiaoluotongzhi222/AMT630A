@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_MENU
@@ -62,7 +62,7 @@ line level    source
                       {
                         return NULL_CMD;
                       }
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 2   
 
                     #endif
   52   2      
@@ -126,7 +126,7 @@ line level    source
  110   2              break;
  111   2      
  112   2           case MSG_BATTERYADC:
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 3   
 
  113   2                printfStr("MSG_BATTERYADC");
  114   2              break;
@@ -190,7 +190,7 @@ line level    source
  171          
  172          
  173          BOOL ExectComd(ComdType OpratComd)
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 4   
 
  174          {
  175   1          BOOL OpratComdFlg = TRUE;
@@ -254,7 +254,7 @@ line level    source
  233   3              if(IsPowerOn())
  234   3              {
  235   4                  //printfStr("Osd_PowerOffMenu");
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 5   
 
  236   4                  SetMenuIndex(Osd_PowerOffMenu);
  237   4              }
@@ -318,7 +318,7 @@ line level    source
                         HideMenu();
                         SetVDETestSwitch(VDE_CLOSE);
                         ResetMenuIndex();
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 6   
 
                         InitOSD();       
                         SetMenuIndex(Osd_PowerOnMenu);
@@ -382,7 +382,7 @@ line level    source
  357   3              if(g_ucOsdEixt & OsdBrightness)
  358   3              {
  359   4                OsdBlockEnable(CurrentBlock);
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 7   
 
  360   4                OsdConfigScaler(OsdScalerRatio);
  361   4                DrawOsdMenu();
@@ -446,7 +446,7 @@ line level    source
  419   3              //printfStr("COMD_Saturation");
  420   3              SetMenuIndex(Osd_QuicklySaturationMenu);
  421   3              
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 8   
 
  422   3              #ifdef OsdEn
  423   3              if(g_ucOsdEixt & OsdSaturation)
@@ -510,7 +510,7 @@ line level    source
  481   4                       printfStr("Osd_Logo2Menu");
  482   4                       SetMenuIndex(Osd_LOGO2Menu);
  483   4                       break;
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 9   
 
  484   4                     
  485   4                  case LOGO3:
@@ -574,7 +574,7 @@ line level    source
  543          
  544          void MenuProcessKey(BYTE OpratComd)
  545          {
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 10  
 
  546   1          if (OpratComd)
  547   1          {
@@ -638,7 +638,7 @@ line level    source
  605   1          UCHAR XDATA ucForeColor,ucBackColor;
  606   1        
  607   1          //printfStr("DrawOsdTitel");
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 11  
 
  608   1          while(1)
  609   1          {
@@ -702,7 +702,7 @@ line level    source
  667   3           }
  668   2            if(pIcon->DispalyIcon)
  669   2            {   
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 12  
 
  670   3                OsdDrawIcon(pIcon->XPos, pIcon->YPos,pIcon->XSize, pIcon->YSize,ucBackColor, pIcon->DispalyIcon()
              -);
@@ -766,7 +766,7 @@ line level    source
  726          *input:  pNumberItem  画进度条
  727                   status     状态: 画状态， 选择状态， 
  728          *output: void
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 13  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 13  
 
  729                
  730          *Description: 画进度条
@@ -830,7 +830,7 @@ line level    source
  787   2           {   
  788   3             OsdDrawStr(pOptionItem->XPos, pOptionItem->YPos, COLOR(ucForeColor,ucBackColor),pOptionItem->DisplayT
              -ext());
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 14  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 14  
 
  789   3           }
  790   2        }
@@ -894,7 +894,7 @@ line level    source
  848   2          }
  849   1      
  850   1          //判断是否有个性风格
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 15  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 15  
 
  851   1        if(pMenuItem->DrawItemStyle)
  852   1        {
@@ -958,7 +958,7 @@ line level    source
  910   4            }
  911   3            } 
  912   2          
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 16  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 16  
 
  913   2          if(CurrentMenu->MenuIcons)
  914   2          {   
@@ -1022,7 +1022,7 @@ line level    source
  972   2           {   
  973   3               break;
  974   3           }
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 17  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 17  
 
  975   2          }
  976   1        return g_ucMenuPageIndex;
@@ -1086,7 +1086,7 @@ line level    source
 1034   2              {
 1035   3                   return i;
 1036   3              }
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 18  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 18  
 
 1037   2        }
 1038   1        return 0;
@@ -1150,7 +1150,7 @@ line level    source
 1096   2      
 1097   2          //printf("g_OsdContrller.block0Size = %d", g_OsdContrller.block0Size);
 1098   2          //printf("g_OsdContrller.block1Size = %d", g_OsdContrller.block1Size);
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 19  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 19  
 
 1099   2          //printf("g_OsdContrller.block2Size = %d", g_OsdContrller.block2Size);
 1100   2          //printf("g_OsdContrller.block3Size = %d", g_OsdContrller.block3Size);
@@ -1193,7 +1193,7 @@ line level    source
 1137   2        }
 1138   1      }
 1139          
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 20  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 20  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1256,7 +1256,7 @@ _AdjustQuicklySaturation . . . . . . .  EXTERN   CODE   PROC     -----  -----
 _OsdConfigWndPosition. . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 CommandDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 21  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 21  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1319,7 +1319,7 @@ _UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LOGO2LogoMenu_IconTab. . . . . . . . .  PUBLIC   CODE   ARRAY    04CEH  11
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 22  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 22  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1382,7 +1382,7 @@ DrawGuageType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 23  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 23  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1445,7 +1445,7 @@ QuicklyBrightnessMenu_ItemTab. . . . .  PUBLIC   CODE   ARRAY    0618H  32
 _AdjustQuicklyContrast . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 COMD_OvpBackLight. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 g_OsdContrller . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  10
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 24  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 24  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1508,7 +1508,7 @@ _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 25  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 25  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1571,7 +1571,7 @@ MenuPageType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   MenuTitels . . . . . . . . . . . . .  MEMBER   -----  PTR      0018H  3
   MenuItems. . . . . . . . . . . . . .  MEMBER   -----  PTR      001BH  3
   ItemCount. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   001EH  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 26  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 26  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1634,7 +1634,7 @@ _OsdDrawIcon . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 27  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 27  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1697,7 +1697,7 @@ _BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 28  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 28  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1760,7 +1760,7 @@ QuicklyContrastMenu. . . . . . . . . .  PUBLIC   CODE   STRUCT   06C4H  38
 EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
 _KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 29  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 29  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1823,7 +1823,7 @@ _OsdDrawHex. . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
 _DrawOsdMenuItemOption . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   pOptionItem. . . . . . . . . . . . .  AUTO     DATA   PTR      0000H  3
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 30  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 30  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1886,7 +1886,7 @@ OsdCofigPalette. . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 31  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 31  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -1949,7 +1949,7 @@ DUTCH. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/05/2026 17:33:49 PAGE 32  
+C51 COMPILER V9.60.7.0   OSD_MENU                                                          02/06/2026 11:26:01 PAGE 32  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

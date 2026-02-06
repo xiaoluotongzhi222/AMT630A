@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_POWEROFFMENU
@@ -62,7 +62,7 @@ line level    source
   48          
   49          
   50          /*****************************************************************
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 2   
 
   51                                    Item Icon table
   52          *****************************************************************/
@@ -89,7 +89,7 @@ line level    source
   73                                     Item table
   74          *****************************************************************/
   75          
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 3   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -152,7 +152,7 @@ PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -215,7 +215,7 @@ CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 COMD_IncValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 DrawGuageType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -278,7 +278,7 @@ KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -341,7 +341,7 @@ OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
 _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -404,7 +404,7 @@ Osd_BrightnessMenu . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -467,7 +467,7 @@ OsdBlock4. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 JAPANESE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 KEY_RIGHT. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 _ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -530,7 +530,7 @@ _TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_Contrast. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -593,7 +593,7 @@ fpCheckCondition . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_ContrastDec . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -657,7 +657,7 @@ PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
 fpDrawStyle. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 
 
-C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/05/2026 17:33:47 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_POWEROFFMENU                                                  02/06/2026 11:26:00 PAGE 12  
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   ----    ----
