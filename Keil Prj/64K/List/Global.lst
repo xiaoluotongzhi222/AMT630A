@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 1   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GLOBAL
@@ -62,7 +62,7 @@ line level    source
   48          *history:
   49                                          
   50          ************************************************************/
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 2   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 2   
 
   51          void ConfigMcuCtrl(void)
   52          {
@@ -126,7 +126,7 @@ line level    source
  110   1           g_ucAdjustBrightnessVal = 0XFF;
  111   1           g_ucAdjustContrastVal = 0XFF;
  112   1           g_ucAdjustSaturationVal = 0XFF;
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 3   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 3   
 
  113   1           g_ucBatteryAdcLev = BatterAdc_Lev0;
  114   1           g_uiInitDianWeiQiCH0Val = NULL_KEY;
@@ -190,7 +190,7 @@ line level    source
  172   1        #ifdef SpiInitPannelEn
                   SPI_TM035KDH08_Pannel_Initial(_24BIT_RGB_DEN,0x75);//interface:24BIT_RGB_DEN(default),default VcomVal:
              -0x75
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 4   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 4   
 
                   #endif
  175   1      
@@ -254,14 +254,14 @@ line level    source
  233   1      
  234   1        InitARKChip();
  235   1      
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 5   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 5   
 
  236   1        PrjVersionMsg();
  237   1      
  238   1      }
  239          
  240          
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 6   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -324,7 +324,7 @@ _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 7   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -387,7 +387,7 @@ BULGARIAN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SPANISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MIN_LAG. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 8   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -450,7 +450,7 @@ MSG_OSD_STORAGE. . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BLUE . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MSG_UPK_SATURATION . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MSG_UPK_POWER. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 9   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -513,7 +513,7 @@ DrawOptionType . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  14
   BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 10  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -576,7 +576,7 @@ MenuPageType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   PrevPage . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000CH  1
   CurrentPage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
   NextPage . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000EH  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 11  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -639,7 +639,7 @@ PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MacroKeyVal. . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 g_ucMenuItemIndex. . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 12  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -702,7 +702,7 @@ _VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 13  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -765,7 +765,7 @@ OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 14  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -828,7 +828,7 @@ _sysMsg. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MAX_LANG . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 15  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -892,7 +892,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    282    ----
    CONSTANT SIZE    =    149    ----
    XDATA SIZE       =     58       2
-C51 COMPILER V9.60.7.0   GLOBAL                                                            02/06/2026 11:25:56 PAGE 16  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/02/2026 15:43:07 PAGE 16  
 
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      1    ----

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 1   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CONFIGLCDPARA
@@ -62,7 +62,7 @@ line level    source
   47          {
   48   1          UCHAR XDATA regVal;
   49   1         
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 2   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 2   
 
   50   1          if(ideaDat >= 10)
   51   1          {
@@ -126,7 +126,7 @@ line level    source
  109                   这个函数是配置不同通道的静态参数。      
  110          
  111          *History:  yshuizhou   2011/12/06    0.1    build  this  function
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 3   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 3   
 
  112          ************************************************************/
  113          void ConfigStaticPara(UCHAR CurretSource)
@@ -190,7 +190,7 @@ line level    source
  170          *update:    2013-03-28
  171          *state:     allright
  172          
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 4   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 4   
 
  173          *description:  
  174                   这个函数是用来解决不同客户的一些特殊配置参数。
@@ -254,7 +254,7 @@ line level    source
  231          ************************************************************/
  232          void ConfigDispZoomDynPara(UCHAR currentmode) 
  233          {    
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 5   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 5   
 
  234   1          UCHAR XDATA i;
  235   1      
@@ -290,7 +290,7 @@ line level    source
              -AX_VALUE);
  262   1      }
  263          
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 6   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -353,7 +353,7 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
   Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 7   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -416,7 +416,7 @@ KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 8   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -479,7 +479,7 @@ ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 AV1_sysDynPara . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0544H  40
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 9   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -542,7 +542,7 @@ _VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 10  
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -605,7 +605,7 @@ BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
 KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 11  
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -668,7 +668,7 @@ SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     02/06/2026 11:25:54 PAGE 12  
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
