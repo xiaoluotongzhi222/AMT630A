@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 1   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE INTERRUPT
@@ -62,7 +62,7 @@ line level    source
   48   1         #ifdef SpiInitPannelEn
                  #ifdef SpiAdjRegEn
                  POS_RecUartSpiInfor();
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 2   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 2   
 
                  #endif
                  #endif
@@ -126,7 +126,7 @@ line level    source
                      //IrqPrintf("current NoiseLevel = %x\n", wcNoiseLevel);
               
                      if(contClkChange<=10)
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 3   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 3   
 
                      {
                            contClkChange++;
@@ -190,7 +190,7 @@ line level    source
                      s_ucIndex =0;   
                   }
                 }
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 4   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 4   
 
                 
                   /*ÊµÊ±¼à²âÊ±ÖÓ*/
@@ -254,7 +254,7 @@ line level    source
  234   2        }
  235   1          
  236   1        if(Is20ms(s_ucSysTimer))
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 5   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 5   
 
  237   1        {
  238   2            g_bGetColorSysFlg = 1;
@@ -318,7 +318,7 @@ line level    source
               
                 if(g_bBLCtrlEnFlg)
                 {
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 6   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 6   
 
                     static UCHAR ucContSignal = 0xff;
               
@@ -382,14 +382,14 @@ line level    source
  358   3      //      g_bBackLightFlg = OFF; 
  359   3                #endif
  360   3              }
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 7   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 7   
 
  361   2        }
  362   1        #endif
  363   1      }
  364          
  365          
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 8   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -437,7 +437,7 @@ g_ucStableTime . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -445,19 +445,22 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_NOSIGNALPOWEROFF . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 9   
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
@@ -512,15 +515,15 @@ KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
-VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
-  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 10  
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
@@ -575,15 +578,15 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
 ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
-CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 11  
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 _KeyCmdMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
@@ -638,15 +641,15 @@ _VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
-  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
-  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
-  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 12  
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
+  tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
   ScreeSw. . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 TIME_640MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _AdcChannelType. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
@@ -701,15 +704,15 @@ _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 g_ucColorSys . . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0001H  1
-_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
-  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 13  
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+_DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
+  zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
 LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -737,7 +740,7 @@ SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -745,8 +748,11 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
@@ -761,18 +767,18 @@ g_bGetTimeFlg. . . . . . . . . . . . .  PUBLIC   DATA   BIT      0006H  1
 _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/04/2026 11:31:22 PAGE 14  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
   storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
   alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
   yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   INTERRUPT                                                         03/02/2026 15:43:08 PAGE 14  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
 
 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_BRIGHTNESSMENU
@@ -62,7 +62,7 @@ line level    source
   48   1        return adjust;
   49   1      }
   50          
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 2   
 
   51          
   52          
@@ -126,7 +126,7 @@ line level    source
  108          DrawGuageType CODE Gugae_Brightness[]=
  109          {
  110            {1,1,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM_GUAGEBACKCOLOR,MAINMENU_ITEM_GUAGEFORECOLOR,MAINMENU_ITEM
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 3   
 
              -_GUAGEBACKCOLOR, MAX_VALUE,GetBrightnessVal,osdEnd},
  111          };
@@ -170,7 +170,7 @@ line level    source
  148          *****************************************************************/
  149          
  150          
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -220,7 +220,7 @@ INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TRANSPARENCE . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MSG_UPK_CONTRAST . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  38
+g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  41
 _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -233,7 +233,7 @@ COMD_BlockDown . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
 PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 _AdjustBrightness. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -246,7 +246,7 @@ DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_DecValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -254,8 +254,11 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 AdjustType . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -293,15 +296,15 @@ NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 COMD_IncValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -356,15 +359,15 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   DrawTitelMethod. . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
-ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-COMD_OvpBackLight. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+COMD_OvpBackLight. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DWT_Nothing. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CYAN . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
@@ -419,15 +422,15 @@ BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
-  DrawNumber . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
-  DrawGuage. . . . . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
-  DrawOption . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  DrawNumber . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
+  DrawGuage. . . . . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
+  DrawOption . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
 OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -482,15 +485,15 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
   block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
 ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
-fpDisplayIcon. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+fpDisplayIcon. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_NextMenu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -545,15 +548,15 @@ KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
 _CommandType . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 OsdBlock2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MAX_COLOR. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-KEY_BRIGHTNESS . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+KEY_BRIGHTNESS . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 COMD_OsdExit . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 OsdBlock3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -608,15 +611,15 @@ PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
 _KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -671,15 +674,15 @@ _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
 _LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
   logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -711,7 +714,7 @@ AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 Number_Brightness. . . . . . . . . . .  PUBLIC   CODE   ARRAY    002BH  11
 fpExecFunc . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -719,8 +722,11 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 COMD_BatteryAdc. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_PowerOnMenu. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
@@ -731,18 +737,18 @@ BrightnessMenuStr. . . . . . . . . . .  PUBLIC   CODE   ARRAY    0025H  3
 DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_ContrastMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MultLanguageType . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/04/2026 11:31:25 PAGE 13  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 COMD_BlockRight. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_ContrastInc . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_BRIGHTNESSMENU                                                03/02/2026 15:43:12 PAGE 13  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 _RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 KEY_LEFT . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1

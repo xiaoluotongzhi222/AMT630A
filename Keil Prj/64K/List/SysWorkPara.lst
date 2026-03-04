@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 1   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SYSWORKPARA
@@ -62,7 +62,7 @@ line level    source
   48          
   49          *description:   
   50                 这个函数用来检测系统参数的临界值,如果一旦发现有出错的数据，就会
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 2   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 2   
 
   51               把这个错误的数据恢复为默认值。 
   52          *history:  
@@ -126,7 +126,7 @@ line level    source
  110   1          if((g_sysSetting.OX55 == 0x55) && (g_sysSetting.OXAA == 0xaa))
  111   1          {
  112   2          for(i = 0; i < numOper; i++)
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 3   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 3   
 
  113   2          {
  114   3            tmpCheckSum ^= pSysPara[i];
@@ -190,7 +190,7 @@ line level    source
                 if(ReadSaveFlagEn())
                 { 
                     ClrSaveFlagEn();
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 4   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 4   
 
                   WriteE2promMultByte(E2P_DAT_ADDR, (UCHAR *)&g_sysSetting, sizeof(SysWorkParaType));
                   DelayMs(100);
@@ -227,74 +227,77 @@ line level    source
  206   1        g_sysSetting.Osd.dispTime  = 0;
  207   1        g_sysSetting.Video.ScreeSw = VDE_CLOSE;
  208   1        g_sysSetting.Logo.logoID  = LOGO1;  
- 209   1        SetPowerOn();
- 210   1      }
- 211          
- 212          
- 213          /***********************************************************
- 214          *name:       ReadSetting(void)
- 215          *input:      void
- 216          *output:     BOOL 
- 217          *update:     2011-11-27 
- 218          *state:      allright
- 219          
- 220          *description:   
- 221                     读取系统设置参数
- 222          *history:
- 223                                          
- 224          ************************************************************/
- 225          BOOL ReadSetting(void)
- 226          {
- 227   1      
- 228   1          #ifdef FlashEn
- 229   1        VerifyFlashDate(FLASH_DAT_ADDR);
- 230   1          #endif
- 231   1      
- 232   1        #ifdef E2promEn
+ 209   1        g_sysSetting.shield_dist_idx = 3;
+ 210   1        g_sysSetting.width_limit_idx = 3;
+ 211   1        g_sysSetting.buzzer_en = 1;
+ 212   1        SetPowerOn();
+ 213   1      }
+ 214          
+ 215          
+ 216          /***********************************************************
+ 217          *name:       ReadSetting(void)
+ 218          *input:      void
+ 219          *output:     BOOL 
+ 220          *update:     2011-11-27 
+ 221          *state:      allright
+ 222          
+ 223          *description:   
+ 224                     读取系统设置参数
+ 225          *history:
+ 226                                          
+ 227          ************************************************************/
+ 228          BOOL ReadSetting(void)
+ 229          {
+ 230   1      
+ 231   1          #ifdef FlashEn
+ 232   1        VerifyFlashDate(FLASH_DAT_ADDR);
+ 233   1          #endif
+ 234   1      
+ 235   1        #ifdef E2promEn
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 5   
+
                 VerifyE2promDate(E2P_DAT_ADDR);
                 #endif
- 235   1        
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 5   
-
- 236   1          if(VerifySetting((UCHAR *)&g_sysSetting, (sizeof(SysWorkParaType) - sizeof(UCHAR)), g_sysSetting.xorSu
+ 238   1        
+ 239   1          if(VerifySetting((UCHAR *)&g_sysSetting, (sizeof(SysWorkParaType) - sizeof(UCHAR)), g_sysSetting.xorSu
              -m)) 
- 237   1          {
- 238   2              CheckSetting();
- 239   2          return 1;
- 240   2          }
- 241   1        else
- 242   1        {
- 243   2          #ifdef FlashEn
- 244   2          VerifyFlashDate(FLASH_COPY_ADDR);
- 245   2            #endif
- 246   2      
- 247   2          #ifdef E2promEn
+ 240   1          {
+ 241   2              CheckSetting();
+ 242   2          return 1;
+ 243   2          }
+ 244   1        else
+ 245   1        {
+ 246   2          #ifdef FlashEn
+ 247   2          VerifyFlashDate(FLASH_COPY_ADDR);
+ 248   2            #endif
+ 249   2      
+ 250   2          #ifdef E2promEn
                   VerifyE2promDate(E2P_COPY_ADDR);
                   #endif
- 250   2          
- 251   2          if(VerifySetting((UCHAR *)&g_sysSetting, (sizeof(SysWorkParaType) - sizeof(UCHAR)), g_sysSetting.xorSum)
+ 253   2          
+ 254   2          if(VerifySetting((UCHAR *)&g_sysSetting, (sizeof(SysWorkParaType) - sizeof(UCHAR)), g_sysSetting.xorSum)
              -) 
- 252   2          {
- 253   3            CheckSetting();
- 254   3            return 1;
- 255   3          }
- 256   2          else
- 257   2          {  
- 258   3              ResetSetting();
- 259   3      
- 260   3            #ifdef FlashEn
- 261   3            g_sysSetting.Flash.erase4kComd = Flash_comd[g_ucFlashTpye].FLASH_ERASE_4K;
- 262   3                  g_sysSetting.Flash.unprotectedComd = Flash_comd[g_ucFlashTpye].FLASH_UNPROTECTED_EN;
- 263   3            #endif
- 264   3            
- 265   3            SetSaveFlagEn();
- 266   3              SaveSetting();
- 267   3            return 0;
- 268   3          }
- 269   2        }
- 270   1      }
- 271          
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 6   
+ 255   2          {
+ 256   3            CheckSetting();
+ 257   3            return 1;
+ 258   3          }
+ 259   2          else
+ 260   2          {  
+ 261   3              ResetSetting();
+ 262   3      
+ 263   3            #ifdef FlashEn
+ 264   3            g_sysSetting.Flash.erase4kComd = Flash_comd[g_ucFlashTpye].FLASH_ERASE_4K;
+ 265   3                  g_sysSetting.Flash.unprotectedComd = Flash_comd[g_ucFlashTpye].FLASH_UNPROTECTED_EN;
+ 266   3            #endif
+ 267   3            
+ 268   3            SetSaveFlagEn();
+ 269   3              SaveSetting();
+ 270   3            return 0;
+ 271   3          }
+ 272   2        }
+ 273   1      }
+ 274          
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -339,7 +342,7 @@ INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TRANSPARENCE . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MSG_UPK_CONTRAST . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  38
+g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  41
 _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -356,8 +359,8 @@ DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_DecValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 7   
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -370,8 +373,11 @@ NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 AdjustType . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -417,15 +423,15 @@ LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 DrawGuageType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-  SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 8   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   Length . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   GetValue . . . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
@@ -480,15 +486,15 @@ BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
 fpSetMaxValue. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
-  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 9   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
@@ -543,15 +549,15 @@ _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MenuPageIndexType. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-FRENCH . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-g_bSaveFlag. . . . . . . . . . . . . .  EXTERN   DATA   BIT      -----  1
-VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 10  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+FRENCH . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_bSaveFlag. . . . . . . . . . . . . .  EXTERN   DATA   BIT      -----  1
+VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_QuicklySaturationMenu. . . . . . .  E_CONST  -----  U_CHAR   -----  1
 NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
@@ -606,15 +612,15 @@ _FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-CheckSetting . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 11  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+CheckSetting . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
 COMD_SaturationDec . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -669,15 +675,15 @@ MSG_OSD_EXIT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
-  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 12  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
@@ -732,15 +738,15 @@ KEY_POWER. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 fpDisplayText. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-Osd_QuicklyContrastMenu. . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 13  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+Osd_QuicklyContrastMenu. . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RED. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -795,15 +801,15 @@ fpCheckCondition . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_ContrastDec . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 14  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+TIME_5MS . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 ResetSetting . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
 _sysMsg. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
@@ -816,7 +822,7 @@ BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 fpExecFunc . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -824,8 +830,11 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 COMD_BatteryAdc. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_PowerOnMenu. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _ContSysCheckSum . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
@@ -855,18 +864,18 @@ Flash_comd . . . . . . . . . . . . . .  EXTERN   CODE   ARRAY    -----  -----
 DWT_Text . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 fpGetValue . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 15  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 DUTCH. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
   storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/02/2026 15:43:10 PAGE 15  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
   alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
   yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
@@ -875,7 +884,7 @@ fpDrawStyle. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    553    ----
+   CODE SIZE        =    564    ----
    CONSTANT SIZE    =     36    ----
    XDATA SIZE       =   ----       6
    PDATA SIZE       =   ----    ----

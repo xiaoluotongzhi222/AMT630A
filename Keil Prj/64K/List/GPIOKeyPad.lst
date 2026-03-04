@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 1   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GPIOKEYPAD
@@ -62,7 +62,7 @@ line level    source
                  
                  switch(ScanGPIO%GPIO_KEY_COUNT)
                  {
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 2   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 2   
 
                     case 0:
                         if(GPIO_KEY0 == GPIO_KEY_VALID)
@@ -126,7 +126,7 @@ line level    source
                        {
                           ScanGPIO++;
                         g_bKeyRepeatFlg = FALSE;
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 3   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 3   
 
                         PreKey.PressTime = NULL_TIME;
                               PreKey.KeyMsg = MSG_NULL;
@@ -190,7 +190,7 @@ line level    source
                           }
                               else
                               {
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 4   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 4   
 
                                 if(++PreKey.PressTime == RepeatTime)
                             {
@@ -254,7 +254,7 @@ line level    source
                      if(PreKey.KeyMsg !=Key.KeyMsg)
                      {
                          PreKey.KeyMsg = Key.KeyMsg;
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 5   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 5   
 
                        g_UserInputInfo.Status = inputPress;
                      }
@@ -314,7 +314,7 @@ line level    source
               
               #endif   //#if KEY_TYPE == DIANWEIQI_KEY
               #endif   //#ifdef KeyDetectEn 
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 6   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -355,7 +355,7 @@ SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -363,8 +363,11 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_NOSIGNALPOWEROFF . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -374,15 +377,15 @@ _UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 7   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_UPK_BRIGHTNESS . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -437,15 +440,15 @@ MSG_BATTERYADC . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 VDE_GREEN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_EXT0. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
-  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 8   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -500,15 +503,15 @@ MSG_UPK_LEFT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 9   
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LogoInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  8
   logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
@@ -563,15 +566,15 @@ DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 KEY_SATURATION . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 KEY_POWER. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
-  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 10  
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+  Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -619,22 +622,25 @@ SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
   Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
-  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
-C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/02/2026 15:43:09 PAGE 11  
+C51 COMPILER V9.60.7.0   GPIOKEYPAD                                                        03/04/2026 11:31:23 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1

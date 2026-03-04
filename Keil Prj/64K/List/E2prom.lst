@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 1   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE E2PROM
@@ -62,7 +62,7 @@ line level    source
               start:
               
                 #if 1
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 2   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 2   
 
                 E2pI2CStart(); 
                 E2pI2CWrite(0xa0);
@@ -126,7 +126,7 @@ line level    source
                   E2pACKCheck();
               
                   if(number >= 32)
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 3   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 3   
 
                   {
                     for(j=0;j<32;j++,pos++)
@@ -185,7 +185,7 @@ line level    source
               }
               #endif
  169          
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 4   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -225,7 +225,7 @@ SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -233,8 +233,11 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -245,15 +248,15 @@ _UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
 TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RecProtocolDataType. . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 TIME_40MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 5   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+INPUT_CAMERA_Car . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
 TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -308,15 +311,15 @@ DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
-  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 6   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -371,15 +374,15 @@ TIME_500MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _ColorSysType. . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
-LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 7   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
+LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _ConfigPower . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -434,15 +437,15 @@ PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 EIP. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
 BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
 KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
-  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
-  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 8   
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+_PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -474,7 +477,7 @@ SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -482,8 +485,11 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
@@ -494,18 +500,18 @@ UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 _RecProtocolDataType . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+C51 COMPILER V9.60.7.0   E2PROM                                                            03/04/2026 11:31:21 PAGE 9   
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   defLanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   curlanguage. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
   storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
   alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   xPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
-C51 COMPILER V9.60.7.0   E2PROM                                                            03/02/2026 15:43:07 PAGE 9   
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
   yPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0008H  1
 UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1

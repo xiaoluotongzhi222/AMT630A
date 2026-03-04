@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   45          UCHAR XDATA g_RxBuf[RX_BUF_SIZE];
   46          UCHAR XDATA g_RxCnt = 0;
   47          UCHAR XDATA g_RxTimeoutCnt = 0; 
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 2   
 
   48          bit g_FrameReady = 0;
   49          RadarFrame XDATA g_RadarData;
@@ -126,7 +126,7 @@ line level    source
  104   3                  INDEX_RAM_ADD_H = (curAddr >> 8);
  105   3                  INDEX_RAM_ADD_L = (curAddr & 0xff);
  106   3                  
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 3   
 
  107   3                  if(col < 16) 
  108   3                  {
@@ -190,7 +190,7 @@ line level    source
  166   1      
  167   1      
  168   1          if(state == 0)
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 4   
 
  169   1          {
  170   2              color = COL_WHITE; 
@@ -228,391 +228,457 @@ line level    source
  202   2              
  203   2              if (dist_val > 6) 
  204   2              {
- 205   3                  if (r == 0 || r == 5) is_target_row = 1;
- 206   3              }
- 207   2              else if (dist_val >= 2) 
- 208   2              {
- 209   3                  if (r == 1 || r == 4) is_target_row = 1;
- 210   3              }
- 211   2              else 
- 212   2              {
- 213   3                  if (r == 2 || r == 3) is_target_row = 1;
- 214   3              }
- 215   2      
- 216   2      
- 217   2              for(s = 0; s < 4; s++)
- 218   2              {
- 219   3      
- 220   3                  is_target_seg = 0;
- 221   3      
+ 205   3                  //if (r == 0 || r == 5) is_target_row = 1;
+ 206   3                if (r == 5) is_target_row = 1;
+ 207   3              }
+ 208   2              else if (dist_val >= 2) 
+ 209   2              {
+ 210   3      //            if (r == 1 || r == 4) is_target_row = 1;
+ 211   3                if (r == 4) is_target_row = 1;
+ 212   3              }
+ 213   2              else 
+ 214   2              {
+ 215   3                  //if (r == 2 || r == 3) is_target_row = 1;
+ 216   3                if (r == 3) is_target_row = 1;
+ 217   3              }
+ 218   2      
+ 219   2      
+ 220   2              for(s = 0; s < 4; s++)
+ 221   2              {
  222   3      
- 223   3                  if (angle > 30 &&s == 0)
- 224   3                  {
- 225   4                    is_target_seg = 1;
- 226   4                  }
- 227   3                  else if(angle>0&&angle<=30&&s==1)
- 228   3                  {
- 229   4                    is_target_seg = 1;
- 230   4                  }
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 5   
+ 223   3                  is_target_seg = 0;
+ 224   3      
+ 225   3      
+ 226   3                  if (angle > 30 &&s == 3)
+ 227   3                  {
+ 228   4                    is_target_seg = 1;
+ 229   4                  }
+ 230   3                  else if(angle>0&&angle<=30&&s==2)
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 5   
 
- 231   3                  else if(angle<=0&&angle>=-30&&s==2)
- 232   3                  {
- 233   4                    is_target_seg = 1;
- 234   4                  }
- 235   3                  else if(angle<-30&&s==3)
- 236   3                  {
- 237   4                    is_target_seg = 1;
- 238   4                  }
- 239   3                  if (is_target_row && is_target_seg)
- 240   3                  {
- 241   4                      Radar_Set_Segment(r, s, blink_state);
- 242   4                  }
- 243   3                  else
- 244   3                  {
- 245   4                      Radar_Set_Segment(r, s, 0x00);
- 246   4                  }
- 247   3              }
- 248   2          }
- 249   1      }
- 250          
- 251          
- 252          
- 253          void Update_Radar_Distance(UCHAR dist_int, UCHAR dist_dec,UCHAR color)
- 254          {
- 255   1          UCHAR tens, units;
- 256   1      
- 257   1          tens = dist_int / 10;
- 258   1          units = dist_int % 10;
+ 231   3                  {
+ 232   4                    is_target_seg = 1;
+ 233   4                  }
+ 234   3                  else if(angle<=0&&angle>=-30&&s==1)
+ 235   3                  {
+ 236   4                    is_target_seg = 1;
+ 237   4                  }
+ 238   3                  else if(angle<-30&&s==0)
+ 239   3                  {
+ 240   4                    is_target_seg = 1;
+ 241   4                  }
+ 242   3                  if (is_target_row && is_target_seg)
+ 243   3                  {
+ 244   4                      Radar_Set_Segment(r, s, blink_state);
+ 245   4                  }
+ 246   3                  else
+ 247   3                  {
+ 248   4                      Radar_Set_Segment(r, s, 0x00);
+ 249   4                  }
+ 250   3              }
+ 251   2          }
+ 252   1      }
+ 253          
+ 254          
+ 255          
+ 256          void Update_Radar_Distance(UCHAR dist_int, UCHAR dist_dec,UCHAR color)
+ 257          {
+ 258   1          UCHAR tens, units;
  259   1      
- 260   1          if (dist_int >= 10)
- 261   1          {
- 262   2              Draw_Big_Number(0, 12, tens, color);
- 263   2            
- 264   2          }
- 265   1          else
- 266   1          {
- 267   2              Draw_Big_Number(0, 12, 0, 0x00); 
- 268   2          }
- 269   1          Draw_Big_Number(0, 15, units, color);
- 270   1          Draw_Big_Dot(2, 17, color);
- 271   1          Draw_Big_Number(0, 18, dist_dec, color);
- 272   1      }
- 273          
- 274          
- 275          void Draw_All_Radar_Demo(void)
- 276          {
- 277   1          UCHAR XDATA r, s;
- 278   1          UCHAR XDATA color;
- 279   1          UCHAR XDATA screen_row;
- 280   1      
- 281   1      
- 282   1          for(r = 0; r < 6; r++)
- 283   1          {
- 284   2      //        if(r == 0 || r == 5)      color = COL_GREEN; 
- 285   2      //        else if(r == 2 || r == 3) color = COL_RED;
- 286   2      //        else                      color = COL_YELLOW;
- 287   2              if(r == 0 || r == 5)      color = COL_WHITE; 
- 288   2              else if(r == 2 || r == 3) color = COL_WHITE;
- 289   2              else                      color = COL_WHITE;
- 290   2              switch(r)
- 291   2              {
- 292   3                  case 0: screen_row = 0; break; 
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 6   
+ 260   1          tens = dist_int / 10;
+ 261   1          units = dist_int % 10;
+ 262   1      
+ 263   1          if (dist_int >= 10)
+ 264   1          {
+ 265   2              Draw_Big_Number(0, 12, tens, color);
+ 266   2            
+ 267   2          }
+ 268   1          else
+ 269   1          {
+ 270   2              Draw_Big_Number(0, 12, 0, 0x00); 
+ 271   2          }
+ 272   1          Draw_Big_Number(0, 15, units, color);
+ 273   1          Draw_Big_Dot(2, 17, color);
+ 274   1          Draw_Big_Number(0, 18, dist_dec, color);
+ 275   1      }
+ 276          
+ 277          
+ 278          void Draw_All_Radar_Demo(void)
+ 279          {
+ 280   1          UCHAR XDATA r, s;
+ 281   1          UCHAR XDATA color;
+ 282   1          UCHAR XDATA screen_row;
+ 283   1      
+ 284   1      
+ 285   1          for(r = 0; r < 6; r++)
+ 286   1          {
+ 287   2      //        if(r == 0 || r == 5)      color = COL_GREEN; 
+ 288   2      //        else if(r == 2 || r == 3) color = COL_RED;
+ 289   2      //        else                      color = COL_YELLOW;
+ 290   2              if(r == 0 || r == 5)      color = COL_WHITE; 
+ 291   2              else if(r == 2 || r == 3) color = COL_WHITE;
+ 292   2              else                      color = COL_WHITE;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 6   
 
- 293   3                  case 1: screen_row = 1; break; 
- 294   3                  case 2: screen_row = 2; break; 
- 295   3                  case 3: screen_row = 9; break; 
- 296   3                  case 4: screen_row = 10; break; 
- 297   3                  case 5: screen_row = 11; break; 
- 298   3              }
- 299   2      
- 300   2              for(s = 0; s < 4; s++)
- 301   2              {
- 302   3                  Draw_Radar_Segment(r, s, color, screen_row, WAVE_START_COL);
- 303   3              }
- 304   2          }
- 305   1      }
- 306          UCHAR code STR_DIST_00[] = "DIST 0m  ";
- 307          UCHAR code STR_DIST_10[] = "DIST 1.0m  ";
- 308          UCHAR code STR_DIST_15[] = "DIST 1.5m  ";
- 309          UCHAR code STR_DIST_20[] = "DIST 2.0m  ";
- 310          
- 311          UCHAR code STR_WIDTH_2M[] = "WIDTH 2m   "; 
- 312          UCHAR code STR_WIDTH_4M[] = "WIDTH 4m   ";
- 313          UCHAR code STR_WIDTH_6M[] = "WIDTH 6m   ";
- 314          UCHAR code STR_WIDTH_8M[] = "WIDTH 8m   ";
- 315          
- 316          UCHAR code STR_BUZ_ON[]  = "BUZZER ON  "; 
- 317          UCHAR code STR_BUZ_OFF[] = "BUZZER OFF ";
- 318          UCHAR code STR_CLEAR[] = "           "; 
- 319          UCHAR code * code dist_strs[4]  = {STR_DIST_00, STR_DIST_10, STR_DIST_15, STR_DIST_20};
- 320          UCHAR code * code width_strs[4] = {STR_WIDTH_2M, STR_WIDTH_4M, STR_WIDTH_6M, STR_WIDTH_8M};
- 321          UCHAR code * code buz_strs[2]   = {STR_BUZ_OFF, STR_BUZ_ON};
- 322          
- 323          void ShowRadarDemo(void)
- 324          {
- 325   1          TurnOffBackLight(); 
- 326   1          SetVDETestSwitch(VDE_BLACK);
- 327   1          XBYTE[0xFB5A] = 0x00; 
- 328   1          XBYTE[0xFB5B] = 0x00;
- 329   1          XBYTE[0xFB06] &= ~0x40;
- 330   1          OSD_MIRROR_SET = 0x00; 
- 331   1          OsdBlockEnable(1); 
- 332   1          OsdConfigWndSize(32, 16); 
- 333   1          OsdConfigWndPosition(10, 12); 
- 334   1          OsdBlockClear(1); 
- 335   1          //Init_Split_Screen();
- 336   1          XBYTE[0xFB76] = 16;
- 337   1          XBYTE[0xFB77] = 22;
- 338   1          
- 339   1          {
- 340   2              //car
- 341   2              UCHAR code R1[] = {'&', 0x00, '&', 0x01, '&', 0x02, '&', 0x03, '&', 0x04, '&', 0x05, 0x00};
- 342   2              UCHAR code R2[] = {'&', 0x06, '&', 0x07, '&', 0x08, '&', 0x09, '&', 0x0A, '&', 0x0B, 0x00};
- 343   2              UCHAR code R3[] = {'&', 0x0C, '&', 0x0D, '&', 0x0E, '&', 0x0F, '&', 0x10, '&', 0x11, 0x00};
- 344   2              UCHAR code R4[] = {'&', 0x12, '&', 0x13, '&', 0x14, '&', 0x15, '&', 0x16, '&', 0x17, 0x00};
- 345   2              UCHAR code R5[] = {'&', 0x18, '&', 0x19, '&', 0x1A, '&', 0x1B, '&', 0x1C, '&', 0x1D, 0x00};
- 346   2              UCHAR code R6[] = {'&', 0x1E, '&', 0x1F, '&', 0x20, '&', 0x21, '&', 0x22, '&', 0x23, 0x00};
- 347   2              OsdDrawStr(3, 3, COL_WHITE, R1);
- 348   2              OsdDrawStr(4, 3, COL_WHITE  ,R2);
- 349   2              OsdDrawStr(5, 3, COL_WHITE , R3);
- 350   2              OsdDrawStr(6, 3, COL_WHITE, R4);
- 351   2              OsdDrawStr(7, 3, COL_WHITE, R5);
- 352   2              OsdDrawStr(8, 3, COL_WHITE, R6);
- 353   2              Draw_All_Radar_Demo();
- 354   2              OsdBlockShow(1); 
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 7   
+ 293   2              switch(r)
+ 294   2              {
+ 295   3                  case 0: screen_row = 0; break; 
+ 296   3                  case 1: screen_row = 1; break; 
+ 297   3                  case 2: screen_row = 2; break; 
+ 298   3                  case 3: screen_row = 9; break; 
+ 299   3                  case 4: screen_row = 10; break; 
+ 300   3                  case 5: screen_row = 11; break; 
+ 301   3              }
+ 302   2      
+ 303   2              for(s = 0; s < 4; s++)
+ 304   2              {
+ 305   3                  Draw_Radar_Segment(r, s, color, screen_row, WAVE_START_COL);
+ 306   3              }
+ 307   2          }
+ 308   1      }
+ 309          UCHAR code STR_DIST_00[] = "DIST 0m  ";
+ 310          UCHAR code STR_DIST_10[] = "DIST 1.0m  ";
+ 311          UCHAR code STR_DIST_15[] = "DIST 1.5m  ";
+ 312          UCHAR code STR_DIST_20[] = "DIST 2.0m  ";
+ 313          
+ 314          UCHAR code STR_WIDTH_2M[] = "WIDTH 2m   "; 
+ 315          UCHAR code STR_WIDTH_4M[] = "WIDTH 4m   ";
+ 316          UCHAR code STR_WIDTH_6M[] = "WIDTH 6m   ";
+ 317          UCHAR code STR_WIDTH_8M[] = "WIDTH 8m   ";
+ 318          
+ 319          UCHAR code STR_BUZ_ON[]  = "BUZZER ON  "; 
+ 320          UCHAR code STR_BUZ_OFF[] = "BUZZER OFF ";
+ 321          UCHAR code STR_CLEAR[] = "           "; 
+ 322          UCHAR code * code dist_strs[4]  = {STR_DIST_00, STR_DIST_10, STR_DIST_15, STR_DIST_20};
+ 323          UCHAR code * code width_strs[4] = {STR_WIDTH_2M, STR_WIDTH_4M, STR_WIDTH_6M, STR_WIDTH_8M};
+ 324          UCHAR code * code buz_strs[2]   = {STR_BUZ_OFF, STR_BUZ_ON};
+ 325          
+ 326          void ShowRadarDemo(void)
+ 327          {
+ 328   1          TurnOffBackLight(); 
+ 329   1          SetVDETestSwitch(VDE_BLACK);
+ 330   1          XBYTE[0xFB5A] = 0x00; 
+ 331   1          XBYTE[0xFB5B] = 0x00;
+ 332   1          XBYTE[0xFB06] &= ~0x40;
+ 333   1          OSD_MIRROR_SET = 0x00; 
+ 334   1          OsdBlockEnable(1); 
+ 335   1          OsdConfigWndSize(32, 16); 
+ 336   1          OsdConfigWndPosition(10, 12); 
+ 337   1          OsdBlockClear(1); 
+ 338   1          //Init_Split_Screen();
+ 339   1          XBYTE[0xFB76] = 16;
+ 340   1          XBYTE[0xFB77] = 22;
+ 341   1          
+ 342   1          {
+ 343   2              //car
+ 344   2              UCHAR code R1[] = {'&', 0x00, '&', 0x01, '&', 0x02, '&', 0x03, '&', 0x04, '&', 0x05, 0x00};
+ 345   2              UCHAR code R2[] = {'&', 0x06, '&', 0x07, '&', 0x08, '&', 0x09, '&', 0x0A, '&', 0x0B, 0x00};
+ 346   2              UCHAR code R3[] = {'&', 0x0C, '&', 0x0D, '&', 0x0E, '&', 0x0F, '&', 0x10, '&', 0x11, 0x00};
+ 347   2              UCHAR code R4[] = {'&', 0x12, '&', 0x13, '&', 0x14, '&', 0x15, '&', 0x16, '&', 0x17, 0x00};
+ 348   2              UCHAR code R5[] = {'&', 0x18, '&', 0x19, '&', 0x1A, '&', 0x1B, '&', 0x1C, '&', 0x1D, 0x00};
+ 349   2              UCHAR code R6[] = {'&', 0x1E, '&', 0x1F, '&', 0x20, '&', 0x21, '&', 0x22, '&', 0x23, 0x00};
+ 350   2              OsdDrawStr(3, 3, COL_WHITE, R1);
+ 351   2              OsdDrawStr(4, 3, COL_WHITE  ,R2);
+ 352   2              OsdDrawStr(5, 3, COL_WHITE , R3);
+ 353   2              OsdDrawStr(6, 3, COL_WHITE, R4);
+ 354   2              OsdDrawStr(7, 3, COL_WHITE, R5);
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 7   
 
- 355   2              DelayMs(50);
- 356   2              TurnOnBackLight(); 
- 357   2          }
- 358   1      }
- 359          
- 360          
- 361          
- 362          void main(void)
- 363          {
- 364   1          UCHAR XDATA last_rx_cnt = 0;
- 365   1          UCHAR XDATA idle_cnt = 0;
- 366   1          UCHAR XDATA current_has_signal = 1; 
- 367   1          UCHAR XDATA last_has_signal = 2;
- 368   1          UINT  XDATA signal_debounce_cnt = 0;
- 369   1          UINT  XDATA blink_timer = 0;
- 370   1          UCHAR XDATA is_red_phase = 1;
- 371   1          UINT  XDATA timer_limted = 200;
- 372   1          float current_range = 0.0;
- 373   1          float current_sin_val = 0.0;
- 374   1          UCHAR has_target = 0;
- 375   1          UCHAR show_int, show_dec, color, seg_state;
- 376   1        
- 377   1          UCHAR XDATA current_btn_state = 0;
- 378   1          UCHAR XDATA last_btn_state = 0;
- 379   1          UCHAR XDATA shield_dist_idx = 3;
- 380   1          UCHAR XDATA width_limit_idx = 3; 
- 381   1          bit buzzer_en = 1; 
- 382   1          float lat_dist, fwd_dist_sq; 
- 383   1          float current_half_width, current_shield_dist;
- 384   1          UINT XDATA setting_show_timer = 0;
- 385   1          
- 386   1          UINT  adc_debug_val = 0;
- 387   1          UCHAR d3, d2, d1, d0;
- 388   1          bit   need_draw = 0; 
- 389   1      
- 390   1          DisableWatchdog();
- 391   1          InitSystem();
- 392   1          Radar_init_tinyframe();
- 393   1          MenuProcessKey(COMD_SelPowerOnMode);
- 394   1          ShowRadarDemo();
- 395   1          
- 396   1          g_RxCnt = 0;
- 397   1          g_FrameReady = 0;
- 398   1          ES = 1;
- 399   1          EA = 1;
- 400   1          SetP0_5(1);
- 401   1          SetUartPrint();
- 402   1      
- 403   1          while(1)
- 404   1          {
- 405   2              adc_debug_val = POS_EnableChipAdc(0); 
- 406   2              if (adc_debug_val > 1800 && adc_debug_val < 2250) {
- 407   3                  current_btn_state = 1; 
- 408   3              } else if (adc_debug_val > 2600 && adc_debug_val < 3100) {
- 409   3                  current_btn_state = 2; 
- 410   3              } else if (adc_debug_val > 1100 && adc_debug_val < 1600) {
- 411   3                  current_btn_state = 3; 
- 412   3              } else {
- 413   3                  current_btn_state = 0; 
- 414   3              }
- 415   2      
- 416   2              if (current_btn_state != 0 && last_btn_state == 0) {
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 8   
+ 355   2              OsdDrawStr(8, 3, COL_WHITE, R6);
+ 356   2              Draw_All_Radar_Demo();
+ 357   2              OsdBlockShow(1); 
+ 358   2              DelayMs(50);
+ 359   2              TurnOnBackLight(); 
+ 360   2          }
+ 361   1      }
+ 362          
+ 363          
+ 364          
+ 365          void main(void)
+ 366          {
+ 367   1          UCHAR XDATA last_rx_cnt = 0;
+ 368   1          UCHAR XDATA idle_cnt = 0;
+ 369   1          UCHAR XDATA current_has_signal = 1; 
+ 370   1          UCHAR XDATA last_has_signal = 2;
+ 371   1          UINT  XDATA signal_debounce_cnt = 0;
+ 372   1          UINT  XDATA blink_timer = 0;
+ 373   1          UCHAR XDATA is_red_phase = 1;
+ 374   1          UINT  XDATA timer_limted = 200;
+ 375   1          float current_range = 0.0;
+ 376   1          float current_sin_val = 0.0;
+ 377   1          UCHAR has_target = 0;
+ 378   1          UCHAR show_int, show_dec, color, seg_state;
+ 379   1          
+ 380   1          UCHAR XDATA current_btn_state = 0;
+ 381   1          UCHAR XDATA last_btn_state = 0;
+ 382   1          UINT XDATA target_timeout_cnt = 0;
+ 383   1          
+ 384   1          float lat_dist, fwd_dist_sq; 
+ 385   1          float current_half_width, current_shield_dist;
+ 386   1          UINT XDATA setting_show_timer = 0;
+ 387   1              
+ 388   1          UINT  adc_debug_val = 0;
+ 389   1          UCHAR d3, d2, d1, d0;
+ 390   1          bit   need_draw = 0; 
+ 391   1          UCHAR XDATA i;
+ 392   1          UCHAR XDATA valid_target_count = 0;
+ 393   1          float min_range = 999.0;
+ 394   1          float min_sin = 0.0;
+ 395   1      
+ 396   1          DisableWatchdog();
+ 397   1          InitSystem();
+ 398   1          Radar_init_tinyframe();
+ 399   1          MenuProcessKey(COMD_SelPowerOnMode);
+ 400   1          ShowRadarDemo();
+ 401   1          
+ 402   1          g_RxCnt = 0;
+ 403   1          g_FrameReady = 0;
+ 404   1          ES = 1;
+ 405   1          EA = 1;
+ 406   1          SetP0_5(1);
+ 407   1          SetUartPrint();
+ 408   1      
+ 409   1          while(1)
+ 410   1          {
+ 411   2              adc_debug_val = POS_EnableChipAdc(0); 
+ 412   2              if (adc_debug_val > 1800 && adc_debug_val < 2250) {
+ 413   3                  current_btn_state = 1; 
+ 414   3              } else if (adc_debug_val > 2600 && adc_debug_val < 3100) {
+ 415   3                  current_btn_state = 2; 
+ 416   3              } else if (adc_debug_val > 1100 && adc_debug_val < 1600) {
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 8   
 
- 417   3                  setting_show_timer = 500;
- 418   3                  if (current_btn_state == 1) {
- 419   4                      shield_dist_idx++; if (shield_dist_idx > 3) shield_dist_idx = 0;
- 420   4                      OsdDrawStr(10, 12, COL_WHITE, dist_strs[shield_dist_idx]);
- 421   4                  } else if (current_btn_state == 2) {
- 422   4                      width_limit_idx++; if (width_limit_idx > 3) width_limit_idx = 0;
- 423   4                      OsdDrawStr(10, 12, COL_WHITE, width_strs[width_limit_idx]);
- 424   4                  } else if (current_btn_state == 3) {
- 425   4                      buzzer_en = !buzzer_en;
- 426   4                      OsdDrawStr(10, 12, COL_WHITE, buz_strs[buzzer_en]);
- 427   4                  }
- 428   3              }
- 429   2              last_btn_state = current_btn_state;
- 430   2              if (setting_show_timer > 0) {
- 431   3                  setting_show_timer--;
- 432   3                  if (setting_show_timer == 0) {
- 433   4                      OsdDrawStr(10, 12, COL_WHITE, STR_CLEAR);
- 434   4                  }
- 435   3              }
- 436   2              blink_timer++;
- 437   2              if(blink_timer > timer_limted) 
- 438   2              {
- 439   3                  blink_timer = 0;
- 440   3                  is_red_phase = !is_red_phase; 
- 441   3                  if(has_target) need_draw = 1;
+ 417   3                  current_btn_state = 3; 
+ 418   3              } else {
+ 419   3                  current_btn_state = 0; 
+ 420   3              }
+ 421   2      
+ 422   2              if (current_btn_state != 0 && last_btn_state == 0) {
+ 423   3                  setting_show_timer = 500;
+ 424   3                  if (current_btn_state == 1) {
+ 425   4                      g_sysSetting.shield_dist_idx++; if (g_sysSetting.shield_dist_idx > 3) g_sysSetting.shield_
+             -dist_idx = 0;
+ 426   4                      OsdDrawStr(10, 12, COL_GREEN, dist_strs[g_sysSetting.shield_dist_idx]);
+ 427   4                  } else if (current_btn_state == 2) {
+ 428   4                      g_sysSetting.width_limit_idx++; if (g_sysSetting.width_limit_idx > 3) g_sysSetting.width_l
+             -imit_idx = 0;
+ 429   4                      OsdDrawStr(10, 12, COL_GREEN, width_strs[g_sysSetting.width_limit_idx]);
+ 430   4                  } else if (current_btn_state == 3) {
+ 431   4                      g_sysSetting.buzzer_en = !g_sysSetting.buzzer_en;
+ 432   4                    if(g_sysSetting.buzzer_en)
+ 433   4                    {
+ 434   5                      OsdDrawStr(10, 12, COL_GREEN, buz_strs[g_sysSetting.buzzer_en]);
+ 435   5                    }
+ 436   4                    else
+ 437   4                    {
+ 438   5                      OsdDrawStr(10, 12, COL_WHITE, buz_strs[g_sysSetting.buzzer_en]);
+ 439   5                    }
+ 440   4                      
+ 441   4                  }
  442   3              }
- 443   2      
- 444   2              if (g_RxCnt > 0)
- 445   2              {
- 446   3                  if (g_RxCnt == last_rx_cnt)
- 447   3                  {
- 448   4                      idle_cnt++;
- 449   4                      if (idle_cnt > 20)
- 450   4                      {
- 451   5                          if(parse_radar(g_RxBuf, g_RxCnt, &g_RadarData))
- 452   5                          {
- 453   6                              if(g_RadarData.user_count > 0)
- 454   6                              {
- 455   7                                  has_target = 1;
- 456   7                                  current_range = g_RadarData.users[0].range;
- 457   7                                  current_sin_val = g_RadarData.users[0].sin_value;
- 458   7      
- 459   7                                  lat_dist = current_range * current_sin_val;
- 460   7                                  if (lat_dist < 0) lat_dist = -lat_dist;
- 461   7                                  fwd_dist_sq = (current_range * current_range) - (lat_dist * lat_dist);
- 462   7      
- 463   7                                  current_half_width = (width_limit_idx + 1) * 1.0; 
- 464   7                                  if(shield_dist_idx == 0)
- 465   7                                  {
- 466   8                                    current_shield_dist = 0;
- 467   8                                  }else{
- 468   8                                    current_shield_dist = (shield_dist_idx + 1) * 0.5;
- 469   8                                  }
- 470   7      
- 471   7      
- 472   7                                  if (lat_dist > current_half_width || fwd_dist_sq < (current_shield_dist * curr
-             -ent_shield_dist)) {
- 473   8                                      has_target = 0;
- 474   8                                      current_range = 0.0;
- 475   8                                  }
+ 443   2              last_btn_state = current_btn_state;
+ 444   2              
+ 445   2              if (setting_show_timer > 0) {
+ 446   3                  setting_show_timer--;
+ 447   3                  if (setting_show_timer == 0) {
+ 448   4                      OsdDrawStr(10, 12, COL_WHITE, STR_CLEAR);
+ 449   4                      SetSaveFlagEn();
+ 450   4                      SaveSetting();
+*** WARNING C206 IN LINE 450 OF ..\..\..\Kernel\Main.c: 'SaveSetting': missing function-prototype
+ 451   4                  }
+ 452   3              }
+ 453   2              
+ 454   2              blink_timer++;
+ 455   2              if(blink_timer > timer_limted) 
+ 456   2              {
+ 457   3                  blink_timer = 0;
+ 458   3                  is_red_phase = !is_red_phase; 
+ 459   3                  if(has_target) need_draw = 1;
+ 460   3              }
+ 461   2      
+ 462   2              if (g_RxCnt > 0)
+ 463   2              {
+ 464   3                  if (g_RxCnt == last_rx_cnt)
+ 465   3                  {
+ 466   4                      idle_cnt++;
+ 467   4                      if (idle_cnt > 20)
+ 468   4                      {
+ 469   5                          if(parse_radar(g_RxBuf, g_RxCnt, &g_RadarData))
+ 470   5                          {
+ 471   6                              if(g_RadarData.user_count > 0)
+ 472   6                              {
+ 473   7                                  valid_target_count = 0;
+ 474   7                                  min_range = 999.0;
+ 475   7                                  min_sin = 0.0;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 9   
+
  476   7      
- 477   7                                  if(has_target) {
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 9   
+ 477   7                                  current_half_width = (g_sysSetting.width_limit_idx + 1) * 1.0; 
+ 478   7                                  if(g_sysSetting.shield_dist_idx == 0) {
+ 479   8                                      current_shield_dist = 0;
+ 480   8                                  } else {
+ 481   8                                      current_shield_dist = (g_sysSetting.shield_dist_idx + 1) * 0.5;
+ 482   8                                  }
+ 483   7      
+ 484   7                                  for(i = 0; i < g_RadarData.user_count; i++) 
+ 485   7                                  {
+ 486   8                                      float rng = g_RadarData.users[i].range;
+ 487   8                                      float sin_v = g_RadarData.users[i].sin_value;
+ 488   8      
+ 489   8                                      lat_dist = rng * sin_v;
+ 490   8                                      if (lat_dist < 0) lat_dist = -lat_dist;
+ 491   8                                      fwd_dist_sq = (rng * rng) - (lat_dist * lat_dist);
+ 492   8      
+ 493   8                                      if (!(lat_dist > current_half_width || fwd_dist_sq < (current_shield_dist 
+             -* current_shield_dist))) 
+ 494   8                                      {
+ 495   9                                          valid_target_count++;
+ 496   9                                          
+ 497   9                                          if (rng < min_range) {
+ 498  10                                              min_range = rng;
+ 499  10                                              min_sin = sin_v;
+ 500  10                                          }
+ 501   9                                      }
+ 502   8                                  }
+ 503   7      
+ 504   7                                  if (valid_target_count > 0) 
+ 505   7                                  {
+ 506   8                                      has_target = 1;
+ 507   8                                      target_timeout_cnt = 0;
+ 508   8                                      
+ 509   8                                      current_range = min_range; 
+ 510   8                                      current_sin_val = min_sin;
+ 511   8      
+ 512   8                                      if(current_range < 1.0){
+ 513   9                                         timer_limted = 50;
+ 514   9                                      }else if(current_range > 1.0){
+ 515   9                                         timer_limted = 150;
+ 516   9                                      }
+ 517   8                                  }
+ 518   7                                  else 
+ 519   7                                  {
+ 520   8                                      has_target = 0;
+ 521   8                                      current_range = 0.0;
+ 522   8                                  }
+ 523   7                              }
+ 524   6                              else
+ 525   6                              {
+ 526   7                                  has_target = 0;
+ 527   7                                  current_range = 0.0;
+ 528   7                              }
+ 529   6                              need_draw = 1;
+ 530   6                          }
+ 531   5                          g_RxCnt = 0; last_rx_cnt = 0; idle_cnt = 0;
+ 532   5                      }
+ 533   4                  }
+ 534   3                  else { last_rx_cnt = g_RxCnt; idle_cnt = 0; }
+ 535   3              }
+ 536   2              
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 10  
 
- 478   8                                      if(current_range<1){
- 479   9                                         timer_limted = 50;
- 480   9                                      }else if(current_range>1){
- 481   9                                         timer_limted = 150;
- 482   9                                      }
- 483   8                                  }
- 484   7                              }
- 485   6                              else
- 486   6                              {
- 487   7                                  has_target = 0;
- 488   7                                  current_range = 0.0;
- 489   7                              }
- 490   6                              need_draw = 1;
- 491   6                          }
- 492   5                          g_RxCnt = 0; last_rx_cnt = 0; idle_cnt = 0;
- 493   5                      }
- 494   4                  }
- 495   3                  else { last_rx_cnt = g_RxCnt; idle_cnt = 0; }
- 496   3              }
- 497   2              
- 498   2              if(need_draw)
- 499   2              {
- 500   3                  need_draw = 0;
- 501   3      
- 502   3                  if(has_target)
- 503   3                  {
- 504   4                      show_int = (UCHAR)current_range;
- 505   4                      show_dec = (UCHAR)((current_range - show_int) * 10);
- 506   4                      if(show_int > 99) show_int=99; if(show_dec > 9) show_dec=9;
- 507   4      
- 508   4                      if(current_range < 2.0)
- 509   4                      {
- 510   5                          if(current_range<0.4)
- 511   5                          {
- 512   6                              if (buzzer_en) SetP0_4(1); else SetP0_4(0);
- 513   6                          }
- 514   5                          else{
- 515   6                              if(is_red_phase) 
- 516   6                              {
- 517   7                                  color = COL_RED;
- 518   7                                  if (buzzer_en) SetP0_4(1); else SetP0_4(0);
- 519   7                                  seg_state = 1;
- 520   7                              }
- 521   6                              else
- 522   6                              {
- 523   7                                  color = COL_GREEN; 
- 524   7                                  SetP0_4(0); 
- 525   7                                  seg_state = 0;
- 526   7                              }
- 527   6                          }
- 528   5                      }
- 529   4                      else
- 530   4                      {
- 531   5                          if(is_red_phase){ 
- 532   6                              color = COL_GREEN;
- 533   6                              SetP0_4(0);
- 534   6                              seg_state = 1;
- 535   6                          }else{
- 536   6                              color = COL_GREEN;
- 537   6                              SetP0_4(0);
- 538   6                              seg_state = 0;
- 539   6                          }
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 10  
+ 537   2              if (has_target) {
+ 538   3                  target_timeout_cnt++;
+ 539   3                  if (target_timeout_cnt > 600) {
+ 540   4                      has_target = 0; 
+ 541   4                      current_range = 0.0;
+ 542   4                      need_draw = 1; 
+ 543   4                      target_timeout_cnt = 0;
+ 544   4                  }
+ 545   3              }
+ 546   2              
+ 547   2              if(need_draw)
+ 548   2              {
+ 549   3                  need_draw = 0;
+ 550   3      
+ 551   3                  if(has_target)
+ 552   3                  {
+ 553   4                      show_int = (UCHAR)current_range;
+ 554   4                      show_dec = (UCHAR)((current_range - show_int) * 10);
+ 555   4                      if(show_int > 99) show_int=99; if(show_dec > 9) show_dec=9;
+ 556   4      
+ 557   4                      if(current_range < (2.0 + current_shield_dist))
+ 558   4                      {
+ 559   5                          if(current_range<(0.4 + current_shield_dist))
+ 560   5                          {
+ 561   6                            if (g_sysSetting.buzzer_en) SetP0_4(1); else SetP0_4(0);                      
+ 562   6                            if(is_red_phase) 
+ 563   6                              {
+ 564   7                                  color = COL_RED;
+ 565   7                                  seg_state = 1;
+ 566   7                              }
+ 567   6                              else
+ 568   6                              {
+ 569   7                                  color = COL_GREEN;
+ 570   7                                  seg_state = 0;
+ 571   7                              }
+ 572   6      
+ 573   6                          }
+ 574   5                          else{
+ 575   6                              if(is_red_phase) 
+ 576   6                              {
+ 577   7                                  color = COL_RED;
+ 578   7                                  if (g_sysSetting.buzzer_en) SetP0_4(1); else SetP0_4(0);
+ 579   7                                  seg_state = 1;
+ 580   7                              }
+ 581   6                              else
+ 582   6                              {
+ 583   7                                  color = COL_GREEN; 
+ 584   7                                  SetP0_4(0); 
+ 585   7                                  seg_state = 0;
+ 586   7                              }
+ 587   6                          }
+ 588   5                      }
+ 589   4                      else
+ 590   4                      {
+ 591   5                          if(is_red_phase){ 
+ 592   6                              color = COL_GREEN;
+ 593   6                              SetP0_4(0);
+ 594   6                              seg_state = 1;
+ 595   6                          }else{
+ 596   6                              color = COL_GREEN;
+ 597   6                              SetP0_4(0);
+ 598   6                              seg_state = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 11  
 
- 540   5                      }
- 541   4      
- 542   4                      Update_Radar_Distance(show_int, show_dec, color);
- 543   4                      {
- 544   5                          char angle_cmd = 0;
- 545   5                          if (current_sin_val > 0.5)      angle_cmd = 40;
- 546   5                          else if (current_sin_val > 0)   angle_cmd = 15;
- 547   5                          else if (current_sin_val >= -0.5) angle_cmd = -15;
- 548   5                          else                            angle_cmd = -40;
- 549   5                          Update_Radar_Logic(show_int, angle_cmd, seg_state);
- 550   5                      }
- 551   4                  }
- 552   3                  else
- 553   3                  {
- 554   4                      Update_Radar_Distance(0, 0, COL_GREEN);
- 555   4                      Update_Radar_Logic(0, 0, 0);
- 556   4                      SetP0_4(0);
- 557   4                  }
- 558   3              }
- 559   2              
- 560   2              if(IsHlockOk()) { if(signal_debounce_cnt < 6000) signal_debounce_cnt++; } 
- 561   2              else { signal_debounce_cnt = 0; }
- 562   2              if(signal_debounce_cnt >= 6000) current_has_signal = 1; else current_has_signal = 0;
- 563   2              if(current_has_signal != last_has_signal) {
- 564   3                  if(current_has_signal == 1) SetVDETestSwitch(VDE_CLOSE); 
- 565   3                  else SetVDETestSwitch(VDE_BLACK); 
- 566   3                  last_has_signal = current_has_signal;
- 567   3              }
- 568   2      
- 569   2              DelayMs(1);
- 570   2          }
- 571   1      }
-*** WARNING C280 IN LINE 387 OF ..\..\..\Kernel\Main.c: 'd3': unreferenced local variable
-*** WARNING C280 IN LINE 387 OF ..\..\..\Kernel\Main.c: 'd2': unreferenced local variable
-*** WARNING C280 IN LINE 387 OF ..\..\..\Kernel\Main.c: 'd1': unreferenced local variable
-*** WARNING C280 IN LINE 387 OF ..\..\..\Kernel\Main.c: 'd0': unreferenced local variable
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 11  
+ 599   6                          }
+ 600   5                      }
+ 601   4      
+ 602   4                      Update_Radar_Distance(show_int, show_dec, color);
+ 603   4                      
+ 604   4                      {
+ 605   5                          char angle_cmd = 0;
+ 606   5                          if (current_sin_val > 0.5)      angle_cmd = 40;
+ 607   5                          else if (current_sin_val > 0)   angle_cmd = 15;
+ 608   5                          else if (current_sin_val >= -0.5) angle_cmd = -15;
+ 609   5                          else                            angle_cmd = -40;
+ 610   5                          Update_Radar_Logic(show_int, angle_cmd, seg_state);
+ 611   5                      }
+ 612   4                  }
+ 613   3                  else
+ 614   3                  {
+ 615   4                      Update_Radar_Distance(0, 0, COL_GREEN);
+ 616   4                      Update_Radar_Logic(0, 0, 0);
+ 617   4                      SetP0_4(0);
+ 618   4                  }
+ 619   3              }
+ 620   2              
+ 621   2              if(IsHlockOk()) { if(signal_debounce_cnt < 6000) signal_debounce_cnt++; } 
+ 622   2              else { signal_debounce_cnt = 0; }
+ 623   2              if(signal_debounce_cnt >= 6000) current_has_signal = 1; else current_has_signal = 0;
+ 624   2              if(current_has_signal != last_has_signal) {
+ 625   3                  if(current_has_signal == 1) SetVDETestSwitch(VDE_CLOSE); 
+ 626   3                  else SetVDETestSwitch(VDE_BLACK); 
+ 627   3                  last_has_signal = current_has_signal;
+ 628   3              }
+ 629   2      
+ 630   2              DelayMs(1);
+ 631   2          }
+ 632   1      }
+*** WARNING C280 IN LINE 389 OF ..\..\..\Kernel\Main.c: 'd3': unreferenced local variable
+*** WARNING C280 IN LINE 389 OF ..\..\..\Kernel\Main.c: 'd2': unreferenced local variable
+*** WARNING C280 IN LINE 389 OF ..\..\..\Kernel\Main.c: 'd1': unreferenced local variable
+*** WARNING C280 IN LINE 389 OF ..\..\..\Kernel\Main.c: 'd0': unreferenced local variable
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -675,7 +741,7 @@ PBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 int32_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 COMD_OsdStorage. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_LOGO4Menu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 12  
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -706,6 +772,7 @@ RadarUserData. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  16
 Radar_TF_TYPE. . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 TRANSPARENCE . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MSG_UPK_CONTRAST . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  41
 _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -725,7 +792,7 @@ DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_DecValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -733,17 +800,20 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
-TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-AdjustType . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
-  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 13  
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
+TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+AdjustType . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   XPos . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0001H  1
   YPos . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
 MSG_NOSIGNALPOWEROFF . . . . . . . . .  E_CONST  -----  CHAR     -----  1
@@ -797,16 +867,16 @@ ShowRadarDemo. . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   R3 . . . . . . . . . . . . . . . . .  STATIC   CODE   ARRAY    00B0H  13
   R4 . . . . . . . . . . . . . . . . .  STATIC   CODE   ARRAY    00BDH  13
   R5 . . . . . . . . . . . . . . . . .  STATIC   CODE   ARRAY    00CAH  13
-  R6 . . . . . . . . . . . . . . . . .  STATIC   CODE   ARRAY    00D7H  13
-IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
-BULGARIAN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-SPANISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 14  
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  R6 . . . . . . . . . . . . . . . . .  STATIC   CODE   ARRAY    00D7H  13
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+BULGARIAN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+SPANISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 targetInfo . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  16
   rng. . . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
@@ -860,16 +930,16 @@ TF_Msg . . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  17
   pData. . . . . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
   len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
   userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 000BH  3
-  userdata2. . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 000EH  3
-DrawNumberType . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
-  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 15  
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 16  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  userdata2. . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 000EH  3
+DrawNumberType . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
+  XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
@@ -885,7 +955,9 @@ FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 g_RxTimeoutCnt . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0002H  1
 main . . . . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-  angle_cmd. . . . . . . . . . . . . .  AUTO     XDATA  CHAR     0034H  1
+  rng. . . . . . . . . . . . . . . . .  AUTO     XDATA  FLOAT    003EH  4
+  sin_v. . . . . . . . . . . . . . . .  AUTO     XDATA  FLOAT    0042H  4
+  angle_cmd. . . . . . . . . . . . . .  AUTO     XDATA  CHAR     003EH  1
   last_rx_cnt. . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
   idle_cnt . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0001H  1
   current_has_signal . . . . . . . . .  AUTO     XDATA  U_CHAR   0002H  1
@@ -903,9 +975,7 @@ main . . . . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   seg_state. . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0017H  1
   current_btn_state. . . . . . . . . .  AUTO     XDATA  U_CHAR   0018H  1
   last_btn_state . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0019H  1
-  shield_dist_idx. . . . . . . . . . .  AUTO     XDATA  U_CHAR   001AH  1
-  width_limit_idx. . . . . . . . . . .  AUTO     XDATA  U_CHAR   001BH  1
-  buzzer_en. . . . . . . . . . . . . .  AUTO     DATA   BIT      0000H  1
+  target_timeout_cnt . . . . . . . . .  AUTO     XDATA  U_INT    001AH  2
   lat_dist . . . . . . . . . . . . . .  AUTO     XDATA  FLOAT    001CH  4
   fwd_dist_sq. . . . . . . . . . . . .  AUTO     XDATA  FLOAT    0020H  4
   current_half_width . . . . . . . . .  AUTO     XDATA  FLOAT    0024H  4
@@ -916,9 +986,19 @@ main . . . . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   d2 . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0031H  1
   d1 . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0032H  1
   d0 . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0033H  1
-  need_draw. . . . . . . . . . . . . .  AUTO     DATA   BIT      0001H  1
+  need_draw. . . . . . . . . . . . . .  AUTO     DATA   BIT      0000H  1
+  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0034H  1
+  valid_target_count . . . . . . . . .  AUTO     XDATA  U_CHAR   0035H  1
+  min_range. . . . . . . . . . . . . .  AUTO     XDATA  FLOAT    0036H  4
+  min_sin. . . . . . . . . . . . . . .  AUTO     XDATA  FLOAT    003AH  4
 _MenuProcessKey. . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 ColorType. . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 17  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
 uint32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
 _SetVDETestSwitch. . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
@@ -927,12 +1007,6 @@ RUSSIAN. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_OSD_STORAGE. . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BLUE . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MSG_UPK_SATURATION . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 16  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 MSG_UPK_POWER. . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BatterAdc_Lev0 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -982,6 +1056,12 @@ OneTargetInfoStrTypedef. . . . . . . .  TYPEDEF  -----  STRUCT   -----  16
 IconType . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
   XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 18  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   XSize. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   YSize. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
@@ -990,12 +1070,6 @@ IconType . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
 MSG_BATTERYADC . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 g_RadarData. . . . . . . . . . . . . .  PUBLIC   XDATA  STRUCT   0004H  84
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 17  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 g_RxBuf. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    0058H  128
 SBUF . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
 _TF_Platform_Send. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
@@ -1045,20 +1119,21 @@ OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 19  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TurnOffBackLight . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 MenuPageIndexType. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 FRENCH . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_bSaveFlag. . . . . . . . . . . . . .  EXTERN   DATA   BIT      -----  1
 VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 g_RxCnt. . . . . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   00D8H  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 18  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 Osd_QuicklySaturationMenu. . . . . . .  E_CONST  -----  U_CHAR   -----  1
 NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 Radar_init_tinyframe . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
@@ -1107,6 +1182,12 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
 COMD_TurnOffBackLight. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 20  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 STR_WIDTH_4M . . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    003AH  12
@@ -1116,12 +1197,6 @@ COMD_NextMenu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 19  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 STR_WIDTH_6M . . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0046H  12
 Draw_All_Radar_Demo. . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   r. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
@@ -1170,6 +1245,12 @@ _FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 21  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_SaturationDec . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
@@ -1179,12 +1260,6 @@ TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 _Update_Radar_Distance . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 20  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
   dist_int . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
   dist_dec . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0000H  1
   color. . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0001H  1
@@ -1233,6 +1308,12 @@ Init_Split_Screen. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   wcIndexAddr. . . . . . . . . . . . .  AUTO     XDATA  U_INT    0000H  2
   curAddr. . . . . . . . . . . . . . .  * REG *  DATA   U_INT    0004H  2
   row. . . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0003H  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 22  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   col. . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0002H  1
 OsdBlock4. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 JAPANESE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -1242,12 +1323,6 @@ TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _OsdConfigWndSize. . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 MSG_OSD_EXIT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 21  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 _BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -1296,6 +1371,12 @@ COMD_SaturationInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
 _KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 23  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -1305,12 +1386,6 @@ UartTypeDef. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  20
   STATE. . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0004H  4
   CTRL . . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0008H  4
   INTSTATUS. . . . . . . . . . . . . .  MEMBER   -----  U_LONG   000CH  4
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 22  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
   BAUDDIV. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0010H  4
 OsdGetStartIndexAddr . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
@@ -1359,6 +1434,12 @@ EIP. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
 COMD_TurnOnBackLight . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BLACK. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 YELLOW . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 24  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 TFState_LEN. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
 COMD_Nothing . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -1368,12 +1449,6 @@ KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
 _OsdBlockEnable. . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 TinyFrame_Radar. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  169
   userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 23  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
   usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
   peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
   next_id. . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
@@ -1422,6 +1497,12 @@ _LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
 LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 25  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 fpCheckCondition . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_ContrastDec . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -1431,12 +1512,6 @@ T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
 MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TFState_SOF. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 24  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 _sysMsg. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -1447,7 +1522,7 @@ BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 fpExecFunc . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -1455,8 +1530,11 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 COMD_BatteryAdc. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_PowerOnMenu. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
@@ -1471,6 +1549,7 @@ MultLanguageType . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+SaveSetting. . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  170
   userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
   usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
@@ -1481,6 +1560,12 @@ TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  170
   addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
   id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000EH  2
   len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0010H  2
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 26  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
   payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0012H  64
   rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0052H  2
   cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
@@ -1494,12 +1579,6 @@ TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  170
   soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A2H  1
   sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A3H  3
   uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
-C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2026 15:43:07 PAGE 25  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
   count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
   count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
   count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A9H  1
@@ -1540,14 +1619,16 @@ TF_RENEW . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2782    ----
+   CODE SIZE        =   3182    ----
    CONSTANT SIZE    =    228    ----
-   XDATA SIZE       =    217      84
+   XDATA SIZE       =    217     101
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              03/04/2026 11:31:21 PAGE 27  
+
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =      1       2
+   BIT SIZE         =      1       1
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  9 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  10 WARNING(S),  0 ERROR(S)

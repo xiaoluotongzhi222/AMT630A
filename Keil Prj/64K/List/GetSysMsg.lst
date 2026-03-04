@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 1   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GETSYSMSG
@@ -62,7 +62,7 @@ line level    source
   48          *history:
   49          
   50          ************************************************************/
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 2   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 2   
 
   51          MSG POS_GetUserInputMsg(void)
   52          {
@@ -126,7 +126,7 @@ line level    source
                       }
                     }
                   }
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 3   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 3   
 
                   else
                   {
@@ -190,7 +190,7 @@ line level    source
  172   2            {
  173   3                g_ucPreColorSys = g_ucColorSys;
  174   3            if(g_ucColorSys != NULL_SYS)  
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 4   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 4   
 
  175   3                {
  176   4                  g_sysSetting.Video.colorSys = g_ucColorSys;
@@ -254,7 +254,7 @@ line level    source
                   if(IsPowerOn()&&!IsSignalOk())
                   {
                     if(POS_SysTimeDriver())
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 5   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 5   
 
                     {
                         if(g_ucContBufSecond >= 60)
@@ -318,7 +318,7 @@ line level    source
  296          
  297          /***********************************************************
  298          *name:       POS_GetUserDefinedMsg(timeflg)
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 6   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 6   
 
  299          *input:      timeflg  //定时时间标志
  300          *output:     void 
@@ -382,12 +382,12 @@ line level    source
                   }
                   #endif
  360   2      
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 7   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 7   
 
  361   2        }
  362   1        return MSG_NULL;  
  363   1      }
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 8   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -443,14 +443,14 @@ INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TRANSPARENCE . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MSG_UPK_CONTRAST . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  38
+g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  41
 _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 ENGLISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 9   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -468,7 +468,7 @@ DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_DecValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -476,8 +476,11 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 AdjustType . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -510,15 +513,15 @@ TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
 VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 10  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+_ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -573,15 +576,15 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
-  DrawTitelMethod. . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
-  DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
-  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 11  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  DrawTitelMethod. . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
+  DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
+  Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
 ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_OvpBackLight. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -636,15 +639,15 @@ TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
 _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 12  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
@@ -699,15 +702,15 @@ INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
-  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
-  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
-  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 13  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
 COMD_TurnOffBackLight. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -762,15 +765,15 @@ KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   cConditions. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Comd . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Msg. . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
-  Source . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-_CommandType . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-OsdBlock2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 14  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  Source . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+_CommandType . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+OsdBlock2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MAX_COLOR. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 KEY_BRIGHTNESS . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 TIME_510MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -825,15 +828,15 @@ g_bGetBatteryAdcFlg. . . . . . . . . .  EXTERN   DATA   BIT      -----  1
 INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 COMD_SaturationInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
-_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 15  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
+_KeyMsgMap . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 WriteDataH . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -888,15 +891,15 @@ _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-fpItemIndex. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-PUTOYA . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-g_ucColorSys . . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 16  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 16  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+fpItemIndex. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
+PUTOYA . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+g_ucColorSys . . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
 _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -931,7 +934,7 @@ BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 fpExecFunc . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -939,8 +942,11 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 COMD_BatteryAdc. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_PowerOnMenu. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
@@ -948,18 +954,18 @@ GREEN. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_ContrastMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/04/2026 11:31:22 PAGE 17  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
 MultLanguageType . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 COMD_BlockRight. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_ContrastInc . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/02/2026 15:43:08 PAGE 17  
-
-NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
-====                                    =====   ======  ====    ======  ====
-
-
 POS_GetUserDefinedMsg. . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   timer. . . . . . . . . . . . . . . .  AUTO     DATA   BIT      0000H  1
 VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1

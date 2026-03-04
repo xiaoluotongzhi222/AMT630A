@@ -266,7 +266,10 @@ typedef  struct _sysWorkPara
 	OsdInfoType     Osd;		       //OSD参数  
 	DispInfoType    Disp;
 	LogoInfoType    Logo;
-    UCHAR           OX55;
+	UCHAR shield_dist_idx;
+  UCHAR width_limit_idx;
+  UCHAR buzzer_en;
+  UCHAR           OX55;
 	UCHAR           xorSum;            //系统参数校验和 
 }SysWorkParaType;
 

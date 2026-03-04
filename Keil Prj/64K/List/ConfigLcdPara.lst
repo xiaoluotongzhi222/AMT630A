@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 1   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CONFIGLCDPARA
@@ -62,7 +62,7 @@ line level    source
   47          {
   48   1          UCHAR XDATA regVal;
   49   1         
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 2   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 2   
 
   50   1          if(ideaDat >= 10)
   51   1          {
@@ -126,7 +126,7 @@ line level    source
  109                   这个函数是配置不同通道的静态参数。      
  110          
  111          *History:  yshuizhou   2011/12/06    0.1    build  this  function
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 3   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 3   
 
  112          ************************************************************/
  113          void ConfigStaticPara(UCHAR CurretSource)
@@ -190,7 +190,7 @@ line level    source
  170          *update:    2013-03-28
  171          *state:     allright
  172          
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 4   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 4   
 
  173          *description:  
  174                   这个函数是用来解决不同客户的一些特殊配置参数。
@@ -254,7 +254,7 @@ line level    source
  231          ************************************************************/
  232          void ConfigDispZoomDynPara(UCHAR currentmode) 
  233          {    
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 5   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 5   
 
  234   1          UCHAR XDATA i;
  235   1      
@@ -290,7 +290,7 @@ line level    source
              -AX_VALUE);
  262   1      }
  263          
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 6   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -334,7 +334,7 @@ AMT_PadMuxStaticPara . . . . . . . . .  PUBLIC   CODE   ARRAY    056CH  129
 g_ucAdjustContrastVal. . . . . . . . .  PUBLIC   XDATA  U_CHAR   0000H  1
 INPUT_AV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PAL_M. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  38
+g_sysSetting . . . . . . . . . . . . .  EXTERN   XDATA  STRUCT   -----  41
 _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -348,12 +348,12 @@ SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
   Video. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0006H  9
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 7   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -362,8 +362,11 @@ NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -413,15 +416,15 @@ MAX_VDECOLOR . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 UINT16 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
-  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 8   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
 VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -476,15 +479,15 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
   block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
 ConfigDisplayMode. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
-AV1_sysDynPara . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0544H  40
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 9   
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+CH2. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
+AV1_sysDynPara . . . . . . . . . . . .  PUBLIC   CODE   ARRAY    0544H  40
 CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 VideoChannelPara . . . . . . . . . . .  PUBLIC   CODE   ARRAY    05EDH  40
 INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -539,15 +542,15 @@ TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 10  
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
+  brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+  contrast . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
@@ -602,15 +605,15 @@ VdeOutputType. . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 PAL. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 EIP. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
 BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
-KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
-  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
-  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 11  
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
+  KeyVal . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 g_ucbrightness . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0003H  1
 _PanlSysDynPara. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  10
   addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
@@ -653,7 +656,7 @@ SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -661,19 +664,22 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
-EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
-SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
-  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/02/2026 15:43:06 PAGE 12  
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+C51 COMPILER V9.60.7.0   CONFIGLCDPARA                                                     03/04/2026 11:31:21 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
+EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
+  KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
+  KeyCmd . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 g_ucContrast . . . . . . . . . . . . .  PUBLIC   XDATA  U_CHAR   0005H  1
 VDE_GRAY . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1

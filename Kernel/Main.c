@@ -202,15 +202,18 @@ void Update_Radar_Logic(UCHAR dist_val, char angle, UCHAR blink_state)
         
         if (dist_val > 6) 
         {
-            if (r == 0 || r == 5) is_target_row = 1;
+            //if (r == 0 || r == 5) is_target_row = 1;
+					if (r == 5) is_target_row = 1;
         }
         else if (dist_val >= 2) 
         {
-            if (r == 1 || r == 4) is_target_row = 1;
+//            if (r == 1 || r == 4) is_target_row = 1;
+					if (r == 4) is_target_row = 1;
         }
         else 
         {
-            if (r == 2 || r == 3) is_target_row = 1;
+            //if (r == 2 || r == 3) is_target_row = 1;
+					if (r == 3) is_target_row = 1;
         }
 
 
@@ -220,19 +223,19 @@ void Update_Radar_Logic(UCHAR dist_val, char angle, UCHAR blink_state)
             is_target_seg = 0;
 
 
-            if (angle > 30 &&s == 0)
+            if (angle > 30 &&s == 3)
             {
 							is_target_seg = 1;
             }
-            else if(angle>0&&angle<=30&&s==1)
+            else if(angle>0&&angle<=30&&s==2)
             {
 							is_target_seg = 1;
             }
-            else if(angle<=0&&angle>=-30&&s==2)
+            else if(angle<=0&&angle>=-30&&s==1)
             {
 							is_target_seg = 1;
             }
-						else if(angle<-30&&s==3)
+						else if(angle<-30&&s==0)
             {
 							is_target_seg = 1;
             }
@@ -365,7 +368,7 @@ void main(void)
     UCHAR XDATA idle_cnt = 0;
     UCHAR XDATA current_has_signal = 1; 
     UCHAR XDATA last_has_signal = 2;
-		UINT  XDATA signal_debounce_cnt = 0;
+    UINT  XDATA signal_debounce_cnt = 0;
     UINT  XDATA blink_timer = 0;
     UCHAR XDATA is_red_phase = 1;
     UINT  XDATA timer_limted = 200;
@@ -373,19 +376,22 @@ void main(void)
     float current_sin_val = 0.0;
     UCHAR has_target = 0;
     UCHAR show_int, show_dec, color, seg_state;
-	
+    
     UCHAR XDATA current_btn_state = 0;
     UCHAR XDATA last_btn_state = 0;
-    UCHAR XDATA shield_dist_idx = 3;
-    UCHAR XDATA width_limit_idx = 3; 
-    bit buzzer_en = 1; 
+    UINT XDATA target_timeout_cnt = 0;
+    
     float lat_dist, fwd_dist_sq; 
     float current_half_width, current_shield_dist;
-		UINT XDATA setting_show_timer = 0;
-		
+    UINT XDATA setting_show_timer = 0;
+        
     UINT  adc_debug_val = 0;
     UCHAR d3, d2, d1, d0;
     bit   need_draw = 0; 
+    UCHAR XDATA i;
+    UCHAR XDATA valid_target_count = 0;
+    float min_range = 999.0;
+    float min_sin = 0.0;
 
     DisableWatchdog();
     InitSystem();
@@ -402,7 +408,7 @@ void main(void)
 
     while(1)
     {
-				adc_debug_val = POS_EnableChipAdc(0); 
+        adc_debug_val = POS_EnableChipAdc(0); 
         if (adc_debug_val > 1800 && adc_debug_val < 2250) {
             current_btn_state = 1; 
         } else if (adc_debug_val > 2600 && adc_debug_val < 3100) {
@@ -414,26 +420,38 @@ void main(void)
         }
 
         if (current_btn_state != 0 && last_btn_state == 0) {
-						setting_show_timer = 500;
-						if (current_btn_state == 1) {
-                shield_dist_idx++; if (shield_dist_idx > 3) shield_dist_idx = 0;
-                OsdDrawStr(10, 12, COL_WHITE, dist_strs[shield_dist_idx]);
+            setting_show_timer = 500;
+            if (current_btn_state == 1) {
+                g_sysSetting.shield_dist_idx++; if (g_sysSetting.shield_dist_idx > 3) g_sysSetting.shield_dist_idx = 0;
+                OsdDrawStr(10, 12, COL_GREEN, dist_strs[g_sysSetting.shield_dist_idx]);
             } else if (current_btn_state == 2) {
-                width_limit_idx++; if (width_limit_idx > 3) width_limit_idx = 0;
-                OsdDrawStr(10, 12, COL_WHITE, width_strs[width_limit_idx]);
+                g_sysSetting.width_limit_idx++; if (g_sysSetting.width_limit_idx > 3) g_sysSetting.width_limit_idx = 0;
+                OsdDrawStr(10, 12, COL_GREEN, width_strs[g_sysSetting.width_limit_idx]);
             } else if (current_btn_state == 3) {
-                buzzer_en = !buzzer_en;
-                OsdDrawStr(10, 12, COL_WHITE, buz_strs[buzzer_en]);
+                g_sysSetting.buzzer_en = !g_sysSetting.buzzer_en;
+							if(g_sysSetting.buzzer_en)
+							{
+								OsdDrawStr(10, 12, COL_GREEN, buz_strs[g_sysSetting.buzzer_en]);
+							}
+							else
+							{
+								OsdDrawStr(10, 12, COL_WHITE, buz_strs[g_sysSetting.buzzer_en]);
+							}
+                
             }
         }
         last_btn_state = current_btn_state;
-				if (setting_show_timer > 0) {
+        
+        if (setting_show_timer > 0) {
             setting_show_timer--;
             if (setting_show_timer == 0) {
-								OsdDrawStr(10, 12, COL_WHITE, STR_CLEAR);
+                OsdDrawStr(10, 12, COL_WHITE, STR_CLEAR);
+                SetSaveFlagEn();
+                SaveSetting();
             }
         }
-				blink_timer++;
+        
+        blink_timer++;
         if(blink_timer > timer_limted) 
         {
             blink_timer = 0;
@@ -452,34 +470,55 @@ void main(void)
                     {
                         if(g_RadarData.user_count > 0)
                         {
-                            has_target = 1;
-                            current_range = g_RadarData.users[0].range;
-                            current_sin_val = g_RadarData.users[0].sin_value;
+                            valid_target_count = 0;
+                            min_range = 999.0;
+                            min_sin = 0.0;
 
-                            lat_dist = current_range * current_sin_val;
-                            if (lat_dist < 0) lat_dist = -lat_dist;
-                            fwd_dist_sq = (current_range * current_range) - (lat_dist * lat_dist);
-
-                            current_half_width = (width_limit_idx + 1) * 1.0; 
-													  if(shield_dist_idx == 0)
-														{
-															current_shield_dist = 0;
-														}else{
-														  current_shield_dist = (shield_dist_idx + 1) * 0.5;
-														}
-
-
-                            if (lat_dist > current_half_width || fwd_dist_sq < (current_shield_dist * current_shield_dist)) {
-                                has_target = 0;
-                                current_range = 0.0;
+                            current_half_width = (g_sysSetting.width_limit_idx + 1) * 1.0; 
+                            if(g_sysSetting.shield_dist_idx == 0) {
+                                current_shield_dist = 0;
+                            } else {
+                                current_shield_dist = (g_sysSetting.shield_dist_idx + 1) * 0.5;
                             }
 
-                            if(has_target) {
-                                if(current_range<1){
+                            for(i = 0; i < g_RadarData.user_count; i++) 
+                            {
+                                float rng = g_RadarData.users[i].range;
+                                float sin_v = g_RadarData.users[i].sin_value;
+
+                                lat_dist = rng * sin_v;
+                                if (lat_dist < 0) lat_dist = -lat_dist;
+                                fwd_dist_sq = (rng * rng) - (lat_dist * lat_dist);
+
+                                if (!(lat_dist > current_half_width || fwd_dist_sq < (current_shield_dist * current_shield_dist))) 
+                                {
+                                    valid_target_count++;
+                                    
+                                    if (rng < min_range) {
+                                        min_range = rng;
+                                        min_sin = sin_v;
+                                    }
+                                }
+                            }
+
+                            if (valid_target_count > 0) 
+                            {
+                                has_target = 1;
+                                target_timeout_cnt = 0;
+                                
+                                current_range = min_range; 
+                                current_sin_val = min_sin;
+
+                                if(current_range < 1.0){
                                    timer_limted = 50;
-                                }else if(current_range>1){
+                                }else if(current_range > 1.0){
                                    timer_limted = 150;
                                 }
+                            }
+                            else 
+                            {
+                                has_target = 0;
+                                current_range = 0.0;
                             }
                         }
                         else
@@ -495,6 +534,16 @@ void main(void)
             else { last_rx_cnt = g_RxCnt; idle_cnt = 0; }
         }
         
+        if (has_target) {
+            target_timeout_cnt++;
+            if (target_timeout_cnt > 600) {
+                has_target = 0; 
+                current_range = 0.0;
+                need_draw = 1; 
+                target_timeout_cnt = 0;
+            }
+        }
+        
         if(need_draw)
         {
             need_draw = 0;
@@ -505,17 +554,28 @@ void main(void)
                 show_dec = (UCHAR)((current_range - show_int) * 10);
                 if(show_int > 99) show_int=99; if(show_dec > 9) show_dec=9;
 
-                if(current_range < 2.0)
+                if(current_range < (2.0 + current_shield_dist))
                 {
-                    if(current_range<0.4)
+                    if(current_range<(0.4 + current_shield_dist))
                     {
-                        if (buzzer_en) SetP0_4(1); else SetP0_4(0);
+                      if (g_sysSetting.buzzer_en) SetP0_4(1); else SetP0_4(0);											
+											if(is_red_phase) 
+                        {
+                            color = COL_RED;
+                            seg_state = 1;
+                        }
+                        else
+                        {
+                            color = COL_GREEN;
+                            seg_state = 0;
+                        }
+
                     }
                     else{
                         if(is_red_phase) 
                         {
                             color = COL_RED;
-                            if (buzzer_en) SetP0_4(1); else SetP0_4(0);
+                            if (g_sysSetting.buzzer_en) SetP0_4(1); else SetP0_4(0);
                             seg_state = 1;
                         }
                         else
@@ -540,6 +600,7 @@ void main(void)
                 }
 
                 Update_Radar_Distance(show_int, show_dec, color);
+                
                 {
                     char angle_cmd = 0;
                     if (current_sin_val > 0.5)      angle_cmd = 40;

@@ -206,6 +206,9 @@ void ResetSetting(void)
 	g_sysSetting.Osd.dispTime  = 0;
 	g_sysSetting.Video.ScreeSw = VDE_CLOSE;
 	g_sysSetting.Logo.logoID  = LOGO1;	
+	g_sysSetting.shield_dist_idx = 3;
+  g_sysSetting.width_limit_idx = 3;
+  g_sysSetting.buzzer_en = 1;
 	SetPowerOn();
 }
 

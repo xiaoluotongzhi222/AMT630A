@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 1   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE E2PI2C
@@ -62,7 +62,7 @@ line level    source
                   }   
               } 
               /**********************************************************
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 2   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 2   
 
               *name:    I2CStart(void)
               *input:   non
@@ -126,7 +126,7 @@ line level    source
               {
                   UCHAR loop = 200;
                 
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 3   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 3   
 
                   SetSdaInput();
                 
@@ -190,7 +190,7 @@ line level    source
                 DelayE2pI2c(2);
                 SetScl(1);  
                 DelayE2pI2c(2);
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 4   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 4   
 
                 SetScl(0);  
                 DelayE2pI2c(2);
@@ -254,7 +254,7 @@ line level    source
                   if(GetSda() == 1)
                   {
                     temp = temp | 0x01;
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 5   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 5   
 
                   }
               
@@ -273,7 +273,7 @@ line level    source
  251          
  252          
  253          
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 6   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -308,7 +308,7 @@ SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
+SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -316,8 +316,11 @@ SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 TIME_10MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 AddressDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -333,15 +336,15 @@ INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
-VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 7   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
+VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 _ConfigDisplayMode . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
@@ -396,15 +399,15 @@ _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
 DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 8   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+AUTO . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_VdeOutputType . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
+CH0. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_AV1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CH1. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -459,15 +462,15 @@ TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
-  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 9   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+TIME_225MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+_VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
+  curSource. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   videoType. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   colorSys . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   brigthness . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
@@ -522,15 +525,15 @@ _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/02/2026 15:43:07 PAGE 10  
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  lrAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
+LOGO2. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TIME_21OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
   logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -550,7 +553,7 @@ SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 BatterAdcLevel . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 AdcChannelType . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
+_sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  41
   OXAA . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Power. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0001H  2
   Flash. . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0003H  3
@@ -558,8 +561,11 @@ _sysWorkPara . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  38
   Osd. . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   000FH  9
   Disp . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   0018H  4
   Logo . . . . . . . . . . . . . . . .  MEMBER   -----  STRUCT   001CH  8
-  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
-  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  shield_dist_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0024H  1
+  width_limit_idx. . . . . . . . . . .  MEMBER   -----  U_CHAR   0025H  1
+  buzzer_en. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0026H  1
+  OX55 . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0027H  1
+  xorSum . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0028H  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -583,6 +589,8 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   ----    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/04/2026 11:31:21 PAGE 11  
+
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
