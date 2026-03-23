@@ -13,7 +13,6 @@ typedef struct {
     uint32 power; 
 } RadarUserData;
 
-// ????????
 typedef struct {
     uint32 user_count;
     RadarUserData users[5];
@@ -23,6 +22,6 @@ typedef struct {
 extern TinyFrame_Radar XDATA x_tf; 
 
 void Radar_init_tinyframe(void);
-uint8 parse_radar(const uint8* raw, uint8 raw_len, RadarFrame* out);
+uint8 parse_radar(uint8 rx_byte, RadarFrame* out);
 
 #endif

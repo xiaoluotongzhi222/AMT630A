@@ -128,12 +128,12 @@ typedef struct
 
 typedef uint16_t TF_TICKS;
 typedef uint8_t TF_COUNT;
-#define TF_MAX_PAYLOAD_RX 64  
+#define TF_MAX_PAYLOAD_RX 256  
 #define TF_SENDBUF_LEN 64     
 #define TF_MAX_ID_LST   2
 #define TF_MAX_TYPE_LST 2
 #define TF_MAX_GEN_LST  2
-#define TF_PARSER_TIMEOUT_TICKS 10
+#define TF_PARSER_TIMEOUT_TICKS 60
 
 #define TF_Error(x) 
 

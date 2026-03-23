@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 1   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE FLASH
@@ -62,7 +62,7 @@ line level    source
   48                 不是：等待 
   49          *history:  
   50          *************************************************************************/
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 2   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 2   
 
   51          void CheckIdle(void)
   52          {
@@ -126,7 +126,7 @@ line level    source
  110                    这个函数是用来使能flash unprotected sector.
  111          *history:  
  112          *************************************************************************/
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 3   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 3   
 
  113          void EnableFlashUnprotected(ULONG stAddr)
  114          {
@@ -190,7 +190,7 @@ line level    source
  172   1           while((stAddr != FLASH_DAT_ADDR)&&(stAddr != FLASH_COPY_ADDR))
  173   1           {
  174   2              _nop_();
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 4   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 4   
 
  175   2           }
  176   1         
@@ -254,7 +254,7 @@ line level    source
  234   2        
  235   2            FADDR_REG0_D6 = (UCHAR)(stAddr);
  236   2            FADDR_REG1_D7 = (UCHAR)(stAddr>>8);
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 5   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 5   
 
  237   2            FADDR_REG2_D8 = (UCHAR)(stAddr>>16);
  238   2      
@@ -318,7 +318,7 @@ line level    source
  296   3            }
  297   2            else
  298   2            {
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 6   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 6   
 
  299   3              Length = maxOperNum;
  300   3            }
@@ -382,7 +382,7 @@ line level    source
  358   4      
  359   4                if(!VerifyFlashDate(FLASH_DAT_ADDR))
  360   4                {
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 7   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 7   
 
  361   5                    g_ucFlashTpye = i;
  362   5                break;
@@ -398,7 +398,7 @@ line level    source
  372          
  373          #endif
  374          
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 8   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -461,7 +461,7 @@ TIME_20MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 9   
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -524,7 +524,7 @@ TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
 _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 10  
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -587,7 +587,7 @@ PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 DispInfoType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 11  
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -650,7 +650,7 @@ VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 12  
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -713,7 +713,7 @@ VDE_BLUE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ConfigPower. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 SECAM. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 _VerifyFlashDate . . . . . . . . . . .  PUBLIC   CODE   PROC     0008H  -----
-C51 COMPILER V9.60.7.0   FLASH                                                             03/04/2026 11:31:21 PAGE 13  
+C51 COMPILER V9.60.7.0   FLASH                                                             03/23/2026 15:48:46 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

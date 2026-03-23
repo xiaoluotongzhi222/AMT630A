@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 1   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SYSWORKPARA
@@ -62,7 +62,7 @@ line level    source
   48          
   49          *description:   
   50                 这个函数用来检测系统参数的临界值,如果一旦发现有出错的数据，就会
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 2   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 2   
 
   51               把这个错误的数据恢复为默认值。 
   52          *history:  
@@ -126,7 +126,7 @@ line level    source
  110   1          if((g_sysSetting.OX55 == 0x55) && (g_sysSetting.OXAA == 0xaa))
  111   1          {
  112   2          for(i = 0; i < numOper; i++)
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 3   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 3   
 
  113   2          {
  114   3            tmpCheckSum ^= pSysPara[i];
@@ -190,7 +190,7 @@ line level    source
                 if(ReadSaveFlagEn())
                 { 
                     ClrSaveFlagEn();
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 4   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 4   
 
                   WriteE2promMultByte(E2P_DAT_ADDR, (UCHAR *)&g_sysSetting, sizeof(SysWorkParaType));
                   DelayMs(100);
@@ -254,7 +254,7 @@ line level    source
  233   1          #endif
  234   1      
  235   1        #ifdef E2promEn
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 5   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 5   
 
                 VerifyE2promDate(E2P_DAT_ADDR);
                 #endif
@@ -297,7 +297,7 @@ line level    source
  272   2        }
  273   1      }
  274          
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 6   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -360,7 +360,7 @@ size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_DecValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SysWorkParaType. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  41
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 7   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -423,7 +423,7 @@ LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 DrawGuageType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 8   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -486,7 +486,7 @@ BatterAdc_Lev3 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BOOL . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
 fpSetMaxValue. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 9   
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -549,7 +549,7 @@ _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MenuPageIndexType. . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 10  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -612,7 +612,7 @@ _FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   unprotectedComd. . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 11  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -675,7 +675,7 @@ MSG_OSD_EXIT . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 12  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -738,7 +738,7 @@ KEY_POWER. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 fpDisplayText. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   Type . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 13  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -801,7 +801,7 @@ fpCheckCondition . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_ContrastDec . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LOGO4. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_23OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 14  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -864,7 +864,7 @@ Flash_comd . . . . . . . . . . . . . .  EXTERN   CODE   ARRAY    -----  -----
 DWT_Text . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 fpGetValue . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/04/2026 11:31:24 PAGE 15  
+C51 COMPILER V9.60.7.0   SYSWORKPARA                                                       03/23/2026 15:48:49 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

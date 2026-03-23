@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/04/2026 11:31:23 PAGE 1   
+C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/23/2026 15:48:48 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE PRASE_RADAR
@@ -35,75 +35,72 @@ line level    source
   18   1      
   19   1      }
   20          
-  21          uint8 parse_radar(const uint8* raw, uint8 raw_len, RadarFrame* out) 
+  21          static void extract_radar_payload(const uint8 XDATA *payload, RadarFrame* out)
   22          {
-  23   1          uint8 XDATA i;
-  24   1          int8  XDATA result;
-  25   1          uint32 XDATA k;
-  26   1          
-  27   1          uint32 XDATA range_raw;
-  28   1          int32 XDATA velocity_raw;
-  29   1          int32 XDATA sin_raw;
-  30   1          uint32 XDATA power_raw;
-  31   1          
-  32   1          uint8 XDATA *ptr; 
+  23   1          uint32 XDATA k;
+  24   1          uint32 XDATA range_raw, power_raw;
+  25   1          int32 XDATA velocity_raw, sin_raw;
+  26   1          const uint8 XDATA *ptr; 
+  27   1      
+  28   1      
+  29   1          out->user_count = (uint32)payload[0] | 
+  30   1                            ((uint32)payload[1] << 8) | 
+  31   1                            ((uint32)payload[2] << 16) | 
+  32   1                            ((uint32)payload[3] << 24);
   33   1      
-  34   1          memset(out, 0, sizeof(*out));
-  35   1          for(i = 0; i < raw_len; i++) 
-  36   1          {
-  37   2              result = Radar_TF_AcceptChar(&x_tf, raw[i]);
-  38   2              if(result == 0 && !x_tf.discard_data) 
-  39   2              {
-  40   3                  if(x_tf.type == 0x0A10)
-  41   3                  {
-  42   4                      out->user_count = 0;
-  43   4                  }
-  44   3                  else if(x_tf.type == 0x0A06)
-  45   3                  {
-  46   4                      out->user_count = (uint32)x_tf.payload[0] | 
-  47   4                                        ((uint32)x_tf.payload[1] << 8) | 
-C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/04/2026 11:31:23 PAGE 2   
+  34   1          if(out->user_count > 15) out->user_count = 15;
+  35   1      
+  36   1          ptr = &payload[4];
+  37   1      
+  38   1          for(k = 0; k < out->user_count; k++) 
+  39   1          {
+  40   2              range_raw    = (uint32)ptr[0] | ((uint32)ptr[1]<<8) | ((uint32)ptr[2]<<16) | ((uint32)ptr[3]<<24);
+  41   2              velocity_raw = (int32)((uint32)ptr[4] | ((uint32)ptr[5]<<8) | ((uint32)ptr[6]<<16) | ((uint32)ptr[
+             -7]<<24));
+  42   2              sin_raw      = (int32)((uint32)ptr[8] | ((uint32)ptr[9]<<8) | ((uint32)ptr[10]<<16) | ((uint32)ptr
+             -[11]<<24));
+  43   2              power_raw    = (uint32)ptr[12] | ((uint32)ptr[13]<<8) | ((uint32)ptr[14]<<16) | ((uint32)ptr[15]<<
+             -24);
+  44   2      
+C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/23/2026 15:48:48 PAGE 2   
 
-  48   4                                        ((uint32)x_tf.payload[2] << 16) | 
-  49   4                                        ((uint32)x_tf.payload[3] << 24);
-  50   4                      
-  51   4                      if(out->user_count > 20) out->user_count = 20;
-  52   4      
-  53   4                      ptr = &x_tf.payload[4];
-  54   4      
-  55   4                      for(k = 0; k < out->user_count; k++) 
-  56   4                      {
-  57   5      
-  58   5                          range_raw    = (uint32)ptr[0] | ((uint32)ptr[1]<<8) | ((uint32)ptr[2]<<16) | ((uint32)
-             -ptr[3]<<24);
-  59   5                          velocity_raw = (int32)((uint32)ptr[4] | ((uint32)ptr[5]<<8) | ((uint32)ptr[6]<<16) | (
-             -(uint32)ptr[7]<<24));
-  60   5                          sin_raw      = (int32)((uint32)ptr[8] | ((uint32)ptr[9]<<8) | ((uint32)ptr[10]<<16) | 
-             -((uint32)ptr[11]<<24));
-  61   5                          power_raw    = (uint32)ptr[12] | ((uint32)ptr[13]<<8) | ((uint32)ptr[14]<<16) | ((uint
-             -32)ptr[15]<<24);
-  62   5      
-  63   5      
-  64   5                          if (sin_raw == 0) out->users[k].sin_value = 0.0;
-  65   5                          else              out->users[k].sin_value = (float)sin_raw / 1000.0f;
-  66   5      
-  67   5                          if (velocity_raw == 0) out->users[k].velocity = 0.0;
-  68   5                          else                   out->users[k].velocity = (float)velocity_raw / 1000.0f;
-  69   5      
-  70   5                          if (range_raw == 0) out->users[k].range = 0.0;
-  71   5                          else                out->users[k].range = (float)range_raw / 1000.0f;
-  72   5      
-  73   5                          out->users[k].power = power_raw;
-  74   5      
-  75   5                          ptr += 16;
-  76   5                      }
-  77   4                  }
-  78   3                  return 1;
-  79   3              }
-  80   2          }
-  81   1          return 0; 
-  82   1      }
-C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/04/2026 11:31:23 PAGE 3   
+  45   2              out->users[k].sin_value = (sin_raw == 0) ? 0.0f : ((float)sin_raw / 1000.0f);
+  46   2              out->users[k].velocity  = (velocity_raw == 0) ? 0.0f : ((float)velocity_raw / 1000.0f);
+  47   2              out->users[k].range     = (range_raw == 0) ? 0.0f : ((float)range_raw / 1000.0f);
+  48   2              out->users[k].power     = power_raw;
+  49   2      
+  50   2              ptr += 16;
+  51   2          }
+  52   1      }
+  53          
+  54          
+  55          uint8 parse_radar(uint8 rx_byte, RadarFrame* out) 
+  56          {
+  57   1          int8 XDATA result;
+  58   1      
+  59   1      
+  60   1          result = Radar_TF_AcceptChar(&x_tf, rx_byte);
+  61   1          
+  62   1      
+  63   1          if(result == 0 && !x_tf.discard_data) 
+  64   1          {
+  65   2              if(x_tf.type == 0x0A10)
+  66   2              {
+  67   3      
+  68   3                  memset(out, 0, sizeof(*out));
+  69   3                  out->user_count = 0;
+  70   3                  return 1;
+  71   3              }
+  72   2              else if(x_tf.type == 0x0A06)
+  73   2              {
+  74   3                  memset(out, 0, sizeof(*out));
+  75   3                  extract_radar_payload(x_tf.payload, out);
+  76   3                  return 1; 
+  77   3              }
+  78   2          }
+  79   1          return 0; 
+  80   1      }
+C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/23/2026 15:48:48 PAGE 3   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -134,17 +131,9 @@ TF_Peer. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 int16_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 SBYTE. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 _parse_radar . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-  raw. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
-  raw_len. . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0003H  1
-  out. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0004H  3
-  i. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_CHAR   0007H  1
+  rx_byte. . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+  out. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  3
   result . . . . . . . . . . . . . . .  * REG *  DATA   CHAR     0007H  1
-  k. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0008H  4
-  range_raw. . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   000CH  4
-  velocity_raw . . . . . . . . . . . .  AUTO     XDATA  LONG     0010H  4
-  sin_raw. . . . . . . . . . . . . . .  AUTO     XDATA  LONG     0014H  4
-  power_raw. . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0018H  4
-  ptr. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      001CH  2
 RadarUserData. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  16
   range. . . . . . . . . . . . . . . .  MEMBER   -----  FLOAT    0000H  4
   velocity . . . . . . . . . . . . . .  MEMBER   -----  FLOAT    0004H  4
@@ -156,7 +145,7 @@ PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-TinyFrame. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  170
+TinyFrame. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  362
   userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
   usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
   peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
@@ -166,28 +155,28 @@ TinyFrame. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  170
   addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
   id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000EH  2
   len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0010H  2
-C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/04/2026 11:31:23 PAGE 4   
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0012H  256
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0112H  2
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0114H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0115H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0116H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0118H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0119H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0159H  4
+C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/23/2026 15:48:48 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
-  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0012H  64
-  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0052H  2
-  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
-  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0055H  1
-  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0056H  2
-  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0058H  1
-  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0059H  64
-  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0099H  4
-  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009DH  4
-  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
-  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A2H  1
-  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A3H  3
-  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
-  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
-  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
-  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A9H  1
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   015DH  4
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0161H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0162H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      0163H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0166H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0167H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   0168H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   0169H  1
 TF_ADDR. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 targetInfo . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  16
   rng. . . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
@@ -227,24 +216,33 @@ OneTargetInfoStrTypedef. . . . . . . .  TYPEDEF  -----  STRUCT   -----  16
   ang. . . . . . . . . . . . . . . . .  MEMBER   -----  LONG     0008H  4
   power. . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   000CH  4
 int32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
-x_tf . . . . . . . . . . . . . . . . .  PUBLIC   XDATA  STRUCT   0004H  169
+x_tf . . . . . . . . . . . . . . . . .  PUBLIC   XDATA  STRUCT   0004H  361
 int16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
-C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/04/2026 11:31:23 PAGE 5   
+BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+Radar_init_tinyframe . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+TF_NEXT. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+uart_port_t. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+_extract_radar_payload . . . . . . . .  STATIC   CODE   PROC     0000H  -----
+  payload. . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0000H  2
+  out. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0002H  3
+  k. . . . . . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0005H  4
+C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/23/2026 15:48:48 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
-BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-Radar_init_tinyframe . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-TF_NEXT. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-uart_port_t. . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
+  range_raw. . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   0009H  4
+  power_raw. . . . . . . . . . . . . .  AUTO     XDATA  U_LONG   000DH  4
+  velocity_raw . . . . . . . . . . . .  AUTO     XDATA  LONG     0011H  4
+  sin_raw. . . . . . . . . . . . . . .  AUTO     XDATA  LONG     0015H  4
+  ptr. . . . . . . . . . . . . . . . .  AUTO     XDATA  PTR      0019H  2
 TF_STAY. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 WORD . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 TF_TYPE. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 UINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
-TinyFrame_Radar_ . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  169
+TinyFrame_Radar_ . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  361
   userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
   usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
   peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
@@ -253,27 +251,27 @@ TinyFrame_Radar_ . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  169
   parser_timeout_ticks . . . . . . . .  MEMBER   -----  U_INT    000BH  2
   id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000DH  2
   len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000FH  2
-  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0011H  64
-  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0051H  2
-  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0053H  1
-  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
-  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0055H  2
-  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0057H  1
-  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0058H  64
-  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0098H  4
-  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009CH  4
-  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A0H  1
-  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
-  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A2H  3
-  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A5H  1
-  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
-  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
-  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0011H  256
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0111H  2
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0113H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0114H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0115H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0117H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0118H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0158H  4
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   015CH  4
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0160H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0161H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      0162H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0165H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0166H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   0167H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   0168H  1
 TFState_TYPE . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PUCHAR . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 TF_MASTER. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-t_y. . . . . . . . . . . . . . . . . .  PUBLIC   XDATA  FLOAT    00ADH  4
+t_y. . . . . . . . . . . . . . . . . .  PUBLIC   XDATA  FLOAT    016DH  4
 uint8_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 multTargetInfoStrTypedef . . . . . . .  TYPEDEF  -----  STRUCT   -----  2052
   targetNum. . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
@@ -291,20 +289,20 @@ SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 UART_NUM_MAX . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 int8_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-TF_LEN . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
-C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/04/2026 11:31:23 PAGE 6   
+C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/23/2026 15:48:48 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+TF_LEN . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 RadarFrame . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  84
   user_count . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0000H  4
   users. . . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0004H  80
 TF_State_. . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 TFState_LEN. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
-TinyFrame_Radar. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  169
+TinyFrame_Radar. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  361
   userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
   usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
   peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
@@ -313,29 +311,29 @@ TinyFrame_Radar. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  169
   parser_timeout_ticks . . . . . . . .  MEMBER   -----  U_INT    000BH  2
   id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000DH  2
   len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000FH  2
-  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0011H  64
-  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0051H  2
-  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0053H  1
-  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
-  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0055H  2
-  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0057H  1
-  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0058H  64
-  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0098H  4
-  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009CH  4
-  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A0H  1
-  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
-  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A2H  3
-  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A5H  1
-  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
-  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
-  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
-t_range. . . . . . . . . . . . . . . .  PUBLIC   XDATA  FLOAT    00B1H  4
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0011H  256
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0111H  2
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0113H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0114H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0115H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0117H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0118H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0158H  4
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   015CH  4
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0160H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0161H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      0162H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0165H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0166H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   0167H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   0168H  1
+t_range. . . . . . . . . . . . . . . .  PUBLIC   XDATA  FLOAT    0171H  4
 TF_Sender_Cb . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 TFState_SOF. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 wchar_t. . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 TF_CLOSE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  170
+TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  362
   userdata . . . . . . . . . . . . . .  MEMBER   -----  VOID_PTR 0000H  3
   usertag. . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0003H  4
   peer_bit . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
@@ -345,28 +343,28 @@ TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  170
   addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
   id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000EH  2
   len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0010H  2
-  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0012H  64
-  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0052H  2
-  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0054H  1
-  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0055H  1
-  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0056H  2
-  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0058H  1
-  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0059H  64
-  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0099H  4
-  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   009DH  4
-  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A1H  1
-C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/04/2026 11:31:23 PAGE 7   
+  payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0012H  256
+  rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0112H  2
+  cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0114H  1
+  ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0115H  1
+  type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0116H  2
+  discard_data . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0118H  1
+  sendbuf. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0119H  64
+  tx_pos . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   0159H  4
+  tx_len . . . . . . . . . . . . . . .  MEMBER   -----  U_LONG   015DH  4
+C51 COMPILER V9.60.7.0   PRASE_RADAR                                                       03/23/2026 15:48:48 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
-  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A2H  1
-  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      00A3H  3
-  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A6H  1
-  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A7H  1
-  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   00A8H  1
-  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   00A9H  1
+  tx_cksum . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0161H  1
+  soft_lock. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0162H  1
+  sender_cb. . . . . . . . . . . . . .  MEMBER   -----  PTR      0163H  3
+  uart_port. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0166H  1
+  count_id_lst . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0167H  1
+  count_type_lst . . . . . . . . . . .  MEMBER   -----  U_CHAR   0168H  1
+  count_generic_lst. . . . . . . . . .  MEMBER   -----  U_CHAR   0169H  1
 UCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 TF_SLAVE . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TFState_HEAD_CKSUM . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -379,9 +377,9 @@ TF_RENEW . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1724    ----
+   CODE SIZE        =   1633    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =    181      30
+   XDATA SIZE       =    373      30
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

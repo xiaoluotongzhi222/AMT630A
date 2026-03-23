@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_QUICKLYSATURATIONMENU
@@ -62,7 +62,7 @@ line level    source
   47   1          AdjustType XDATA adjust ={0,0,0};
   48   1        adjust.Flags |= osdVisible;
   49   1        
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 2   
 
   50   1        printfStr("QuicklySaturationMenu_CheckCondition");
   51   1        return adjust;
@@ -126,7 +126,7 @@ line level    source
  109   1        else
  110   1        {    
  111   2              switch(opratComd)
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 3   
 
  112   2              { 
  113   3                 case COMD_SaturationInc:
@@ -190,7 +190,7 @@ line level    source
  168          {
  169               {
  170                  Number_QuicklySaturation,
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 4   
 
  171                  Gugae_QuicklySaturation,
  172                  NULL,   
@@ -235,7 +235,7 @@ line level    source
  210                                     Menu 
  211          *****************************************************************/
  212          
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -298,7 +298,7 @@ CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DWT_FullText . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockDown . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -361,7 +361,7 @@ NULL_SYS . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -424,7 +424,7 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   DrawTitelMethod. . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -487,7 +487,7 @@ BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -550,7 +550,7 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
   block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
   block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -613,7 +613,7 @@ KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   Source . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
 _CommandType . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 OsdBlock2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -676,7 +676,7 @@ COMD_SaturationInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _printfStr . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 g_ucSaturation . . . . . . . . . . . .  EXTERN   XDATA  U_CHAR   -----  1
 PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -739,7 +739,7 @@ _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
 LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 fpItemIndex. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 PUTOYA . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 13  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -802,7 +802,7 @@ EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
 GREEN. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/04/2026 11:31:26 PAGE 14  
+C51 COMPILER V9.60.7.0   OSD_QUICKLYSATURATIONMENU                                         03/23/2026 15:48:52 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

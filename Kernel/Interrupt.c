@@ -24,21 +24,17 @@
 #include "ConfigLcdPara.h"
 #include "Interrupt.h"
 extern UCHAR XDATA g_RxBuf[];
-extern UCHAR XDATA g_RxCnt;
-extern UCHAR XDATA g_RxTimeoutCnt; // ????
-extern bit g_FrameReady;           // ????
-#define RX_BUF_SIZE 128
+extern UCHAR volatile XDATA g_RxHead;
+extern UCHAR volatile XDATA g_RxTail;         
+#define RX_BUF_SIZE 256
 
 void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
 {
-	ES = 0;
     if (RI)
     {
-        RI = 0;
-        if (g_RxCnt < RX_BUF_SIZE) 
-        {
-            g_RxBuf[g_RxCnt++] = SBUF; 
-        }
+				RI = 0;
+        g_RxBuf[g_RxHead] = SBUF; 
+        g_RxHead = (g_RxHead + 1) % RX_BUF_SIZE; 
     }
     
     if (TI)
@@ -50,7 +46,6 @@ void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
    POS_RecUartSpiInfor();
    #endif
    #endif
-		ES = 1;
 }
 
 

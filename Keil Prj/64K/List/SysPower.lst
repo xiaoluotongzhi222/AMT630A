@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 1   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SYSPOWER
@@ -62,7 +62,7 @@ line level    source
   48   1        #ifdef PowerLedEn
                 hw_setGreenLEDOn();
                 hw_setRedLEDOff();
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 2   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 2   
 
                 #endif
   52   1      
@@ -126,7 +126,7 @@ line level    source
  110          
  111          *history: Jordan.chen   2011/12/16    0.1    transplant   this  function
  112          *****************************************************************************/
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 3   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 3   
 
  113          BOOL PowerOffSystem(void)
  114          {  
@@ -146,7 +146,7 @@ line level    source
  128   1          return 1;
  129   1      }
  130          
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 4   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -209,7 +209,7 @@ SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 size_t . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_INT    -----  2
 PUINT. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 5   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -272,7 +272,7 @@ CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 g_bBLCtrlEnFlg . . . . . . . . . . . .  EXTERN   DATA   BIT      -----  1
 COMD_IncValue. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LogoID . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 6   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -335,7 +335,7 @@ COMD_OvpBackLight. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DWT_Nothing. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CYAN . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 7   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -398,7 +398,7 @@ ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
 PowerOffSystem . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
 OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 8   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -461,7 +461,7 @@ fpDisplayIcon. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_NextMenu. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 9   
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -524,7 +524,7 @@ ptrdiff_t. . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 COMD_OsdExit . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 OsdBlock3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 10  
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -587,7 +587,7 @@ INT16. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 VideoPDF . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
   ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 11  
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -650,7 +650,7 @@ _LogoSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  8
   logoID . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ColorMode. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   FontRamNum . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 12  
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -713,7 +713,7 @@ TimeMsType . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 fpGetValue . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 DUTCH. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
-C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/04/2026 11:31:23 PAGE 13  
+C51 COMPILER V9.60.7.0   SYSPOWER                                                          03/23/2026 15:48:49 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
