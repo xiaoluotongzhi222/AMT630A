@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 1   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE E2PI2C
@@ -62,7 +62,7 @@ line level    source
                   }   
               } 
               /**********************************************************
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 2   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 2   
 
               *name:    I2CStart(void)
               *input:   non
@@ -126,7 +126,7 @@ line level    source
               {
                   UCHAR loop = 200;
                 
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 3   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 3   
 
                   SetSdaInput();
                 
@@ -190,7 +190,7 @@ line level    source
                 DelayE2pI2c(2);
                 SetScl(1);  
                 DelayE2pI2c(2);
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 4   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 4   
 
                 SetScl(0);  
                 DelayE2pI2c(2);
@@ -254,7 +254,7 @@ line level    source
                   if(GetSda() == 1)
                   {
                     temp = temp | 0x01;
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 5   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 5   
 
                   }
               
@@ -273,7 +273,7 @@ line level    source
  251          
  252          
  253          
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 6   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -336,7 +336,7 @@ INPUT_CAMERA_DoorBell. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_25MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_80MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 7   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -399,7 +399,7 @@ _osdPath . . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
 DISP_EXT3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 VDE_CLOSE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 NTSC . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 8   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -462,7 +462,7 @@ TIME_15S . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POWER_OFF. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _BatterAdcLevel. . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 BatterAdc_lev2 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 9   
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -525,7 +525,7 @@ _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
   zoomMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   flipMode . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   udAdj. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 10  
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -589,7 +589,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   ----    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   E2PI2C                                                            03/23/2026 15:48:47 PAGE 11  
+C51 COMPILER V9.60.7.0   E2PI2C                                                            03/25/2026 18:00:55 PAGE 11  
 
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

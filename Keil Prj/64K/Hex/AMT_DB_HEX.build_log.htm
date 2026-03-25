@@ -25,9 +25,10 @@ Project File Date:  02/03/2026
 Rebuild target 'ARK-SDK'
 User command #1: ..\..\..\PC Tool\18X9_Function_Location "\\List"
 AMT Function Location Start...
-M51File List is AMT_DB_HEX.M51
-the Using M51File is AMT_DB_HEX.M51
-AMT Function Location End...
+Invalid file handle. Error is 2
+M51File List is 
+the Using M51File is 
+Can't Find .M51 File
 compiling ConfigLcdPara.c...
 compiling ArkChip.c...
 ..\..\..\OSD\AMT_OsdBootDrv.c(756): warning C280: 'rowAddr': unreferenced local variable
@@ -45,7 +46,7 @@ compiling Main.c...
 ..\..\..\Kernel\udsf_tinyframe.h(320): warning C322: unknown identifier
 ..\..\..\Kernel\Main.c(54): warning C259: pointer: different mspace
 ..\..\..\Kernel\Main.c(84): warning C206: 'OsdGetStartIndexAddr': missing function-prototype
-..\..\..\Kernel\Main.c(451): warning C206: 'SaveSetting': missing function-prototype
+..\..\..\Kernel\Main.c(463): warning C206: 'SaveSetting': missing function-prototype
 compiling Global.c...
 compiling GetSysMsg.c...
 compiling Delay.c...
@@ -97,18 +98,6 @@ linking...
     MODULE:  ..\Hex\prase_radar.obj (PRASE_RADAR)
     MODEL:   LARGE
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETSIGNALMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETCOLORSYSMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETTIMEMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETUSERINPUTMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETUSERDEFINEDMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETBATTERYADCMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_SETPWM0?ARKCHIP
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_SETPWM1?ARKCHIP
@@ -143,6 +132,18 @@ linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_ABS?GLOBAL
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?POS_GETUSERINPUTMSG?GETSYSMSG
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?POS_GETSIGNALMSG?GETSYSMSG
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?POS_GETCOLORSYSMSG?GETSYSMSG
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?POS_GETTIMEMSG?GETSYSMSG
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?POS_GETBATTERYADCMSG?GETSYSMSG
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?POS_GETUSERDEFINEDMSG?GETSYSMSG
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_OSDMSGHANDLE?EVENTHANDLE
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_SIGNALMSGHANDLE?EVENTHANDLE
@@ -172,15 +173,16 @@ linking...
     SEGMENT: ?PR?_IRQPUTSTR?DEBUG
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_IRQPRINTF?DEBUG
-Program Size: data=113.2 xdata=1174 code=45725
+Program Size: data=112.3 xdata=1186 code=46004
 creating hex file from "..\Hex\AMT_DB_HEX"...
 User command #1: ..\..\..\PC Tool\18X9_Function_Location "\\List"
 AMT Function Location Start...
-M51File List is AMT_DB_HEX.M51
-the Using M51File is AMT_DB_HEX.M51
-AMT Function Location End...
+Invalid file handle. Error is 2
+M51File List is 
+the Using M51File is 
+Can't Find .M51 File
 "..\Hex\AMT_DB_HEX" - 0 Error(s), 61 Warning(s).
-Build Time Elapsed:  00:00:09
+Build Time Elapsed:  00:00:07
 </pre>
 </body>
 </html>

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 1   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE EVENTHANDLE
@@ -62,7 +62,7 @@ line level    source
   48          ************************************************************/
   49          void  OsdMsgHandle(MSG curMsg)
   50          {
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 2   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 2   
 
   51   1          UCHAR ucComd= COMD_Nothing;
   52   1        
@@ -126,7 +126,7 @@ line level    source
                   g_bLogoDisplayFlag = 1;
                   
                   #if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 3   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 3   
 
                   ExectComd(COMD_RedrawLogo); 
                   #endif
@@ -190,7 +190,7 @@ line level    source
  172   2              printfStr("MSG_NOSIGNALPOWEROFF");
  173   2          MenuProcessKey(COMD_Power);
  174   2          }
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 4   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 4   
 
  175   1      }
  176          
@@ -250,7 +250,7 @@ line level    source
  230   2          }    
  231   1      }
  232          
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 5   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -313,7 +313,7 @@ CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
 DWT_FullText . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockDown . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 6   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -376,7 +376,7 @@ MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 7   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -439,7 +439,7 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   DrawTitelMethod. . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 8   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -502,7 +502,7 @@ DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 9   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -565,7 +565,7 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
   block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
   block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 10  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -628,7 +628,7 @@ KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   Comd . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Msg. . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
   Source . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 11  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -691,7 +691,7 @@ INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 _printfStr . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 _ConfigColorSysDynPara . . . . . . . .  EXTERN   CODE   PROC     -----  -----
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 12  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -754,7 +754,7 @@ _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 _BatteryAdcMsgHandle . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   curMsg . . . . . . . . . . . . . . .  * REG *  DATA   CHAR     0007H  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 13  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -817,7 +817,7 @@ GREEN. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_ContrastMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/23/2026 15:48:48 PAGE 14  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

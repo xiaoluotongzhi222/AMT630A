@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 1   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OSD_ROOTMENU
@@ -62,7 +62,7 @@ line level    source
   48          /*****************************************************************
   49                                    Item Icon table
   50          *****************************************************************/
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 2   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 2   
 
   51          
   52          
@@ -94,7 +94,7 @@ line level    source
   78          *****************************************************************/
   79          
   80          
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 3   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 3   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -157,7 +157,7 @@ PWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 AddressDataH . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SWORD. . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 DISP_16_9. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 4   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 4   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -220,7 +220,7 @@ MSG_TURNON_BACKLIGHT . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 VDE_BLACK. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CtrlMode . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 CHAR . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 5   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 5   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -283,7 +283,7 @@ DWT_Nothing. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 CYAN . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 KeyInfor . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 6   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -346,7 +346,7 @@ ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
 OsdPath. . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   pageIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   itemIndex. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 7   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -409,7 +409,7 @@ CH3. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_SVIDEO . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SINT . . . . . . . . . . . . . . . . .  TYPEDEF  -----  INT      -----  2
 Osd_BrightnessMenu . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 8   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -472,7 +472,7 @@ OsdBlock3. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 LogoIDMax. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_160MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 OsdBlock4. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 9   
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -535,7 +535,7 @@ IIC. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 SDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 WriteDataL . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 10  
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -598,7 +598,7 @@ LOGO3. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_22OMS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MCU. . . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 fpCheckCondition . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 11  
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -661,7 +661,7 @@ _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
   storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
   alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
-C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/23/2026 15:48:51 PAGE 12  
+C51 COMPILER V9.60.7.0   OSD_ROOTMENU                                                      03/25/2026 18:00:58 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

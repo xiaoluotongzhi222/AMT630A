@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 1   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MCU
@@ -62,7 +62,7 @@ line level    source
   48                  4.reserve
   49          
   50          *history:
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 2   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 2   
 
   51          ************************************************************/
   52          void InitialPPort(void)
@@ -126,7 +126,7 @@ line level    source
  110          mcu 频率：24MHz   T4 = 4096 *(1/24M) = 170.66us   1024*4分频       170.66us 加1
  111          
  112          *history:
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 3   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 3   
 
  113          ************************************************************/
  114          void InitialTimer(void)
@@ -190,7 +190,7 @@ line level    source
  172   1        
  173   1        SetT2BaudRate(9600); 
  174   1        TR2  = ON;  
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 4   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 4   
 
  175   1          ET2  = OFF;        //T2中断禁止
  176   1        TI = 0;
@@ -254,7 +254,7 @@ line level    source
  234          *update:     2009-03-23  
  235          *state:      allright
  236          
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 5   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 5   
 
  237          *description:   
  238                   清除看门狗设置
@@ -318,7 +318,7 @@ line level    source
  296   1      
  297   1        /*设置外部中断5优先级*/
  298   1        PX5 = 0; //若要使用外部中断5，则要置为1
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 6   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 6   
 
  299   1      
  300   1          /*外部中断开关*/
@@ -361,7 +361,7 @@ line level    source
  337   1        InitialExtInterrupt();
  338   1        printfStr("mcu init ok!\n");
  339   1      }
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 7   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -424,7 +424,7 @@ _UserInput . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   Val. . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 TIME_30MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 8   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -487,7 +487,7 @@ VideoInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
   saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 9   
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -550,7 +550,7 @@ _FlashSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   erase4kComd. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 VDE_WHITE. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_100MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 10  
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -613,7 +613,7 @@ EX4. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EAH  1
 TL1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008BH  1
 INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 11  
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -676,7 +676,7 @@ _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _DispSettingInfo . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  4
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 12  
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -739,7 +739,7 @@ _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   dispTime . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
   storageTime. . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
   alph . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
-C51 COMPILER V9.60.7.0   MCU                                                               03/23/2026 15:48:46 PAGE 13  
+C51 COMPILER V9.60.7.0   MCU                                                               03/25/2026 18:00:55 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

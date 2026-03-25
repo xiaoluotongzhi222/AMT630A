@@ -133,7 +133,7 @@ typedef uint8_t TF_COUNT;
 #define TF_MAX_ID_LST   2
 #define TF_MAX_TYPE_LST 2
 #define TF_MAX_GEN_LST  2
-#define TF_PARSER_TIMEOUT_TICKS 60
+#define TF_PARSER_TIMEOUT_TICKS 12
 
 #define TF_Error(x) 
 

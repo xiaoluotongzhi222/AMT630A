@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 1   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GETSYSMSG
@@ -62,7 +62,7 @@ line level    source
   48          *history:
   49          
   50          ************************************************************/
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 2   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 2   
 
   51          MSG POS_GetUserInputMsg(void)
   52          {
@@ -126,7 +126,7 @@ line level    source
                       }
                     }
                   }
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 3   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 3   
 
                   else
                   {
@@ -190,7 +190,7 @@ line level    source
  172   2            {
  173   3                g_ucPreColorSys = g_ucColorSys;
  174   3            if(g_ucColorSys != NULL_SYS)  
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 4   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 4   
 
  175   3                {
  176   4                  g_sysSetting.Video.colorSys = g_ucColorSys;
@@ -254,7 +254,7 @@ line level    source
                   if(IsPowerOn()&&!IsSignalOk())
                   {
                     if(POS_SysTimeDriver())
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 5   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 5   
 
                     {
                         if(g_ucContBufSecond >= 60)
@@ -318,7 +318,7 @@ line level    source
  296          
  297          /***********************************************************
  298          *name:       POS_GetUserDefinedMsg(timeflg)
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 6   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 6   
 
  299          *input:      timeflg  //定时时间标志
  300          *output:     void 
@@ -382,12 +382,12 @@ line level    source
                   }
                   #endif
  360   2      
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 7   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 7   
 
  361   2        }
  362   1        return MSG_NULL;  
  363   1      }
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 8   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -450,7 +450,7 @@ _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
 PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 ENGLISH. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POWER_ON . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 9   
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -513,7 +513,7 @@ TIME_35MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 FLAG . . . . . . . . . . . . . . . . .  TYPEDEF  DATA   BIT      -----  1
 VDE_RED. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _InputSourceIDType . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 10  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -576,7 +576,7 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
   SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 11  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -639,7 +639,7 @@ TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
 _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   ADDR_0xfd33. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   ADDR_0xfd34. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 12  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -702,7 +702,7 @@ INPUT_AV2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 13  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -765,7 +765,7 @@ KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   cConditions. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Comd . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   Msg. . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 14  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -828,7 +828,7 @@ g_bGetBatteryAdcFlg. . . . . . . . . .  EXTERN   DATA   BIT      -----  1
 INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
 COMD_SaturationInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 15  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -891,7 +891,7 @@ _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 16  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 16  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -954,7 +954,7 @@ GREEN. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_ContrastMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/23/2026 15:48:47 PAGE 17  
+C51 COMPILER V9.60.7.0   GETSYSMSG                                                         03/25/2026 18:00:55 PAGE 17  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

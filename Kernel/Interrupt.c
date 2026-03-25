@@ -25,16 +25,25 @@
 #include "Interrupt.h"
 extern UCHAR XDATA g_RxBuf[];
 extern UCHAR volatile XDATA g_RxHead;
-extern UCHAR volatile XDATA g_RxTail;         
+extern UCHAR volatile XDATA g_RxTail;  
+UCHAR XDATA next_head;
 #define RX_BUF_SIZE 256
 
 void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
 {
     if (RI)
     {
-				RI = 0;
-        g_RxBuf[g_RxHead] = SBUF; 
-        g_RxHead = (g_RxHead + 1) % RX_BUF_SIZE; 
+        RI = 0;
+        next_head = (UCHAR)(g_RxHead + 1) % RX_BUF_SIZE; 
+        if (next_head != g_RxTail) 
+        {
+            g_RxBuf[g_RxHead] = SBUF; 
+            g_RxHead = next_head; 
+        }
+			
+        else
+        {
+        }
     }
     
     if (TI)
@@ -62,9 +71,10 @@ void POS_IrqServerRec(void) interrupt 4  //Uart Receive interrupt
          这个计数器可以从0-255分频
 *history:
 ************************************************************/
+UINT XDATA s_ucSysTimer = 0;
 void POS_IrqServerTimer1(void) interrupt 3	   //timer 1
 {  
-    static UCHAR s_ucSysTimer;
+
 
 	#ifdef LargeSignalEn
 	static UCHAR ucContAgcStable = 0;
