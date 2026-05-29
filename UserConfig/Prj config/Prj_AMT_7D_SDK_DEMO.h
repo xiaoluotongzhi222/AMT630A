@@ -398,7 +398,7 @@
 <<<<<<<<<<<<<<<<<<<<<<  软件功能配置>>>>>>>>>>>>>>>>>>>>
 =========================================================*/
 //[Software function enable]
-#define NoSignalBLOffEn          //无信号关背光开关
+//#define NoSignalBLOffEn          //无信号关背光开关
 //#define NoSignalPowerOffEn      //无信号一段时间自动关机开关
 //#define QuickParaSaveEn       //快速参数保存开关
 //#define KillColorEn           //强制关闭色彩

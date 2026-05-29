@@ -81,39 +81,49 @@ void  SignalMsgHandle(MSG curMsg)
 
      if(curMsg == MSG_SIGNAL_OK)
      {
+				SetVDETestSwitch(VDE_CLOSE); 
+				XBYTE[0xFCE3] |= 0x08; 
+				XBYTE[0xFCE3] &= ~0x01; 
+				XBYTE[0xFE01] &= ~0x01;
         printfStr("MSG_SIGNAL_OK");
-		
-        #ifdef NoSignalBLOffEn
-	    ExectComd(COMD_TurnOnBackLight); 
-		#endif
+			 	DelayMs(300);
+				TurnOnBackLight(); 
+//        #ifdef NoSignalBLOffEn
+//	    //ExectComd(COMD_TurnOnBackLight); 
+//		#endif
 
-		#ifdef LogoEn 
-		g_bLogoDisplayFlag = 0;
-		
-		#if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
-		ExectComd(COMD_ClearLogo); 
-		#endif
-		
-		#endif
+//		#ifdef LogoEn 
+//		g_bLogoDisplayFlag = 0;
+//		
+//		#if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
+//		ExectComd(COMD_ClearLogo); 
+//		#endif
+//		
+//		#endif
 
      }
 
 	 if(curMsg == MSG_NO_SIGNAL)
 	 {  
-	    printfStr("MSG_NO_SIGNAL");
+			SetVDETestSwitch(VDE_BLACK); 
+			XBYTE[0xFCE3] &= ~0x08; 
+			XBYTE[0xFCE3] |= 0x01; 
+			XBYTE[0xFE01] |= 0x01;
+		 TurnOnBackLight(); 
+//	    printfStr("MSG_NO_SIGNAL");
 
-	    #ifdef NoSignalBLOffEn
-	    ExectComd(COMD_TurnOffBackLight);
-		#endif
+//	    #ifdef NoSignalBLOffEn
+//	    ExectComd(COMD_TurnOffBackLight);
+//		#endif
 
-		#ifdef LogoEn 
-		g_bLogoDisplayFlag = 1;
-		
-		#if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
-		ExectComd(COMD_RedrawLogo); 
-		#endif
-		
-		#endif
+//		#ifdef LogoEn 
+//		g_bLogoDisplayFlag = 1;
+//		
+//		#if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
+//		ExectComd(COMD_RedrawLogo); 
+//		#endif
+//		
+//		#endif
 	 }
 }
 /***********************************************************

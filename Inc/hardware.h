@@ -83,8 +83,8 @@
 
 
 /*<<<<<<<<<<<<<<<<<<<<<<LOGO disp mode >>>>>>>>>>>>>>>>>>>*/
-#define POWER_ON_DISP_LOGO     		0
-#define NOSIGNAL_DISP_LOGO     		1
+#define POWER_ON_DISP_LOGO     		1
+#define NOSIGNAL_DISP_LOGO     		0
 
 
 #endif

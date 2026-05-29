@@ -327,9 +327,9 @@ void ShowRadarDemo(void)
 {
 		TurnOffBackLight(); 
     SetVDETestSwitch(VDE_BLACK);
-		XBYTE[0xFCE3] &= ~0x08; // 1. ?? Scaler ???????????,?????? (?????)
-                XBYTE[0xFCE3] |= 0x01;  // 2. 0xE3 Bit0=1: ?? THLEN ????,???????? (?????)
-                XBYTE[0xFE01] |= 0x01;  // 3. 0x01 Bit0=1: ????????,??????? (?????)
+		XBYTE[0xFCE3] &= ~0x08; 
+		XBYTE[0xFCE3] |= 0x01; 
+		XBYTE[0xFE01] |= 0x01; 
 		XBYTE[0xFB5A] = 0x00; 
     XBYTE[0xFB5B] = 0x00;
     XBYTE[0xFB06] &= ~0x40;
@@ -358,8 +358,8 @@ void ShowRadarDemo(void)
         OsdDrawStr(8, 3, COL_WHITE, R6);
         Draw_All_Radar_Demo();
         OsdBlockShow(1); 
-        DelayMs(50);
-        TurnOnBackLight(); 
+        //DelayMs(50);
+        //TurnOnBackLight(); 
     }
 }
 
@@ -370,6 +370,19 @@ UCHAR XDATA last_color = 0xFF;
 UCHAR XDATA last_seg_state = 0xFF;
 char  XDATA last_angle_cmd = 100;
 UCHAR XDATA last_has_target = 0xFF;
+
+UINT Get_SysTimer_Safe(void)
+{
+    UINT current_time;
+    bit original_ea = EA;
+    
+    EA = 0; 
+    current_time = s_ucSysTimer;
+    EA = original_ea;
+    
+    return current_time;
+}
+
 void main(void)
 {
     UCHAR XDATA current_has_signal = 1; 
@@ -394,7 +407,6 @@ void main(void)
     //UINT XDATA target_timeout_cnt = 0;
     UINT XDATA	last_timeout_tick = 0;
 		UINT XDATA last_rx_tick = 0;
-	
     float lat_dist, fwd_dist_sq; 
     float current_half_width, current_shield_dist;
     UINT XDATA last_show_timer = 0;
@@ -406,9 +418,12 @@ void main(void)
     UCHAR XDATA valid_target_count = 0;
     float min_range = 999.0;
     float min_sin = 0.0;
-
+		
+		UINT current_tick = 0;
+		
     DisableWatchdog();
     InitSystem();
+		
     Radar_init_tinyframe();
     MenuProcessKey(COMD_SelPowerOnMode);
     ShowRadarDemo();
@@ -421,10 +436,25 @@ void main(void)
     EA = 1;
     SetP0_5(1);
     SetUartPrint();
-
+		
     while(1)
     {
+			 MSG curMsg;
+			
 			POS_ClearWatchDog();
+			curMsg = POS_GetSignalMsg(g_bGetSignalFlg);
+			current_tick = Get_SysTimer_Safe();
+			if(curMsg != MSG_NULL)
+			{
+				SignalMsgHandle(curMsg);
+				curMsg = MSG_NULL;
+			}
+			curMsg = POS_GetColorSysMsg(g_bGetColorSysFlg);
+					if(curMsg != MSG_NULL)
+			{
+				ColorSysMsgHandle(curMsg);
+				curMsg = MSG_NULL;
+			}
         adc_debug_val = POS_EnableChipAdc(0); 
         if (adc_debug_val > 1800 && adc_debug_val < 2250) {
             current_btn_state = 1; 
@@ -437,7 +467,7 @@ void main(void)
         }
 
         if (current_btn_state != 0 && last_btn_state == 0) {
-            last_show_timer = s_ucSysTimer;
+            last_show_timer = current_tick;
             is_showing_setting = 1;
             if (current_btn_state == 1) {
                 g_sysSetting.shield_dist_idx++; if (g_sysSetting.shield_dist_idx > 3) g_sysSetting.shield_dist_idx = 0;
@@ -456,36 +486,34 @@ void main(void)
         }
         last_btn_state = current_btn_state;
         
-				if (is_showing_setting && ((UINT)(s_ucSysTimer - last_show_timer) > 100)) {
+				if (is_showing_setting && ((UINT)(current_tick - last_show_timer) > 100)) {
             is_showing_setting = 0;            
             OsdDrawStr(10, 12, COL_WHITE, STR_CLEAR);
             SetSaveFlagEn();
             SaveSetting();
         }
 
-        //blink_timer++;
-        //ui_refresh_timer++;
+//        if((UINT)(current_tick-last_blink_timer) >= timer_limted) 
+//        {
+//            last_blink_timer = current_tick;
+//            is_red_phase = !is_red_phase; 
+//        }
 
-        if((UINT)(s_ucSysTimer-last_blink_timer) >= timer_limted) 
+        if ((UINT)(current_tick-last_refresh_timer) >=25) 
         {
-            last_blink_timer = s_ucSysTimer;
-            is_red_phase = !is_red_phase; 
-        }
-
-        if ((UINT)(s_ucSysTimer-last_refresh_timer) >= 2) 
-        {
-            last_refresh_timer = s_ucSysTimer;
+            last_refresh_timer = current_tick;
             need_draw = 1; 
+						is_red_phase = !is_red_phase;
         }
 
         while (g_RxTail != g_RxHead) 
         {
             UCHAR rx_byte = g_RxBuf[g_RxTail];
             g_RxTail = (g_RxTail + 1); 
-						last_rx_tick = s_ucSysTimer;
+						last_rx_tick = current_tick;
             if (parse_radar(rx_byte, &g_RadarData)) 
             {
-								last_timeout_tick = s_ucSysTimer;
+								//last_timeout_tick = current_tick;
                 if(g_RadarData.user_count > 0)
                 {
                     valid_target_count = 0;
@@ -501,9 +529,13 @@ void main(void)
 
                     for(i = 0; i < g_RadarData.user_count; i++) 
                     {
+											
                         float rng = g_RadarData.users[i].range;
+												
                         float sin_v = g_RadarData.users[i].sin_value;
-
+												if (rng < 0.1f) continue;
+												if (sin_v > 1.0f) sin_v = 1.0f;
+												if (sin_v < -1.0f) sin_v = -1.0f;
                         lat_dist = rng * sin_v;
                         if (lat_dist < 0) lat_dist = -lat_dist;
                         fwd_dist_sq = (rng * rng) - (lat_dist * lat_dist);
@@ -521,7 +553,8 @@ void main(void)
 
                     if (valid_target_count > 0) 
                     {
-                        has_target = 1;
+											last_timeout_tick = current_tick;
+                      has_target = 1;
                         
                         current_range = min_range; 
                         current_sin_val = min_sin;
@@ -551,19 +584,19 @@ void main(void)
         {
             if (x_tf.state != TFState_SOF) {
                 //x_tf.parser_timeout_ticks++;
-                if ((UINT)(s_ucSysTimer - last_rx_tick)  >= TF_PARSER_TIMEOUT_TICKS) {
+                if ((UINT)(current_tick - last_rx_tick)  >= TF_PARSER_TIMEOUT_TICKS) {
                     x_tf.state = TFState_SOF; 
-										last_rx_tick = s_ucSysTimer;
+										last_rx_tick = current_tick;
                 }
             } else {
-                last_rx_tick = s_ucSysTimer;
+                last_rx_tick = current_tick;
             }
         }
 
-            if ((UINT)(s_ucSysTimer - last_timeout_tick)>=400) { 
+            if ((UINT)(current_tick - last_timeout_tick)>=400) { 
                 has_target = 0; 
-                current_range = 0.0;
-								//last_timeout_tick = s_ucSysTimer;
+                //current_range = 0.0;
+								//last_timeout_tick = current_tick;
             }
         
 					if(need_draw)
@@ -579,29 +612,28 @@ void main(void)
 
                 if(current_range < (2.0 + current_shield_dist))
                 {
+                    if(is_red_phase) 
+                    { color = COL_RED; seg_state = 1; }
+                    else             
+                    { color = COL_GREEN; seg_state = 0; } 
                     if(current_range < (0.4 + current_shield_dist))
                     {
-                        if (g_sysSetting.buzzer_en) SetP0_4(1); else SetP0_4(0);                                        
-                        if(is_red_phase) 
-                        { color = COL_RED; seg_state = 1; }
-                        else             
-                        { color = COL_GREEN; seg_state = 0; } 
+                        if (g_sysSetting.buzzer_en) SetP0_4(1); else SetP0_4(0);
                     }
                     else
                     {
-                        if(is_red_phase) 
-                        { color = COL_RED; if (g_sysSetting.buzzer_en) SetP0_4(1); else SetP0_4(0); seg_state = 1; }
-                        else             
-                        { color = COL_GREEN; SetP0_4(0); seg_state = 0; }
+                        if (g_sysSetting.buzzer_en && is_red_phase) {
+                            SetP0_4(1);
+                        } else {
+                            SetP0_4(0);
+                        }
                     }
                 }
                 else
                 {
-                    if(is_red_phase){ 
-                        color = COL_GREEN; SetP0_4(0); seg_state = 1;
-                    }else{
-                        color = COL_GREEN; SetP0_4(0); seg_state = 1;
-                    }
+                    color = COL_GREEN; 
+                    seg_state = 1; 
+                    SetP0_4(0);
                 }
 
 
@@ -618,7 +650,6 @@ void main(void)
                 {
                     Update_Radar_Distance(show_int, show_dec, color);
                     Update_Radar_Logic(show_int, angle_cmd, seg_state);
-                    
 
                     last_show_int = show_int;
                     last_show_dec = show_dec;
@@ -626,13 +657,13 @@ void main(void)
                     last_seg_state = seg_state;
                     last_angle_cmd = angle_cmd;
                     last_has_target = 1;
-                }
+                }		
             }
             else
             {
                 if (last_has_target != 0)
                 {
-                    Update_Radar_Distance(0, 0, COL_GREEN);
+                    Update_Radar_Distance(0, 0, 0x00);
                     Update_Radar_Logic(0, 0, 0);
                     SetP0_4(0);
                     last_has_target = 0;
@@ -645,41 +676,6 @@ void main(void)
             }
         }
         
-
-			if(IsHlockOk()) 
-        {
-            if((UINT)(s_ucSysTimer - signal_debounce_cnt) >= 300) 
-            {
-                current_has_signal = 1; 
-            }
-            else 
-            {
-                current_has_signal = 0;
-            }
-        } 
-        else 
-        { 
-            signal_debounce_cnt = s_ucSysTimer;
-            current_has_signal = 0;
-        }
-
-        if(current_has_signal != last_has_signal) {
-            if(current_has_signal == 1)
-            {
-                SetVDETestSwitch(VDE_CLOSE); 
-                XBYTE[0xFCE3] |= 0x08; 
-                XBYTE[0xFCE3] &= ~0x01; 
-                XBYTE[0xFE01] &= ~0x01;
-            }                           
-            else
-            {   
-                SetVDETestSwitch(VDE_BLACK); 
-                XBYTE[0xFCE3] &= ~0x08; 
-                XBYTE[0xFCE3] |= 0x01; 
-                XBYTE[0xFE01] |= 0x01;  
-            }
-            last_has_signal = current_has_signal;
-        }
 
     }
 }

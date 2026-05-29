@@ -1,0 +1,785 @@
+ArkMicro I2Config File
+[Device]
+AMT630A_STD_V1.4
+[Company]
+ArkMicro
+[Type]
+General
+[ChipID]
+AMT630A
+[ChipIDList]
+AMT630A
+[Protocol]
+I2C
+[DataBits]
+8
+[DataAddrBits]
+0
+[Ack]
+Yes
+[Sub]
+Yes
+[Restart]
+Yes
+[Continuous]
+No
+[Channel]
+1
+[Rate]
+Low
+[DisplayFormat]
+HEX
+[ChannelDefine]
+16
+17
+9
+8
+[VideoChannel]
+AV1
+[VideoChannelList]
+AV1
+
+[SoftVideoChIDList]
+INPUT_AV1
+
+[VideoType]
+CVBS
+[VideoPI]
+VIDEO_P
+[VideoPicSys]
+PAL
+[VideoData]
+13500000
+ 690
+ 280
+ 864
+ 312
+[PannelName]
+SAT070CP50D18Y0
+[PannelType]
+D_RGB888
+[PannelResolution]
+ 800
+ 480
+1056
+ 525
+   8
+  10
+  46
+  23
+ 210
+  22
+  -1
+  -1
+1200
+ 650
+  40
+  20
+  46
+  23
+ 354
+ 147
+  -1
+  -1
+ 862
+ 510
+   1
+   1
+  46
+  23
+  16
+   7
+[PannelDispMode]
+0
+[PannelDispModeList]
+16:9
+4:3
+DM_EX0
+DM_EX1
+DM_EX2
+DM_EX3
+[AddrTransforMap]
+fd,b0
+fe,b2
+fb,b6
+fc,b8
+ff,b4
+fa,be
+[PanePos]
+All	=( 62,498),( 98,453),(216,248),(350, 82)
+Red	=( 62,498),( 98,453),(216,248),(350, 82)
+Green	=( 62,498),( 98,453),(216,248),(350, 82)
+Blue	=( 62,498),( 98,453),(216,248),(350, 82)
+[DataTypeDefine]
+PcDefine
+
+
+[PageInfo]
+GLOBAL
+FD01 01 (01,03)   {6'h0,window_en<1>,chip_en<0>}
+FD02 00 (00,03)   {7'h0,SCALE_BYPASS<0>}
+FD0A 89 (1D,01)   ANA_DIVA
+FD0B 40 (1D,03)   ANA_DIVB
+FD0C 33 (33,03)   ANA_CTL0,{SPB<7:4>,SPA<3:0>}
+FD0D E0 (F0,00)   ANA_CTL1,{OUT_DIVB<7:6>, OUT_DIVA<5:4>, LPR_EN<3>, LDO_REG<2:0>}
+FD0E 2C (20,03)   ANA_CTL2,{OSD4_EN_V12<7>,SMT_EN<6>,E2_E1<5:4>, ENH_PLLB<3>,ENH_PLLA<2>,BAND_ADJB<1>,BAND_ADJA<0>}
+FD0F 07 (01,00)   displl_refclk_div_reg
+FD10 04 (01,03)   oscpll_refclk_div_reg
+FD11 FF (0F,03)   clk_gate_en_reg[7:0]
+FD12 FF (00,03)   clk_gate_en_reg[15:8]
+FD13 FF (00,03)   clk_gate_en_reg[23:16]
+FD14 01 (03,00)   sca_clk_div_reg
+FD15 04 (80,00)   dis_clk_div_reg
+FD16 0A (0A,00)   tcon_src_div_reg
+FD1A 04 (40,00)   {adc_en_reg<7:6>,tpll_div_reg<2:0>}
+FD1B FF (FF,03)   det_threshold[7:0]
+FD1C FF (FF,03)   det_threshold[15:0]
+FD1D 00 (00,03)   {i2c_pfi_int<7>,det_wdt_rst_en<0>}
+FD5B 04 (04,03)   [7]场中断取反 [2:0]场中断源 0:decoder,1:scaler,2:vp,3:blend,4:osd,5:gamma,6:dither,7:osd. {vsyn_int_inv<7>,4'h0,vsyn_int_sel<2:0>}
+FD19 C3 (04,03)   {vadc_clk_sel<7>,pwm_clk_src_reg<6>,mcu_adc_clk_inv_reg<5>,srgb_clk_o_inv_reg<4>,pwm_src_pll_sel<3>,dis_clk_inv_reg<2>,sys_clk_inv_reg<1>,sys_clk_div_reg<0>}
+
+[PageInfo]
+PAD MUX
+FD30 22 (22,03)   padmux_reg0 = pad14_mux<6:4>,pad13_mux<2:0>
+FD31 00 (00,03)   padmux_reg1 = pad16_mux<6:4>,pad15_mux<2:0>
+FD32 11 (11,00)   padmux_reg2 = pad18_mux<6:4>,pad17_mux<2:0>
+FD33 11 (11,00)   padmux_reg3 = pad20_mux<6:4>,pad19_mux<2:0>
+FD34 11 (00,00)   padmux_reg4 = pad25_mux<6:4>,pad24_mux<2:0>
+FD35 21 (00,00)   padmux_reg5 = pad27_mux<6:4>,pad26_mux<2:0>
+FD36 11 (00,00)   padmux_reg6 = pad29_mux<6:4>,pad28_mux<2:0>
+FD37 11 (00,00)   padmux_reg7 = pad31_mux<6:4>,pad30_mux<2:0>
+FD38 11 (00,00)   padmux_reg8 = pad33_mux<6:4>,pad32_mux<2:0>
+FD39 11 (00,00)   padmux_reg9 = pad35_mux<6:4>,pad34_mux<2:0>
+FD3A 11 (00,00)   padmux_reg10= pad37_mux<6:4>,pad36_mux<2:0>
+FD3B 11 (00,00)   padmux_reg11= pad39_mux<6:4>,pad38_mux<2:0>
+FD3C 11 (00,00)   padmux_reg12= pad44_mux<6:4>,pad43_mux<2:0>
+FD3D 11 (00,00)   padmux_reg13= pad46_mux<6:4>,pad45_mux<2:0>
+FD3E 11 (00,00)   padmux_reg14= pad48_mux<6:4>,pad47_mux<2:0>
+FD3F 11 (00,00)   padmux_reg15= pad50_mux<6:4>,pad49_mux<2:0>
+FD40 12 (00,00)   padmux_reg16= pad52_mux<6:4>,pad51_mux<2:0>
+FD41 11 (00,00)   padmux_reg17= pad54_mux<6:4>,pad53_mux<2:0>
+FD42 00 (00,03)   padmux_reg18= pad56_mux<6:4>,pad55_mux<2:0>
+FD43 00 (00,03)   padmux_reg19= rxd_sel<4:3>,  pad57_mux<2:0> [4:3]RXD 输入选择 00 or 11:rxd_0  01:rxd_1 10:rxd_2
+FD44 01 (01,00)   SSCG_DLY_SEL[ 7: 0] 展频延时[ 7: 0]
+FD45 00 (00,00)   SSCG_DLY_SEL[15: 8] 展频延时[15: 8]
+FD46 00 (00,00)   SSCG_DLY_SEL[23:16] 展频延时[23:16]
+FD47 00 (00,00)   SSCG_DLY_SEL[31:24] 展频延时[31:24]
+FD48 00 (00,00)   SSCG_DLY_SEL[39:32] 展频延时[39:32]
+FD49 00 (00,00)   SSCG_DLY_SEL[47:40] 展频延时[47:40]
+FD4A 00 (00,00)   SSCG_DLY_SEL[55:48] 展频延时[55:48]
+FD4B 00 (00,00)   SSCG_DLY_SEL[63:56] 展频延时[63:56]
+FD4C 12 (12,03)   SSCG_CP
+FD4D 4F (4F,03)   SSCG_DIV
+FD4E 02 (02,03)   SSCG_DIV_IN
+FD4F 27 (27,03)   SSCG_DIV_SG
+FD50 0F (0B,00)   [5]1:直通  0:展频  [3]1:数据与取反时钟同步 0:数据与直通时钟同步 [2]1:展频时钟取反 0:展频时钟直通,SSCG_EN<7>,SSCG_DLY_EN<6>,BY_SSCG<5>,SG_BAND_ADJ<4>,DS_INV_SEL
+FD51 00 (55,03)   cell_type_reg0 PAD 的驱动电流选择
+FD52 00 (55,03)   cell_type_reg1 PAD 的驱动电流选择
+FD53 00 (57,03)   cell_type_reg2 PAD 的驱动电流选择
+FD54 00 (57,03)   cell_type_reg3 PAD 的驱动电流选择
+FD55 00 (55,03)   cell_type_reg4 PAD 的驱动电流选择
+FD56 00 (55,03)   cell_type_reg5 PAD 的驱动电流选择
+FD57 00 (55,03)   cell_type_reg6 PAD 的驱动电流选择
+FD58 00 (55,03)   cell_type_reg7 PAD 的驱动电流选择
+FD59 00 (5D,03)   cell_type_reg8 PAD 的驱动电流选择
+FD5A 00 (55,03)   cell_type_reg9 PAD 的驱动电流选择
+
+[PageInfo]
+PWM
+FD18 FF (FF,03)   选择PWM模块的工作时钟 [7] 1:直通  0:根据[6:0]分频,[6:0] 分频系数
+FD1F 00 (00,03)   [0]:PWM0_EN  [1]:PWM1_EN  [2]:PWM2_EN  [3]:PWM3_EN  [4]:PWM0_INV [5]:PWM1_INV  [6]:PWM2_INV [7]:PWM3_INV
+FD20 FF (FF,03)   PWM0 的周期调节[7:0]
+FD21 00 (00,03)   PWM0 的周期调节[15:8]
+FD22 FF (FF,03)   PWM1 的周期调节[7:0]
+FD23 00 (00,03)   PWM1 的周期调节[15:8]
+FD24 FF (FF,03)   PWM2 的周期调节[7:0]
+FD25 00 (00,03)   PWM2 的周期调节[15:8]
+FD26 FF (FF,03)   PWM3 的周期调节[7:0]
+FD27 00 (00,03)   PWM3 的周期调节[15:8]
+FD28 80 (80,03)   PWM0 的占空比调节[7:0]
+FD29 00 (00,03)   PWM0 的占空比调节[15:8]
+FD2A 80 (80,03)   PWM1 的占空比调节[7:0]
+FD2B 00 (00,03)   PWM1 的占空比调节[15:8]
+FD2C 80 (80,03)   PWM2 的占空比调节[7:0]
+FD2D 00 (00,03)   PWM2 的占空比调节[15:8]
+FD2E 80 (80,03)   PWM3 的占空比调节[7:0]
+FD2F 00 (00,03)   PWM3 的占空比调节[15:8]
+
+[PageInfo]
+GPIO
+FD04 00 (00,03)   gpio_ie[ 7:0]  GPIO 0- 7 IE 高有效
+FD05 00 (00,03)   gpio_ie[11:8]  GPIO 8-11 IE 高有效
+FD06 00 (00,03)   gpio_oe[ 7:0]  GPIO 0- 7 OE 高有效
+FD07 00 (00,03)   gpio_oe[11:8]  GPIO 8-11 OE 高有效
+FD08 00 (FF,03)   gpio_out[ 7:0] GPIO 0- 7 Data,输出控制为1时，寄存器读的值为GPIO_OUT，否则为GPIO的输入值
+FD09 00 (07,03)   gpio_out[11:8] GPIO 8-11 Data，输出控制为1时 寄存器读的值为GPIO_OUT，否则为GPIO的输入值
+FA80 00 (FF,03)   P0
+FA90 00 (FF,03)   P1
+FAA0 00 (FF,03)   P2
+FAB0 20 (FF,03)   P3
+FAE9 FF (FF,03)   P0_OEN / P0.0-P0.7 out input OEN，低有效
+FAEA FF (FF,03)   P1_OEN / P1.0-P1.7 out input OEN，低有效
+FAEB FF (FF,03)   P2_OEN / P2.0-P2.7 out input OEN，低有效
+FAEC DF (FF,03)   P3_OEN / P3.0-P3.7 out input OEN，低有效
+FAED FF (FF,03)   P0_IEN / P0.0-P0.7  input OEN，低有效
+FAEE FF (FF,03)   P1_IEN / P1.0-P1.7  input OEN，低有效
+FAEF FF (FF,03)   P2_IEN / P2.0-P2.7  input OEN，低有效
+FAF4 FF (FF,03)   P3_IEN / P3.0-P3.7  input OEN，低有效
+
+[PageInfo]
+DECODER
+FE00 80 (80,03)   [7]:Auto_config [6]:Ntsc_j_sel [5]:Sample_format [4]:Ped_inv  [3:0]:Cstd
+FE01 06 (04,03)   [4]:Comphv_detect_en [3]:reg_inq_en [2]:Pal60_mode [1]:cstd_pn_mode [0]:cstd_sel
+FE02 00 (00,03)   [7]:vline_625_sel [6]:vline_625_set [5]:pal_sel [4]:pal_set [3]:freq443_sel [2]:freq443_set [1]:secam_sel [0]:secam_set
+FE03 80 (80,03)   comphv_slvl
+FE04 80 (80,03)   comphv_exist_thr
+FE05 30 (30,03)   comphv_hdiff
+FE06 02 (02,03)   [2:0]:NP_DET_THLD
+FE07 80 (80,03)   P_CNT_THLD
+FE08 00 (00,03)   SECAM_DET_THLD
+FE09 00 (00,03)   [5:4]:bpf_carrier_sel [3:0]:acc_num
+FE0A 2F (2F,03)   burst_gate_paldet_start
+FE0B 40 (40,03)   burst_gate_paldet_end
+FE0C 10 (10,03)   SECAM_BURST_THR
+FE0D 03 (03,03)   dgain_set[7:0]
+FE0E 72 (72,03)   [3:0]:dgain_set[11:8] [4]:dgain_clear_en [5]:bgate_by_scope [6]:halter_clear
+FE0F 07 (07,03)   pn_detect_tc
+FE10 14 (14,03)   hjit_max
+FE11 09 (09,03)   hlock_num_thr
+FE12 00 (00,03)   [7]:hv_sel [6:0]:psign_range
+FE13 1E (16,03)   [4]:pga_en [3]:Pga_manual [2:0]:Pga_tc
+FE14 22 (22,03)   pga_swch_th
+FE15 09 (05,03)   pga_state_fix
+FE26 0E (0C,03)   [3]:Chroma_lock [2]:Vs_lock [1]:Hs_lock [0]:Tv_inactive
+FE27 00 (00,03)   [3]:freq443_detected [2]:vnon_standard [1]:hnon_standard
+FE28 00 (04,03)   [4]:Vcr_detect [3]:noisy_flag [2]:Vline_625_detected [1]:Secam_verify [0]:Pal_verify
+FE2A 01 (07,03)   [6]:comphv_detected [5]:secamsig_detected [4]:palsig_detected [3:0]:auto_tv_standard
+FE35 AA (AA,03)   testpat_reg[7:0]
+FE36 AA (AA,03)   testpat_reg[15:8]
+FE37 60 (60,03)   [7:6]:Dgain_white_ctl [5:0]:Dgain_bottdiff
+FE38 0F (0F,03)   [3:0]:dgain_fast_adj_cnt
+FE39 08 (08,03)   [3:0]:weak_color_thr
+FE48 07 (07,03)   [7:6]:Color_kill_sel [5]:reserve [4]:reserve [3:0]:color_kill_level
+FE54 40 (00,03)   [6]:vsync_out_sel [5:0]:vsync_slice_offset
+FE55 0A (0A,03)   [1:0]:Vflt_coef
+FE5F C0 (C0,03)   adc_blank_level[7:0]
+FE60 03 (03,03)   adc_blank_level[11:8]
+FE61 2D (2D,03)   burst_gate_z_start
+FE62 41 (41,03)   burst_gate_z_end
+FE63 C0 (C0,03)   ZCORSS_THR
+FE83 FE (43,00)   [7]:Ench_en [6]:Ench_coring_en [1:0]:Ench_gain
+FEA0 02 (02,03)   [1]:NP_auto_switch [0]:Amtdecoder_rst
+FEAA 01 (02,03)   [3:0]:Dgain_val[11:8]
+FEAB 3F (00,03)   Dgain_val[7:0]
+FEAC 76 (00,03)   C_mag
+FEB1 00 (00,03)   Noise_level
+FEB2 04 (04,03)   [3:1]:peak_coeff [0]:Peaking_en
+FEB5 67 (6F,03)   [3:1]:Clock_speed [0]:Clost_kill
+FECA 4F (4F,03)   [0]:Dagc_en
+FECD 32 (32,03)   noise_thr
+FED0 C1 (00,03)   Read only [7]:weak_color_frame [6]:same_color_frame [5]:Colbar_exist_flag [4]:Graybar_exist_flag [3]:Half_colbar_exist_flag [2]	Half_grabar_exist_flag [1:0]:ad
+      ::bit0   ::bit48
+FED1 19 (19,03)   [6:0]:trim_vcoml
+FED2 00 (00,03)   [1:0]:clamp_dac[9:8]
+FED3 00 (00,03)   clamp_dac[7:0]
+FED4 00 (00,03)   [7]:ADC_IBS1_SEL1 [6]:ADC_IBS1_SEL0 [5]:ADC_IBS0_SEL1 [4]:ADC_IBS0_SEL0 [3]:ADC_IBLS_SEL1 [2]:ADC_IBLS_SEL0 [1]:ADC_COM_SEL1 [0]:ADC_COM_SEL0
+FED5 B6 (A1,03)   [7]:CLAMP_MODE [6]:PF1 [5]:PF0 [4]:LPF_EN [3]:reserve [2]:BAND_SEL2 [1]:BAND_SEL1 [0]:BAND_SEL0
+FED6 08 (08,03)   [7]:COM_RANGE_SEL [6]:reserve [5]:CH1_DLY_SEL1_V12 [4]:CH1_DLY_SEL0_V12 [3]:CK_DLY_SEL3_V12 [2]:CK_DLY_SEL2_V12 [1]:CK_DLY_SEL1_V12 [0]:CK_DLY_SEL0_V12
+FED7 F7 (FC,03)   [7]:LDO12_EN [6]:EN_VREF [5]:EN_VHL [4]:EN_SOG [3]:EN_MUX_SOG [2]:EN_FLOW_SOG [1]:CH1_EN_V12 [0]:ADC1_EN
+FED8 A3 (A3,03)   [7]:SOGIN_SEL1 [6]:SOGIN_SEL0 [5]:TRIM5_VT_SOG [4]:TRIM4_VT_SOG [3]:TRIM3_VT_SOG [2]:TRIM2_VT_SOG [1]:TRIM1_VT_SOG [0]:TRIM0_VT_SOG
+FED9 40 (40,03)   [7]:reserve [6]:TRIM2_VIN2_SOG [5]:TRIM1_VIN2_SOG [4]:TRIM0_VIN2_SOG [3]:TRIM_DRV [2]:TRIM3_IBADC [1]:TRIM2_IBADC [0]:TRIM1_IBADC
+FEDA 29 (29,03)   [7]:IBUF_SEL1 [6]:IBUF_SEL0 [5]:TRIM_FB_D5 [4]:TRIM_FB_D4 [3]:TRIM_FB_D3 [2]:TRIM_FB_D2 [1]:TRIM_FB_D1 [0]:TRIM_FB_D0
+FEDB 00 (00,03)   [7]:TRIM_VREF1_SOG [6]:TRIM_VREFH_D2 [5]:TRIM_VREFH_D1 [4]:TRIM_VREFH_D0 [3]:TRIM_VREFL_D3 [2]:TRIM_VREFL_D2 [1]:TRIM_VREFL_D1 [0]:TRIM_VREFL_D0
+FEDC 00 (00,03)   [7]:ADC1_S1CAL1 [6]:ADC1_S1CAL0 [5]:CVBS_SEL1 [4]:CVBS_SEL0 [3]:VC_DRV_SEL [2]:VC_SEL2 [1]:VC_SEL1 [0]:VC_SEL0
+FEDD 50 (5A,03)   sync_level. read only
+FEDE 5E (5B,03)   blank_level. read only
+FEDF 57 (53,03)   sync_midpt. read only
+FEE0 28 (20,03)   Cagc_val. read only
+FEE1 85 (00,03)   Max_dat[7:0]. read only
+FEE2 04 (08,03)   Max_dat[9:8]. read only
+FE44 20 (08,03)   saturation
+FE45 80 (08,03)   brightness
+FE43 80 (08,03)   contratst
+FECB 00 (4F,03)
+FE56 00 (0A,03)   [1:0]:Vflt_coef
+FEC9 01 (4F,00)
+FE46 00 (80,03)
+
+[PageInfo]
+VP
+FFB0 67 (47,00)   VP_EN_REG  [7]:snowflower_en [6]:DENOISE_EN [5]:BLUE_SCREEN_EN [4]:BLE_EN [3]:wle_en [2]:DLTI_EN [1]:DCTI_EN [0]:PEAKING_EN
+FFB1 0F (0C,00)   VP_BYPASS_REG [7]:dat_valid_bypass [6]:Col_weak_bypass [5]:VP_bypass [4]:vde_bypass [3]:Firy_bypass [2]:Firc_bypass[1]:Col_mask_bypass [0]:gle_bypass
+FFB2 10 (10,00)   PEAKING_COEFH
+FFB3 20 (10,00)   PEAKING_COEFM
+FFB4 10 (10,00)   PEAKING_COEFL
+FFB5 60 (60,03)   PEAKING_CORING_MAX
+FFB6 10 (10,03)   PEAKING_CORING_H_MIN
+FFB7 90 (10,03)   [7]PEAKING_CORING_MIN_MUX/[6:0]PEAKING_CORING_M_MIN
+FFB8 10 (10,03)   [7]PEAKING_YCBCR_MODE/[6:0]PEAKING_CORING_L_MIN
+FFB9 22 (22,03)   [5]DCTI_SEL/[4]DLTI_SEL/[3:0]DLTI_GAIN
+FFBA 20 (20,03)   [6:0]DLTI_THRSHD
+FFBB 22 (22,03)   [7:4]DCTI_CBGAIN/[3:0]DCTI_CRGAIN
+FFBC 20 (20,03)   DCTI_CBTHRSHD
+FFBD 20 (20,03)   [5:0]DCTI_CRTHRSHD
+FFBE 20 (20,03)   BLE_THR
+FFBF 20 (20,03)   BLE_GAIN
+FFC0 E0 (E0,03)   WLE_THR
+FFC1 20 (20,03)   WLE_GAIN
+FFC2 B5 (B5,03)   GLE_COFF_SIN
+FFC3 B5 (B5,03)   GLE_COFF_COS
+FFC4 FF (FF,03)   GLE_Y_min
+FFC5 FF (FF,03)   GLE_coff_tan
+FFC6 99 (99,03)   GLE_gain
+FFC7 31 (31,03)   [5:4]: GLE_tan_cita/[2:0]: ACC_WIN_SIZE/[1:0]:col_cmpr_ratio
+FFC8 10 (10,03)   col_lowlvl_thr
+FFC9 18 (40,00)   Dsmth_thr
+FFCA 00 (00,03)   offset_position
+FFCB 80 (00,03)   dithing_s_reg [7]:spatial_bypass [6]:truncate_sel [5:4]:spatial_mux_b [3:2]:spatial_mux_g [1:0]:spatial_mux_r
+FFCC 80 (00,03)   dithing_t_reg [7]:tmporal_bypass [6]:rgb_test_en [5:4]:tmporal_mux_b [3:2]:tmporal_mux_g [1:0]:tmporal_mux_r
+FFCD 2D (2D,03)   diff_reg
+FFCE 13 (00,03)   r_test_reg
+FFCF DD (00,03)   g_test_reg
+FFD0 72 (00,03)   b_test_reg
+FFD1 40 (40,03)   [6:4]:rgb_protect_sel
+FFD2 4F (4F,03)   [7]:vde_test_vector_sel/[6:4]:vde_protect_sel/[3:0]:vde_out_sel
+FFD3 80 (80,01)   Contrast
+FFD4 60 (80,01)   Brightness
+FFD7 10 (80,03)   Y_Cb_Cr_TEST_REG[7:0]  COL_LUM_CFG_REG[7:0]
+FFD8 80 (80,03)   Y_Cb_Cr_TEST_REG[15:8]##LUM_STEP_REG[7:0]##
+FFD9 80 (80,03)   Y_Cb_Cr_TEST_REG[23:16]
+FFDA 5C (5C,03)   [6]:Blue_dva_en [5:4]:snowflower_big_sel [3:0]:snowflower_sel
+FFDD FF (00,03)   den_delay
+FFDE 0E (0E,03)   Coef0
+FFDF 0E (0E,03)   Coef1
+FFE0 0E (0E,03)   Coef2
+FFE1 0E (0E,03)   Coef3
+FFE2 0E (0E,03)   Coef4
+FFE3 0E (0E,03)   Coef5
+FFE4 0E (0E,03)   Coef6
+FFE5 0E (0E,03)   Coef7
+FFE6 0E (0E,03)   Coef8
+FFE7 50 (50,03)   [7:6]:c_slope_ctrl_by_Y [5:0]:c_max_Ythr
+FFE8 10 (10,03)   [7:4]:PRE_DCTI_CBGAIN [3:0]:PRE_DCTI_CRGAIN
+FFE9 22 (22,03)   PRE_DCTI_CBTHRSHD
+FFEA 20 (20,03)   PRE_DCTI_CRTHRSHD
+FFF0 21 (65,00)   k00_reg[9:0]={REGF4H[1:0],REGF0H[7:0]};
+FFF1 D2 (C0,00)   k01_reg[9:0]={REGF4H[3:2],REGF1H[7:0]};
+FFF2 FE (DA,00)   k02_reg[9:0]={REGF4H[5:4],REGF2H[7:0]};
+FFF3 00 (0D,00)   k10_reg[9:0]={REGF4H[7:6],REGF3H[7:0]};
+FFF4 3D (3D,00)   k02_reg[9:0]={REGF4H[5:4],REGF2H[7:0]};
+FFF5 D7 (19,00)   k12_reg[9:0]={REGF9H[1:0],REGF5H[7:0]};
+FFF6 05 (DA,00)   k10_reg[9:0]={REGF9H[3:2],REGF6H[7:0]};
+FFF7 00 (CD,00)   k11_reg[9:0]={REGF9H[5:4],REGF7H[7:0]};
+FFF8 00 (1A,00)   k21_reg[9:0]={REGF9H[7:6],REGF8H[7:0]};
+FFF9 00 (3D,00)   k22_reg[9:0]={REGFBH[1:0],REGFAH[7:0]};
+FFFA E0 (19,00)   1 允许COLOR MATRIX工作 0 BYPASS COLOR MATRIX [7]:col_matrix_en [1:0]:k22_reg[9:8]
+FFFB 80 (81,00)   col_matrix_en=REGFBH[7];
+FFD5 00 (00,01)   Hue
+FFD6 50 (00,01)   Saturation
+
+[PageInfo]
+TCON
+FC00 00 (03,00)   [7]:ITU_HV_SEL [6]:INTERLACE [5]:OUT_FIELD_INV [4]:WINDOW_EN [3]:DAT_ORDER_INV [2:0]:RGB_ORDER_SEL
+FC01 00 (07,03)   [5]:VSCAL_UP_DOWN [4]:SCA_BYPASS_SEL [3]:FID_SYNC_SEL [2]:FID_SEL [1]:RGB_INV [0]:DTCON_EN
+FC02 00 (10,03)   [2:0]:H_V_DE_SEL
+FC03 00 (1A,03)   WINH_START[7:0]
+FC04 00 (23,03)   WINH_STOP[7:0]
+FC05 00 (2D,03)   [6:4]:WINH_STOP[10:8] [2:0]:WINH_START[10:8]
+FC06 00 (35,03)   WINV_START[7:0]
+FC07 00 (3C,03)   WINV_STOP[7:0]
+FC08 00 (43,03)   [6:4]:WINV_STOP[10:8] [2:0]:WINV_START[10:8]
+FC09 00 (4A,03)   [4]:YCBCR_FILTER_MODE [3]:YCBCR_FILTER_EN [2]:SRGB_YUV_SEL [1:0]:SRGB_MODE
+FC0A 00 (51,03)   [6:4]:CF2 [2:0]:CF1
+FC0B 00 (56,03)   CPU_SOFT_REG[7:0]
+FC0C 00 (5C,03)   CPU_SOFT_REG[15:8]
+FC0D 00 (62,03)   [7:6]:CPU_SCR_STATUS [5]:CPU_RS [4]:CPU_CS [3]:CPU_RD [2]:CPU_WR [1:0]:CPU_SOFT_REG[17:16]
+FC0E 00 (68,03)   [6]:CPU_SCR_COMB [5]:DATA_REFRESH_EN [4]:ADR_CLR_SEL [3]:ADR_CLR_EN [2]:CMD_MODE [1]:SOFT_MODE [0]:CPU_RSTN
+FC0F 00 (6E,03)   [5:4]:DATAEN_MASK [2:0]:CPU_SCR_MODE
+FC10 00 (74,03)   [7:4]:RAM_RD_NUM [3:0]:INTERVAL_COUNTER
+FC11 FF (7A,03)   RESERVED
+FC12 10 (81,03)   [7]:VS_ADJ_FID_SEL [6]:CKH_INV [5]:TCPH3_INV [4]:VCOM_ACT [3]:VCOM_INV [2]:CKH2_3_MOD [1]:LNR [0]:UND
+FC13 00 (88,03)   [3:2]:STH_SEL [1:0]:CKH1_MOD
+FC14 03 (8F,03)   TCON_HSHIFT[7:0] 水平方向位置移动寄存器，低8位。
+FC15 00 (96,03)   [6:4]:TCON_VSHIFT[10:8] 垂直方向位置移动寄存器，高3位 [2:0]:TCON_HSHIFT[10:8] 水平方向位置移动寄存器，高3位。
+FC16 03 (9D,03)   TCON_VSHIFT[7:0] 垂直方向位置移动寄存器，低8位
+FC17 00 (A4,03)   [7:4]:TCON_CKVFM [3:0]:TCON_CKVFZ  CKV垂直方向寄存器
+FC18 10 (AB,03)   TCPH1_RISE[7:0] OEH上升沿位置，低8位。
+FC19 00 (B2,03)   [2:0]:TCPH1_RISE[10:8] OEH上升沿位置，高3位。
+FC1A 14 (BA,03)   TCPH1_FALL[7:0] OEH下降沿位置，低8位。
+FC1B 00 (C1,03)   [2:0]:TCPH1_FALL[10:8] OEH下降沿位置，高3位。
+FC1C 06 (C9,03)   TCPH4_RISE[7:0] OEV上升沿位置，低8位。
+FC1D 00 (D2,03)   [2:0]:TCPH4_RISE[10:8] OEV上升沿位置，高3位。
+FC1E 0E (DD,03)   TCPH4_FALL[7:0] OEV下降沿位置，低8位。
+FC1F 00 (EC,03)   [2:0]:TCPH4_FALL[10:8] OEV下降沿位置，高3位。
+FC20 1B (07,03)   STHL_RISE[7:0] STHL上升沿位置，低8位。
+FC21 00 (10,03)   [2:0]:STHL_RISE[10:8] STHL上升沿位置，高3位。
+FC22 1F (1A,03)   STHL_FALL[7:0] STHL下降沿位置，低8位。
+FC23 00 (23,03)   [2:0]:STHL_FALL[10:8] STHL下降沿位置，高3位。
+FC24 1B (2D,03)   STHR_RISE[7:0] STHR上升沿位置，低8位。
+FC25 00 (35,03)   STHR_RISE[10:8] STHR上升沿位置，高3位。
+FC26 1F (3C,03)   STHR_FALL[7:0] STHR下降沿位置，低8位。
+FC27 00 (43,03)   [2:0]:STHR_FALL[10:8] STHR下降沿位置，高3位。
+FC28 10 (4A,03)   CKV_RISE[7:0] CKV上升沿位置，低8位。
+FC29 00 (51,03)   [2:0]:CKV_RISE[10:8] CKV上升沿位置，高3位。
+FC2A 12 (56,03)   CKV_FALL[7:0] CKV下降沿位置，低8位。
+FC2B 00 (5C,03)   [2:0]:CKV_FALL[10:8] CKV下降沿位置，高3位。
+FC2C 04 (62,03)   VCOM_TRIG[7:0] VCOM翻转位置，低8位。
+FC2D 00 (68,03)   [2:0]:VCOM_TRIG[10:8] VCOM翻转位置，高3位。
+FC2E 04 (6E,03)   VCOM2_TRIG[7:0] POL翻转位置，低8位。
+FC2F 00 (74,03)   [2:0]:VCOM2_TRIG[10:8] POL翻转位置，高3位。
+FC30 01 (7A,03)   CKVSP_START[7:0] CKV垂直方向开始位置，低8位。
+FC31 00 (81,03)   [1:0]:CKVSP_START[9:8] CKV垂直方向开始位置，高3位。
+FC32 01 (88,03)   CKVSP_END[7:0] CKV垂直方向结束位置，低8位。
+FC33 00 (8F,03)   [1:0]	CKVSP_END[9:8]	CKV垂直方向结束位置，高3位。CKV_START, CKV_END值相同时，CKV在场的每行都会出，一般配置成相同的值，具体以屏为准。
+FC34 08 (96,03)   STVL_RISE[7:0] STVL上升沿位置。
+FC35 09 (9D,03)   STVL_FALL[7:0] STVL下降沿位置。
+FC36 09 (A4,03)   STVR_RISE[7:0] STVR上升沿位置。
+FC37 0D (AB,03)   STVR_FALL[7:0] STVR下降沿位置。
+FC38 80 (B2,03)   R_BIAS[7:0] R信号偏置电压。
+FC39 80 (BA,03)   G_BIAS[7:0] G信号偏置电压。
+FC3A 80 (C1,03)   B_BIAS[7:0] B信号偏置电压。
+FC3B 80 (C9,03)   R_BIAS_N[7:0] R_N信号偏置电压。
+FC3C 80 (D2,03)   G_BIAS_N[7:0] G_N信号偏置电压。
+FC3D 80 (DD,03)   B_BIAS_N[7:0] B_N信号偏置电压。
+FC3E A0 (EC,03)   R_RATIO[7:0] R信号乘积系数。
+FC3F A0 (07,03)   G_RATIO[7:0] G信号乘积系数。
+FC40 A0 (10,03)   B_RATIO[7:0] B信号乘积系数。
+FC41 3F (1A,03)   RESERVED
+FC42 BD (23,03)   RESERVED
+FC43 04 (2D,03)   VSHIFT_ODD[7:0] 奇数场垂直方向移动行数寄存器，低8位。
+FC44 00 (35,03)   [3:2]:VSHIFT_EVEN[9:8] 偶数场垂直方向移动行数寄存器，高2位。 [1:0]:VSHIFT_ODD[9:8] 奇数场垂直方向移动行数寄存器，高2位。
+FC45 04 (3C,03)   VSHIFT_EVEN[7:0]:偶数场垂直方向移动行数寄存器，低8位。
+FC46 39 (04,03)   [5:0]:HDEN_DEL_VAL
+
+[PageInfo]
+SCALE
+FC90 02 (02,00)   bit[7]:CbCr_align/bit[6]:crcbfilter_en/bit[5]:firstiscr/bit[4]:CR_CUT_LSB/bit[3]:CB_CUT_LSB/bit[2]:Y_CUT_LSB/bit[1]:half_down_pix_sel/bit[0]:pn_sel_disable
+FC91 01 (00,00)   NTSC  bit[7]:FIELD_BYPASS/bit[6]:VSYN_BYPASS/bit[5]:HSYN_BYPASS/bit[4]:field_no_change/bit[3]:datena_inv/bit[2]:vsync_inv/bit[1]:hsync_inv/bit[0]:FIELDIN
+FC92 04 (00,00)   NTSC [7]:COS_EN [5]:HU_SCA_BYPA [4]:HD_SCA_BYPA [3]:H_SCALE_BYPASS_SEL [2]:VSYN_DEL_FIELD [1]:VSYN_DEL_EN [0]:DEN_BYPASS
+FC93 00 (0C,00)   NTSC  Sel [5]:CB_DELAY_SEL [4]:CB_AHEAD_SEL [3]:VSYN_OUT_SEL [2]:HSYN_OUT_SEL [1:0]:H_FLT_SEL
+FC94 00 (00,00)   NTSC  VSYN_DEL_NUM[7:0] 场开始（奇场或偶场）标志的延迟点数，低8位
+FC95 00 (00,00)   NTSC  VSYN_DEL_NUM[15:8]场开始（奇场或偶场）标志的延迟点数，高8位
+FC96 51 (DB,02)   NTSC  HFZ[7:0]   low 8 bits
+FC97 03 (03,02)   NTSC  HFZ[15:8]  high 8 bits
+FC98 E7 (00,00)   NTSC  VFZ[7:0] low 8 bits
+FC99 01 (04,00)   NTSC  VFZ[7:0] high 8 bits
+FC9A EA (5A,00)   NTSC  Thlen[7:0] low 8 bits
+FC9B 03 (03,00)   NTSC  Thlen[15:8] high 8 bits
+FC9C 01 (01,00)   NTSC  Hsyn_start[7:0] low 8 bits 行同步开始位置，低8位
+FC9D 00 (00,00)   NTSC  Hsyn_start[15:8]  high 8 bits 行同步开始位置，高8位
+FC9E 06 (06,00)   NTSC  Hsyn_stop[7:0] low 8 bits 行同步结束位置，低8位
+FC9F 00 (00,00)   NTSC  Hsyn_stop[15:8] high 8 bits 行同步结束位置，高8位
+FCA0 24 (20,00)   NTSC  Hgate_start[7:0] low 8 bits 行有效信号开始位置，低8位
+FCA1 00 (00,00)   NTSC  Hgate_start[15:8] high 8 bits 行有效信号开始位置，高8位
+FCA2 8D (F2,00)   NTSC  Hgate_stop[7:0] low 8 bits 行有效信号结束位置，低8位
+FCA3 03 (02,00)   NTSC  Hgate_stop[15:8] high 8 bits 行有效信号结束位置，高8位
+FCA4 09 (03,00)   NTSC  Vsyn_start[7:0] low 8 bits 场同步开始位置，低8位
+FCA5 00 (00,00)   NTSC  Vsyn_start[15:8] high 8 bits 场同步开始位置，高8位
+FCA6 13 (08,00)   NTSC  Vsyn_stop[7:0] low 8 bits 场同步结束位置，低8位
+FCA7 00 (00,00)   NTSC  Vsyn_stop[15:8] high 8 bits 场同步结束位置，高8位
+FCA8 20 (08,00)   NTSC  Vgate_start[7:0] low 8 bits 场有效信号开始位置，低8位
+FCA9 00 (00,00)   NTSC  Vgate_start[15:8] high 8 bits 场有效信号开始位置，高8位
+FCAA 00 (FC,00)   NTSC  Vgate_stop[7:0] low 8 bits 场有效信号结束位置，低8位
+FCAB 02 (00,00)   NTSC  Vgate_stop[15:8] high 8 bits 场有效信号结束位置，高8位
+FCAC 28 (16,02)   NTSC  left_cut_num[7:0] 水平方向左边数据的切边，相当于将数据左移。
+FCAD 00 (00,02)   NTSC  left_black_num[7:0] 水平方向左边黑象素点数，相当于将图像向右移动，另，在4:3模式时需要使用该功能。
+FCAE 00 (00,02)   NTSC  right_black_num[7:0] 水平方向右边黑象素点数，另，在4:3模式时需要使用该功能。
+FCAF 00 (00,02)   NTSC  up_black_num[7:0] 垂直方向上方黑象素行数
+FCB0 00 (00,02)   NTSC  down_black_num[7:0] 垂直方向下方黑象素行数
+FCB1 14 (00,00)   NTSC  HV_DELAY 行同步信号（hsyn），有效信号（DE），场同步信号延迟点数
+FCB2 00 (00,00)   NTSC  COS_STEP 水平方向非线性scaler的增加梯度值。
+FCB3 00 (00,00)   NTSC  COS_LEVEL[7:0] 水平方向非线性scaler的增加幅度，低8位。
+FCB4 00 (00,00)   NTSC  [1:0]:COS_LEVEL[9:8] 水平方向非线性scaler的增加幅度，高2位。
+FCB5 00 (00,00)   NTSC  VXMOD_ODDF_INI[7:0] 奇场或偶场做垂直scaler的起始步长，用来补偿奇偶场之间的隔行关系。
+FCB7 25 (06,00)   NTSC  Tvlen[7:0] 每帧总行数，低8位
+FCB8 02 (01,00)   NTSC  Tvlen[15:8] 每帧总行数，高8位
+FCBB 25 (38,00)   PAL  Tvlen[7:0] 每帧总行数，低8位
+FCBC 02 (01,00)   PAL  Tvlen[15:8] 每帧总行数，高8位
+FCBD 01 (00,00)   PAL  [7]:FIELD_BYPASS [6]:VSYN_BYPASS [5]:HSYN_BYPASS [4]:FIELD_NO_CHANGE [3]:DATENA_INV [2]:VSYNC_INV [1]:HSYNC_INV [0]:FIELDINV
+FCBE 00 (00,00)   PAL  [7]:COS_EN [5]:HU_SCA_BYPA [4]:HD_SCA_BYPA [3]:H_SCALE_BYPASS_SEL [2]:VSYN_DEL_FIELD [1]:VSYN_DEL_EN [0]:DEN_BYPASS
+FCBF 00 (0C,00)   PAL  SEL [5]:CB_DELAY_SEL [4]:CB_AHEAD_SEL [3]:VSYN_OUT_SEL [2]:HSYN_OUT_SEL [1:0]:H_FLT_SEL
+FCC0 00 (00,00)   PAL  VSYN_DEL_NUM[7:0] 场开始（奇场或偶场）标志的延迟点数，低8位
+FCC1 00 (00,00)   PAL  VSYN_DEL_NUM[15:8]场开始（奇场或偶场）标志的延迟点数，高8位
+FCC2 5A (DB,02)   PAL  HFZ[7:0]   low 8 bits Horizontal scale parameter LSB 7~0
+FCC3 03 (03,02)   PAL  HFZ[15:8]  high 8 bits Horizontal scale parameter MSB 15~8
+FCC4 48 (00,00)   PAL  VFZ[7:0] low 8 bits  Vertical scale parameter LSB 7~0
+FCC5 02 (04,00)   PAL  VFZ[7:0] high 8 bits Vertical scale parameter MSB 15~8
+FCC6 B2 (60,00)   PAL  Thlen[7:0]  low 8 bits Horizontal total pixel number MSB 7~0
+FCC7 04 (03,00)   PAL  Thlen[15:8] high 8 bits Horizontal total pixel number MSB 15~8
+FCC8 01 (01,00)   PAL  Hsyn_start[7:0] low 8 bits 行同步开始位置，低8位
+FCC9 00 (00,00)   PAL  Hsyn_start[15:8] high 8 bits 行同步开始位置，高8位
+FCCA 06 (06,00)   PAL  Hsyn_stop[7:0] low 8 bits 行同步结束位置，低8位
+FCCB 00 (00,00)   PAL  Hsyn_stop[15:8] high 8 bits 行同步结束位置，高8位
+FCCC 24 (20,00)   PAL  Hgate_start[7:0] low 8 bits 行有效信号开始位置，低8位
+FCCD 00 (00,00)   PAL  Hgate_start[15:8] high 8 bits 行有效信号开始位置，高8位
+FCCE 8D (F2,00)   PAL  Hgate_stop[7:0] low 8 bits 行有效信号结束位置，低8位
+FCCF 03 (02,00)   PAL  Hgate_stop[15:8] high 8 bits 行有效信号结束位置，高8位
+FCD1 00 (00,00)   PAL  Vsyn_start[15:8] high 8 bits 场同步开始位置，高8位
+FCD2 0F (08,00)   PAL  Vsyn_stop[7:0] low 8 bits 场同步结束位置，低8位
+FCD3 00 (00,00)   PAL  Vsyn_stop[15:8] high 8 bits 场同步结束位置，高8位
+FCD4 1C (08,00)   PAL  Vgate_start[7:0] low 8 bits 场有效信号开始位置，低8位
+FCD5 00 (00,00)   PAL  Vgate_start[15:8] high 8 bits 场有效信号开始位置，高8位
+FCD6 FC (28,00)   PAL  Vgate_stop[7:0] low 8 bits 场有效信号结束位置，低8位
+FCD7 01 (01,00)   PAL  Vgate_stop[15:8] high 8 bits 场有效信号结束位置，高8位
+FCD8 10 (16,02)   PAL  left_cut_num[7:0] 水平方向左边数据的切边，相当于将数据左移。
+FCD9 00 (00,02)   PAL  left_black_num[7:0] 水平方向左边黑象素点数，相当于将图像向右移动，另，在4:3模式时需要使用该功能。
+FCDA 00 (00,02)   PAL  right_black_num[7:0] 水平方向右边黑象素点数，另，在4:3模式时需要使用该功能。
+FCDB 00 (00,02)   PAL  up_black_num[7:0] 垂直方向上方黑象素行数
+FCDC 00 (00,02)   PAL  down_black_num[7:0] 垂直方向下方黑象素行数
+FCDD 14 (00,00)   PAL  HV_DELAY 行同步信号（hsyn），有效信号（DE），场同步信号延迟点数
+FCDE 00 (00,00)   PAL  COS_STEP 水平方向非线性scaler的增加梯度值。
+FCDF 00 (00,00)   PAL  COS_LEVEL[7:0] 水平方向非线性scaler的增加幅度，低8位。
+FCE0 00 (00,00)   PAL  [1:0]:COS_LEVEL[9:8] 水平方向非线性scaler的增加幅度，高2位。
+FCE1 00 (00,00)   PAL  VXMOD_ODDF_INI[7:0] 奇场或偶场做垂直scaler的起始步长，用来补偿奇偶场之间的隔行关系。
+FCE3 01 (C1,03)   Thlen_auto_adj_disen [7]:VFZ_CHG_EN [6]:THLEN_CHG_EN [5]:PN_POS_MOD [4]:VSYN_MOD_SEL [3]:TV_ACTIVE_DISEN [2]:VSYN_OUT_POS_SEL [1]:VSYN_EDGE_SEL [0]:THLEN_AUTO_
+FCE4 45 (02,03)   Thlen_adj_step[7:0] [7]:TV_ACTIVE_POSITION [6]:HFZ_LR_BLK_EN [5]:BLK_LBUF_DSN [4]:V_DELAY_MAN [3:0]:HLEN_ADJ_STEP
+FCE5 EA (60,03)   Thlen_read[7:0] low 8 bits  THLEN_READ[7:0] 只读寄存器，自动调整完之后的Thlen可以在该寄存器读取，低8位。
+FCE6 03 (03,03)   Thlen_read[15:8] high 8 bits  THLEN_READ[15:8] 只读寄存器，自动调整完之后的Thlen可以在该寄存器读取，高8位。
+FCE7 03 (00,03)   PN_read [3]:THLEN_ADJ_FINISH [2]:PN_TVACT_POS_SEL [1]:PN_SEL [0]:PN_DETECT
+FCE8 02 (00,03)   TVLEN_READ[15:8]  Only read 只读寄存器，点屏正常后，该寄存器表示scaler后的总行数，高8位。在不同制式下，读取该寄存器，将该值配置到相应的Tvlen寄存器中。
+FCD0 05 (03,00)   PAL  Vsyn_start[7:0] low 8 bits 场同步开始位置，低8位
+FCE9 25 (02,03)   TVLEN_READ[7:0] Only read 点屏正常后，该寄存器表示scaler后的总行数，低8位。在不同制式下，读取该寄存器，将该值配置到相应的Tvlen寄存器中。
+FCE2 02 (02,00)   PAL  VXMOD_ODDF_INI[7:0] 奇场或偶场做垂直scaler的起始步长，用来补偿奇偶场之间的隔行关系。
+FCB6 02 (2A,00)   [1:0]:VXMOD_ODDF_INI[9:8] 奇场或偶场做垂直scaler的起始步长，用来补偿奇偶场之间的隔行关系。
+FB35 28 (00,00)   [3] hsyn_edge_sel [5]vsyn_edge_sel
+FB89 00 (00,00)   Osd_hsyn_vsyn_sel HV点屏模式为0X00，DE点屏模式为0X11.
+FCEA FF (25,03)   TVLEN_READ[7:0] Only read
+
+[PageInfo]
+OSD
+FB60 0F (00,03)   ICON_CR6_H[3:0]B
+FB61 FF (00,03)   ICON_CR6_L[7:4]G,[3:0]R
+FB62 00 (00,03)   OSD_CHANGE_CON  FB62-FB6F为渐变色(color transition)寄存器
+FB63 00 (00,03)   OSD_CHANGE_HVSYN
+FB64 00 (00,03)   OSD_CHANGE_R
+FB65 00 (00,03)   OSD_CHANGE_G
+FB66 00 (00,03)   OSD_CHANGE_B
+FB67 00 (00,03)   OSD_CHANGE_XY_START_H
+FB68 00 (00,03)   OSD_CHANGE_X_START_L
+FB69 00 (00,03)   OSD_CHANGE_Y_START_L
+FB6A 00 (00,03)   OSD_CHANGE_LENGTH_WIDTH_H
+FB6B 00 (00,03)   OSD_CHANGE_LENGTH_L
+FB6C 00 (00,03)   OSD_CHANGE_WIDTH_L
+FB6D 00 (00,03)   OSD_CHANGE_R_STEP
+FB6E 00 (00,03)   OSD_CHANGE_G_STEP
+FB6F 00 (00,03)   OSD_CHANGE_B_STEP
+FB70 00 (00,03)   BITMAP_START_ICON
+FB71 00 (00,03)   BITMAP_CR_CHANG_EN
+FB72 00 (00,03)   BITMAP_CR_CHANG_00[7:4]TAR PALETTE,[3:0]SRC PALETTE
+FB73 00 (00,03)   BITMAP_CR_CHANG_11[7:4]TAR PALETTE,[3:0]SRC PALETTE
+FB74 00 (00,03)   BITMAP_CR_CHANG_22[7:4]TAR PALETTE,[3:0]SRC PALETTE
+FB75 00 (00,03)   BITMAP_CR_CHANG_33[7:4]TAR PALETTE,[3:0]SRC PALETTE
+FB76 0C (00,03)   CHAR_SIZE_X[4:0]
+FB77 10 (00,03)   CHAR_SIZE_Y[4:0]
+FB78 00 (00,03)   OSDRAM_SYNC_DELAY
+FB79 00 (00,03)   OSD_BLY_START[5:0] [5:0] 闪烁区域垂直方向起始字符数
+FB7A 00 (00,03)   OSD_BLY_STOP[5:0] [5:0] 闪烁区域垂直方向结束字符数
+FB7B 00 (00,03)   OSD_BLX_START[6:0] [6:0] 闪烁区域水平方向起始字符数
+FB7C 00 (00,03)   OSD_BLX_STOP[6:0] [6:0] 闪烁区域水平方向结束字符数
+FB7D 00 (00,03)   BK1_BL_SEL[3]:BK1_BL_EN,[2:0]BK1_BL_BK_SEL
+FB7E 00 (00,03)   BK1_BL[5:0]BK1_BL [5:0] block1_blink ：osd第二闪烁区域闪烁频率调节
+FB7F 00 (00,03)   BK1_BLY_START[5:0] [5:0] 第二闪烁区域垂直方向起始字符数
+FB80 00 (00,03)   BK1_BLY_STOP[5:0] [5:0] 第二闪烁区域垂直方向结束字符数
+FB81 00 (00,03)   BK1_BLX_START[6:0] [6:0] 第二闪烁区域水平方向起始字符数
+FB82 00 (00,03)   BK1_BLX_STOP[6:0] [6:0] 第二闪烁区域水平方向结束字符数
+FB83 00 (00,03)   BK2_BL_SEL[3]:BK2_BL_EN,[2:0]BK2_BL_BK_SEL
+FB84 00 (00,03)   BK2_BL[5:0]BK2_BL [5:0] block2_blink ：osd第三闪烁区域闪烁频率调节
+FB85 00 (00,03)   BK2_BLY_START[5:0] [5:0] 第三闪烁区域垂直方向起始字符数
+FB86 00 (00,03)   BK2_BLY_STOP[5:0] [5:0] 第三闪烁区域垂直方向结束字符数
+FB87 00 (00,03)   BK2_BLX_START[6:0] [6:0] 第三闪烁区域水平方向起始字符数
+FB88 00 (00,03)   BK2_BLX_STOP[6:0] [6:0] 第三闪烁区域水平方向结束字符数
+FB00 A1 (00,03)   INDEX_RAM_ADD_L[7:0] 写index ram 地址，低8bit
+FB01 00 (00,03)   INDEX_RAM_DATA_L[7:0] 写index ram 数据，低8bit
+FB02 A0 (00,03)   FONT_RAM_ADD_L[7:0] 写font ram 地址，低8bit
+FB03 00 (00,03)   FONT_RAM_DATA_H[3:0] 写font ram 高4位数据
+FB04 00 (00,03)   FONT_RAM_DATA_L[7:0] 写font ram 低8位数据
+FB05 00 (00,03)   OSD_1CON [0]:BK0 EN,[1]:BK1 EN,[2]:BK2 EN,[3]:BK3 EN;[5]:OSD_BL_EN,6]:OSDCTRL_COLOR_SEl;[7]:OSDCTRL_BITMAP_EN
+FB06 40 (00,03)   OSD_2CON [5:0]:OSD_BLINK,[6]:OSD_MIX_EN,[7]OSD_MIX_MODE
+FB07 00 (00,03)   OSD_SIZE_X_BK0[6:0] [6:0] osd block 0水平方向最大字符数
+FB08 00 (00,03)   OSD_SIZE_Y_BK0[5:0] [5:0] osd block 0 垂直方向最大字符数
+FB09 00 (00,03)   OSD_POS_XY_H_BK0[2:0]:X POS,[6:4]:Y POS
+FB0A 00 (00,03)   OSD_POS_X_L_BK0[7:0] 确定osd block 0起始点像素的水平位置的低8位
+FB0B 00 (00,03)   OSD_POS_Y_L_BK0[7:0] 确定osd block 0起始点像素的垂直位置的低8位
+FB0C E5 (00,03)   OSD_ALPHA_BRIGHT[2:0]:OSD_ALPHA,[7:3]:OSD_BRIGHT
+FB0D 01 (00,03)   INDEX_RAM_ADD_H[0] [0] 写index ram 地址，高1bit
+FB0E 00 (00,03)   INDEX_RAM_DATA_H[1:0] [1:0]  写index ram 数据，高2bit
+FB0F 0A (00,03)   FONT_RAM_ADD_H[3:0]  [3:0]  写font ram 地址，高4bit
+FB10 00 (00,03)   EACH_ICON_COLOR[2:0]:SEL FRONT COLOR,[6:4]:SEL BACK COLOR
+FB11 28 (00,03)   BITMAP_SATRT_ICON[7:0]
+FB12 00 (00,03)   OSD_SIZE_X_BK1[6:0] osd block 1水平方向最大字符数
+FB13 00 (00,03)   OSD_SIZE_Y_BK1[5:0] osd block 1 垂直方向最大字符数
+FB14 00 (00,03)   OSD_POS_XY_H_BK1[2:0]:BK1 X_H,[6:4]:BK1 Y_H,[7]:BK1 INDXE RAM H
+FB15 00 (00,03)   OSD_POS_X_L_BK1[7:0] 确定osd block 1起始点像素的水平位置的低8位
+FB16 00 (00,03)   OSD_POS_Y_L_BK1[7:0] 确定osd block 1起始点像素的垂直位置的低8位
+FB17 B4 (00,03)   INDEXRAM_ADD_BK1_START[7:0] 确定osd block 1对应的index ram起始地址低8位
+FB18 00 (00,03)   OSD_SIZE_X_BK2[6:0] osd block 2水平方向最大字符数
+FB19 00 (00,03)   OSD_SIZE_Y_BK2[5:0] osd block 2 垂直方向最大字符数
+FB1A 00 (00,03)   OSD_POS_XY_H_BK2[2:0]:BK2 X_H,[6:4]:BK2 Y_H,[7]:BK2 INDXE RAM H
+FB1B 00 (00,03)   OSD_POS_X_L_BK2[7:0] 确定osd block 2起始点像素的水平位置的低8位
+FB1C 00 (00,03)   OSD_POS_Y_L_BK2[7:0] 确定osd block 2起始点像素的垂直位置的低8位
+FB1D B4 (00,03)   INDEXRAM_ADD_BK2_START[7:0] 确定osd block 2对应的index ram起始地址低8位
+FB1E 00 (00,03)   OSD_SIZE_X_BK3[6:0] osd block 3水平方向最大字符数
+FB1F 00 (00,03)   OSD_SIZE_Y_BK3[5:0] osd block 3 垂直方向最大字符数
+FB20 00 (00,03)   OSD_POS_XY_H_BK3[2:0]:BK3 X_H,[6:4]:BK3 Y_H,[7]:BK3 INDXE RAM H
+FB21 00 (00,03)   OSD_POS_X_L_BK3[7:0] 确定osd block 3起始点像素的水平位置的低8位
+FB22 00 (00,03)   OSD_POS_Y_L_BK3[7:0] 确定osd block 3起始点像素的垂直位置的低8位
+FB23 B4 (00,03)   INDEXRAM_ADD_BK3_START[7:0] 确定osd block 3对应的index ram起始地址低8位
+FB24 00 (00,03)   OSD_SIZE_X_BK4[6:0] osd block 4水平方向最大字符数
+FB25 00 (00,03)   OSD_SIZE_Y_BK4[5:0] osd block 4 垂直方向最大字符数
+FB26 00 (00,03)   OSD_POS_XY_H_BK4[2:0]:BK4 X_H,[6:4]:BK4 Y_H,[7]:BK4 INDXE RAM H
+FB27 00 (00,03)   OSD_POS_X_L_BK4[7:0] 确定osd block 4起始点像素的水平位置的低8位
+FB28 00 (00,03)   OSD_POS_Y_L_BK4[7:0] 确定osd block 4起始点像素的垂直位置的低8位
+FB29 B4 (00,03)   INDEXRAM_ADD_BK4_START[7:0] 确定osd block 4对应的index ram起始地址低8位
+FB2A 00 (00,03)   OSDCOLOR_CTRL[7:4]:SEL BACK COLOR,[3:0]:SEL FRONT COLOR
+FB2B 00 (00,03)   V_SCALER[7:0]
+FB2C 00 (00,03)   V_SCALER[15:8]
+FB2D 00 (00,03)   V_SCALER[23:16]
+FB2E 00 (00,03)   V_SCALER[31:24]
+FB2F 00 (00,03)   H_SCALER[7:0]
+FB30 00 (00,03)   H_SCALER[15:8]
+FB31 00 (00,03)   H_SCALER[23:16]
+FB32 00 (00,03)   HV_SCALER_COEF##[1:0]:H_SCALER_COEF 0:2,1:3,2:4,3:5;##[3:2]:V_SCALER_COEF 0:2,1:3,2:4,3:5
+FB33 00 (00,03)   HV_SCALE_COEF FOR OSD1CTRL/OSD2CTRL
+FB34 00 (00,03)   HV_SCALE_COEF FOR OSD3CTRL/OSD4CTRL
+FB36 00 (00,03)   BITMAP_CR0_H[3:0]B 调色盘0
+FB37 00 (00,03)   BITMAP_CR0_L[7:4]G,[3:0]R
+FB38 00 (00,03)   BITMAP_CR1_H[3:0]B 调色盘1
+FB39 00 (00,03)   BITMAP_CR1_L[7:4]G,[3:0]R
+FB3A 00 (00,03)   BITMAP_CR2_H[3:0]B 调色盘2
+FB3B 00 (00,03)   BITMAP_CR2_L[7:4]G,[3:0]R
+FB3C 00 (00,03)   BITMAP_CR3_H[3:0]B 调色盘3
+FB3D 00 (00,03)   BITMAP_CR3_L[7:4]G,[3:0]R
+FB3E 00 (00,03)   BITMAP_CR4_H[3:0]B 调色盘4
+FB3F 00 (00,03)   BITMAP_CR4_L[7:4]G,[3:0]R
+FB40 00 (00,03)   BITMAP_CR5_H[3:0]B 调色盘5
+FB41 00 (00,03)   BITMAP_CR5_L[7:4]G,[3:0]R
+FB42 00 (00,03)   BITMAP_CR6_H[3:0]B 调色盘6
+FB43 00 (00,03)   BITMAP_CR6_L[7:4]G,[3:0]R
+FB44 00 (00,03)   BITMAP_CR7_H[3:0]B 调色盘7
+FB45 00 (00,03)   BITMAP_CR7_L[7:4]G,[3:0]R
+FB46 00 (00,03)   BITMAP_CR8_H[3:0]B 调色盘8
+FB47 00 (00,03)   BITMAP_CR8_L[7:4]G,[3:0]R
+FB48 00 (00,03)   BITMAP_CR9_H[3:0]B 调色盘9
+FB49 00 (00,03)   BITMAP_CR9_L[7:4]G,[3:0]R
+FB4A 00 (00,03)   BITMAP_CR10_H[3:0]B 调色盘10
+FB4B 00 (00,03)   BITMAP_CR10_L[7:4]G,[3:0]R
+FB4C 00 (00,03)   BITMAP_CR11_H[3:0]B 调色盘11
+FB4D 00 (00,03)   BITMAP_CR11_L[7:4]G,[3:0]R
+FB4E 00 (00,03)   BITMAP_CR12_H[3:0]B 调色盘12
+FB4F 00 (00,03)   BITMAP_CR12_L[7:4]G,[3:0]R
+FB50 00 (00,03)   BITMAP_CR13_H[3:0]B 调色盘13
+FB51 00 (00,03)   BITMAP_CR13_L[7:4]G,[3:0]R
+FB52 00 (00,03)   BITMAP_CR14_H[3:0]B 调色盘14
+FB53 00 (00,03)   BITMAP_CR14_L[7:4]G,[3:0]R
+FB54 00 (00,03)   BITMAP_CR15_H[3:0]B 调色盘15
+FB55 00 (00,03)   BITMAP_CR15_L[7:4]G,[3:0]R
+FB56 00 (00,03)   ICON_CR1_H[3:0]B
+FB57 0F (00,03)   ICON_CR1_L[7:4]G,[3:0]R
+FB58 00 (00,03)   ICON_CR2_H[3:0]B
+FB59 F0 (00,03)   ICON_CR2_L[7:4]G,[3:0]R
+FB5A 0F (00,03)   ICON_CR3_H[3:0]B
+FB5B 00 (00,03)   ICON_CR3_L[7:4]G,[3:0]R
+FB5C 00 (00,03)   ICON_CR4_H[3:0]B
+FB5D FF (00,03)   ICON_CR4_L[7:4]G,[3:0]R
+FB5E 04 (00,03)   ICON_CR5_H[3:0]B
+FB5F 44 (00,03)   ICON_CR5_L[7:4]G,[3:0]R
+
+[PageInfo]
+GAMMA
+FF00 03 (03,00)   GammaEn 0x03:Enable 0x00:Disable
+FF01 01 (07,00)   custom_r_val01
+FF02 03 (10,00)   custom_r_val02
+FF03 06 (1A,00)   custom_r_val03
+FF04 0C (23,00)   custom_r_val04
+FF05 15 (2D,00)   custom_r_val05
+FF06 22 (35,00)   custom_r_val06
+FF07 2F (3C,00)   custom_r_val07
+FF08 3E (43,00)   custom_r_val08
+FF09 4C (4A,00)   custom_r_val09
+FF0A 5B (51,00)   custom_r_val10
+FF0B 69 (56,00)   custom_r_val11
+FF0C 77 (5C,00)   custom_r_val12
+FF0D 83 (62,00)   custom_r_val13
+FF0E 8F (68,00)   custom_r_val14
+FF0F 9A (6E,00)   custom_r_val15
+FF10 A6 (74,00)   custom_r_val16
+FF11 B0 (7A,00)   custom_r_val17
+FF12 BB (81,00)   custom_r_val18
+FF13 C4 (88,00)   custom_r_val19
+FF14 CD (8F,00)   custom_r_val20
+FF15 D4 (96,00)   custom_r_val21
+FF16 DB (9D,00)   custom_r_val22
+FF17 E1 (A4,00)   custom_r_val23
+FF18 E6 (AB,00)   custom_r_val24
+FF19 EA (B2,00)   custom_r_val25
+FF1A EE (BA,00)   custom_r_val26
+FF1B F2 (C1,00)   custom_r_val27
+FF1C F5 (C9,00)   custom_r_val28
+FF1D F7 (D2,00)   custom_r_val29
+FF1E FA (DD,00)   custom_r_val30
+FF1F FC (EC,00)   custom_r_val31
+FF20 01 (07,00)   custom_g_val01
+FF21 03 (10,00)   custom_g_val02
+FF22 06 (1A,00)   custom_g_val03
+FF23 0C (23,00)   custom_g_val04
+FF24 15 (2D,00)   custom_g_val05
+FF25 22 (35,00)   custom_g_val06
+FF26 2F (3C,00)   custom_g_val07
+FF27 3E (43,00)   custom_g_val08
+FF28 4C (4A,00)   custom_g_val09
+FF29 5B (51,00)   custom_g_val10
+FF2A 69 (56,00)   custom_g_val11
+FF2B 77 (5C,00)   custom_g_val12
+FF2C 83 (62,00)   custom_g_val13
+FF2D 8F (68,00)   custom_g_val14
+FF2E 9A (6E,00)   custom_g_val15
+FF2F A6 (74,00)   custom_g_val16
+FF30 B0 (7A,00)   custom_g_val17
+FF31 BB (81,00)   custom_g_val18
+FF32 C4 (88,00)   custom_g_val19
+FF33 CD (8F,00)   custom_g_val20
+FF34 D4 (96,00)   custom_g_val21
+FF35 DB (9D,00)   custom_g_val22
+FF36 E1 (A4,00)   custom_g_val23
+FF37 E6 (AB,00)   custom_g_val24
+FF38 EA (B2,00)   custom_g_val25
+FF39 EE (BA,00)   custom_g_val26
+FF3A F2 (C1,00)   custom_g_val27
+FF3B F5 (C9,00)   custom_g_val28
+FF3C F7 (D2,00)   custom_g_val29
+FF3D FA (DD,00)   custom_g_val30
+FF3E FC (EC,00)   custom_g_val31
+FF3F 01 (07,00)   custom_b_val01
+FF40 03 (10,00)   custom_b_val02
+FF41 06 (1A,00)   custom_b_val03
+FF42 0C (23,00)   custom_b_val04
+FF43 15 (2D,00)   custom_b_val05
+FF44 22 (35,00)   custom_b_val06
+FF45 2F (3C,00)   custom_b_val07
+FF46 3E (43,00)   custom_b_val08
+FF47 4C (4A,00)   custom_b_val09
+FF48 5B (51,00)   custom_b_val10
+FF49 69 (56,00)   custom_b_val11
+FF4A 77 (5C,00)   custom_b_val12
+FF4B 83 (62,00)   custom_b_val13
+FF4C 8F (68,00)   custom_b_val14
+FF4D 9A (6E,00)   custom_b_val15
+FF4E A6 (74,00)   custom_b_val16
+FF4F B0 (7A,00)   custom_b_val17
+FF50 BB (81,00)   custom_b_val18
+FF51 C4 (88,00)   custom_b_val19
+FF52 CD (8F,00)   custom_b_val20
+FF53 D4 (96,00)   custom_b_val21
+FF54 DB (9D,00)   custom_b_val22
+FF55 E1 (A4,00)   custom_b_val23
+FF56 E6 (AB,00)   custom_b_val24
+FF57 EA (B2,00)   custom_b_val25
+FF58 EE (BA,00)   custom_b_val26
+FF59 F2 (C1,00)   custom_b_val27
+FF5A F5 (C9,00)   custom_b_val28
+FF5B F7 (D2,00)   custom_b_val29
+FF5C FA (DD,00)   custom_b_val30
+FF5D FC (EC,00)   custom_b_val31
+FF5E FF (FF,00)   custom_red_value_32
+FF5F FF (FF,00)   custom_green_value_32
+FF60 FF (FF,00)   custom_blue_value_32

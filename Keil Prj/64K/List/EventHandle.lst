@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 1   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE EVENTHANDLE
@@ -62,7 +62,7 @@ line level    source
   48          ************************************************************/
   49          void  OsdMsgHandle(MSG curMsg)
   50          {
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 2   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 2   
 
   51   1          UCHAR ucComd= COMD_Nothing;
   52   1        
@@ -97,160 +97,172 @@ line level    source
   81   1      
   82   1           if(curMsg == MSG_SIGNAL_OK)
   83   1           {
-  84   2              printfStr("MSG_SIGNAL_OK");
-  85   2          
-  86   2              #ifdef NoSignalBLOffEn
-  87   2            ExectComd(COMD_TurnOnBackLight); 
-  88   2          #endif
-  89   2      
-  90   2          #ifdef LogoEn 
-                  g_bLogoDisplayFlag = 0;
-                  
-                  #if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
-                  ExectComd(COMD_ClearLogo); 
-                  #endif
-                  
-                  #endif
-  98   2      
-  99   2           }
- 100   1      
- 101   1         if(curMsg == MSG_NO_SIGNAL)
- 102   1         {  
- 103   2            printfStr("MSG_NO_SIGNAL");
- 104   2      
- 105   2            #ifdef NoSignalBLOffEn
- 106   2            ExectComd(COMD_TurnOffBackLight);
- 107   2          #endif
- 108   2      
- 109   2          #ifdef LogoEn 
-                  g_bLogoDisplayFlag = 1;
-                  
-                  #if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 3   
+  84   2              SetVDETestSwitch(VDE_CLOSE); 
+  85   2              XBYTE[0xFCE3] |= 0x08; 
+  86   2              XBYTE[0xFCE3] &= ~0x01; 
+  87   2              XBYTE[0xFE01] &= ~0x01;
+  88   2              printfStr("MSG_SIGNAL_OK");
+  89   2              DelayMs(300);
+  90   2              TurnOnBackLight(); 
+  91   2      //        #ifdef NoSignalBLOffEn
+  92   2      //      //ExectComd(COMD_TurnOnBackLight); 
+  93   2      //    #endif
+  94   2      
+  95   2      //    #ifdef LogoEn 
+  96   2      //    g_bLogoDisplayFlag = 0;
+  97   2      //    
+  98   2      //    #if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
+  99   2      //    ExectComd(COMD_ClearLogo); 
+ 100   2      //    #endif
+ 101   2      //    
+ 102   2      //    #endif
+ 103   2      
+ 104   2           }
+ 105   1      
+ 106   1         if(curMsg == MSG_NO_SIGNAL)
+ 107   1         {  
+ 108   2            SetVDETestSwitch(VDE_BLACK); 
+ 109   2            XBYTE[0xFCE3] &= ~0x08; 
+ 110   2            XBYTE[0xFCE3] |= 0x01; 
+ 111   2            XBYTE[0xFE01] |= 0x01;
+ 112   2           TurnOnBackLight(); 
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 3   
 
-                  ExectComd(COMD_RedrawLogo); 
-                  #endif
-                  
-                  #endif
- 117   2         }
- 118   1      }
- 119          /***********************************************************
- 120          *name:       ColorSysMsgHandle(MSG curMsg)
- 121          *input:      curMsg
- 122          *output:     void 
- 123          
- 124          *update:     2011-11-27 
- 125          *state:      allright
- 126          
- 127          *description:   
- 128                   处理图像效果消息，主要是根据当前通道的图像制式来配置
- 129                   相应的图像参数。 
- 130          *history:
- 131                                          
- 132          ************************************************************/
- 133          void  ColorSysMsgHandle(MSG curMsg)
- 134          {
- 135   1           if(curMsg == MSG_CONFIG_COLOR_SYS)
- 136   1           {   
- 137   2          ConfigColorSysDynPara(g_sysSetting.Video.colorSys); 
- 138   2           }
- 139   1      }
- 140          
- 141          /***********************************************************
- 142          *name:       TimeMsgHandle(MSG curMsg)
- 143          *input:      curMsg
- 144          *output:     void 
- 145          
- 146          *update:     2011-11-27 
- 147          *state:      allright
- 148          
- 149          *description:   
- 150                   处理系统设置时间消息，主要有定时开关机，定时睡眠模式。
- 151                   
- 152          *history:
- 153                                          
- 154          ************************************************************/
- 155          void  TimeMsgHandle(MSG curMsg)
- 156          {
- 157   1            
- 158   1          if(MSG_OSD_EXIT == curMsg) 
- 159   1          {
- 160   2              printfStr("MSG_OSD_EXIT");
- 161   2              MenuProcessKey(COMD_OsdExit);
- 162   2          }
- 163   1      
- 164   1        if(MSG_OSD_STORAGE == curMsg) 
- 165   1          {   
- 166   2              printfStr("MSG_OSD_STORAGE");
- 167   2              MenuProcessKey(COMD_OsdStorage);
- 168   2          }
- 169   1          
- 170   1        if(MSG_NOSIGNALPOWEROFF == curMsg) 
- 171   1          {   
- 172   2              printfStr("MSG_NOSIGNALPOWEROFF");
- 173   2          MenuProcessKey(COMD_Power);
- 174   2          }
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 4   
+ 113   2      //      printfStr("MSG_NO_SIGNAL");
+ 114   2      
+ 115   2      //      #ifdef NoSignalBLOffEn
+ 116   2      //      ExectComd(COMD_TurnOffBackLight);
+ 117   2      //    #endif
+ 118   2      
+ 119   2      //    #ifdef LogoEn 
+ 120   2      //    g_bLogoDisplayFlag = 1;
+ 121   2      //    
+ 122   2      //    #if (LOGO_DISP_MODE == NOSIGNAL_DISP_LOGO)
+ 123   2      //    ExectComd(COMD_RedrawLogo); 
+ 124   2      //    #endif
+ 125   2      //    
+ 126   2      //    #endif
+ 127   2         }
+ 128   1      }
+ 129          /***********************************************************
+ 130          *name:       ColorSysMsgHandle(MSG curMsg)
+ 131          *input:      curMsg
+ 132          *output:     void 
+ 133          
+ 134          *update:     2011-11-27 
+ 135          *state:      allright
+ 136          
+ 137          *description:   
+ 138                   处理图像效果消息，主要是根据当前通道的图像制式来配置
+ 139                   相应的图像参数。 
+ 140          *history:
+ 141                                          
+ 142          ************************************************************/
+ 143          void  ColorSysMsgHandle(MSG curMsg)
+ 144          {
+ 145   1           if(curMsg == MSG_CONFIG_COLOR_SYS)
+ 146   1           {   
+ 147   2          ConfigColorSysDynPara(g_sysSetting.Video.colorSys); 
+ 148   2           }
+ 149   1      }
+ 150          
+ 151          /***********************************************************
+ 152          *name:       TimeMsgHandle(MSG curMsg)
+ 153          *input:      curMsg
+ 154          *output:     void 
+ 155          
+ 156          *update:     2011-11-27 
+ 157          *state:      allright
+ 158          
+ 159          *description:   
+ 160                   处理系统设置时间消息，主要有定时开关机，定时睡眠模式。
+ 161                   
+ 162          *history:
+ 163                                          
+ 164          ************************************************************/
+ 165          void  TimeMsgHandle(MSG curMsg)
+ 166          {
+ 167   1            
+ 168   1          if(MSG_OSD_EXIT == curMsg) 
+ 169   1          {
+ 170   2              printfStr("MSG_OSD_EXIT");
+ 171   2              MenuProcessKey(COMD_OsdExit);
+ 172   2          }
+ 173   1      
+ 174   1        if(MSG_OSD_STORAGE == curMsg) 
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 4   
 
- 175   1      }
- 176          
- 177          
- 178          /***********************************************************
- 179          *name:       BatteryAdcMsgHandle(MSG curMsg)
- 180          *input:      curMsg
- 181          *output:     void 
- 182          
- 183          *update:     2011-11-27 
- 184          *state:      allright
- 185          
- 186          *description:   
- 187                   处理系统电池的实时电压消息。
- 188                   
- 189          *history:
- 190                                          
- 191          ************************************************************/
- 192          void  BatteryAdcMsgHandle(MSG curMsg)
- 193          {
- 194   1          if(MSG_BATTERYADC == curMsg) 
- 195   1          {
- 196   2              printfStr("MSG_BATTERYADC");
- 197   2              MenuProcessKey(COMD_BatteryAdc);
- 198   2          }
- 199   1      }
- 200          
- 201          
- 202          
- 203          /***********************************************************
- 204          *name:       UserDefinedMsgHandle(MSG curMsg)
- 205          *input:      curMsg
- 206          *output:     void 
- 207          
- 208          *update:     2011-11-27 
- 209          *state:      allright
+ 175   1          {   
+ 176   2              printfStr("MSG_OSD_STORAGE");
+ 177   2              MenuProcessKey(COMD_OsdStorage);
+ 178   2          }
+ 179   1          
+ 180   1        if(MSG_NOSIGNALPOWEROFF == curMsg) 
+ 181   1          {   
+ 182   2              printfStr("MSG_NOSIGNALPOWEROFF");
+ 183   2          MenuProcessKey(COMD_Power);
+ 184   2          }
+ 185   1      }
+ 186          
+ 187          
+ 188          /***********************************************************
+ 189          *name:       BatteryAdcMsgHandle(MSG curMsg)
+ 190          *input:      curMsg
+ 191          *output:     void 
+ 192          
+ 193          *update:     2011-11-27 
+ 194          *state:      allright
+ 195          
+ 196          *description:   
+ 197                   处理系统电池的实时电压消息。
+ 198                   
+ 199          *history:
+ 200                                          
+ 201          ************************************************************/
+ 202          void  BatteryAdcMsgHandle(MSG curMsg)
+ 203          {
+ 204   1          if(MSG_BATTERYADC == curMsg) 
+ 205   1          {
+ 206   2              printfStr("MSG_BATTERYADC");
+ 207   2              MenuProcessKey(COMD_BatteryAdc);
+ 208   2          }
+ 209   1      }
  210          
- 211          *description:   
- 212                  处理用户自定义消息
- 213                   
- 214          *history:
- 215                                          
- 216          ************************************************************/
- 217          void  UserDefinedMsgHandle(MSG curMsg)
- 218          {
- 219   1      
- 220   1        if(MSG_TURNON_BACKLIGHT == curMsg) 
- 221   1          {   
- 222   2              printfStr("MSG_TURNON_BACKLIGHT");
- 223   2              ExectComd(COMD_TurnOnBackLight);
- 224   2          }
- 225   1          
- 226   1          if(MSG_TURNOFF_BACKLIGHT == curMsg) 
- 227   1          {   
- 228   2              printfStr("MSG_TURNOFF_BACKLIGHT");
- 229   2              ExectComd(COMD_TurnOffBackLight);
- 230   2          }    
- 231   1      }
- 232          
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 5   
+ 211          
+ 212          
+ 213          /***********************************************************
+ 214          *name:       UserDefinedMsgHandle(MSG curMsg)
+ 215          *input:      curMsg
+ 216          *output:     void 
+ 217          
+ 218          *update:     2011-11-27 
+ 219          *state:      allright
+ 220          
+ 221          *description:   
+ 222                  处理用户自定义消息
+ 223                   
+ 224          *history:
+ 225                                          
+ 226          ************************************************************/
+ 227          void  UserDefinedMsgHandle(MSG curMsg)
+ 228          {
+ 229   1      
+ 230   1        if(MSG_TURNON_BACKLIGHT == curMsg) 
+ 231   1          {   
+ 232   2              printfStr("MSG_TURNON_BACKLIGHT");
+ 233   2              ExectComd(COMD_TurnOnBackLight);
+ 234   2          }
+ 235   1          
+ 236   1          if(MSG_TURNOFF_BACKLIGHT == curMsg) 
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 5   
+
+ 237   1          {   
+ 238   2              printfStr("MSG_TURNOFF_BACKLIGHT");
+ 239   2              ExectComd(COMD_TurnOffBackLight);
+ 240   2          }    
+ 241   1      }
+ 242          
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -313,7 +325,7 @@ CommandDataL . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
 DWT_FullText . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockDown . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 6   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -376,7 +388,7 @@ MAX_VIDEO_CHANNEL. . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_TV . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_75MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 COMD_BlockTurn . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 7   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -421,6 +433,7 @@ FlashInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
 _MenuProcessKey. . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 ColorType. . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
+_SetVDETestSwitch. . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 Osd_QuicklyBrightnessMenu. . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RUSSIAN. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_OSD_STORAGE. . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
@@ -438,13 +451,13 @@ TitelType. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  12
   SelForeColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0004H  1
   SelBackColor . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   DrawTitelMethod. . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
-  DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 8   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  DisplayText. . . . . . . . . . . . .  MEMBER   -----  PTR      0007H  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000AH  2
 ComdType . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 BatterAdc_Lev1 . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -478,6 +491,7 @@ IconType . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
   DispalyIcon. . . . . . . . . . . . .  MEMBER   -----  PTR      0006H  3
   Flags. . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0009H  2
 MSG_BATTERYADC . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
+_DelayMs . . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 DrawOptionType . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  14
   XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
@@ -500,14 +514,14 @@ _VideoPDF. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  3
   ADDR_0xfd35. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
 DISP_EXT1. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BYTE . . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
-COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 9   
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+COMD_Saturation. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+DISP_EXT2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ItemValueType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  11
   DrawNumber . . . . . . . . . . . . .  MEMBER   -----  PTR      0000H  3
   DrawGuage. . . . . . . . . . . . . .  MEMBER   -----  PTR      0003H  3
@@ -563,14 +577,14 @@ OsdCtrlerType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  10
   block0Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   block1Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0002H  2
   block2Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0004H  2
-  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
-  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 10  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  block3Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0006H  2
+  block4Size . . . . . . . . . . . . .  MEMBER   -----  U_INT    0008H  2
 _ColorSysMsgHandle . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
   curMsg . . . . . . . . . . . . . . .  * REG *  DATA   CHAR     0007H  1
 COMD_TurnOffBackLight. . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -626,14 +640,14 @@ TIME_320MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 KeyComdInterface . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  4
   cConditions. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   Comd . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-  Msg. . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
-  Source . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 11  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  Msg. . . . . . . . . . . . . . . . .  MEMBER   -----  CHAR     0002H  1
+  Source . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0003H  1
 _CommandType . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 OsdBlock2. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MAX_COLOR. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
@@ -689,14 +703,14 @@ Osd_SaturationMenu . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 POLISH . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INPUT_VGA. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 INT32. . . . . . . . . . . . . . . . .  TYPEDEF  -----  LONG     -----  4
-_printfStr . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
-_ConfigColorSysDynPara . . . . . . . .  EXTERN   CODE   PROC     -----  -----
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 12  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+_printfStr . . . . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
+_ConfigColorSysDynPara . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 COMD_SaturationInc . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PDWORD . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 EIE. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
@@ -716,6 +730,7 @@ _TimeMsType. . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
 PULONG . . . . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 COMD_Contrast. . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 DISP_4_3 . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+TurnOnBackLight. . . . . . . . . . . .  EXTERN   CODE   PROC     -----  -----
 KEY_SATURATION . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 KEY_POWER. . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 fpDisplayText. . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
@@ -751,15 +766,15 @@ KeyCmdMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
 DWT_None . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 _PowerSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   mode . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
-  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
-_BatteryAdcMsgHandle . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
-  curMsg . . . . . . . . . . . . . . .  * REG *  DATA   CHAR     0007H  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 13  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+  status . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
+_BatteryAdcMsgHandle . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  curMsg . . . . . . . . . . . . . . .  * REG *  DATA   CHAR     0007H  1
 LOGO1. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 fpItemIndex. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 PUTOYA . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
@@ -814,15 +829,15 @@ COMD_BatteryAdc. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 Osd_PowerOnMenu. . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 EICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
 GREEN. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
-DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-Osd_ContrastMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/25/2026 18:00:56 PAGE 14  
+C51 COMPILER V9.60.7.0   EVENTHANDLE                                                       03/29/2026 17:21:36 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
 
 
+SCHAR. . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
+DWT_FullCenterText . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
+Osd_ContrastMenu . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MultLanguageType . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 KeyMsgMap. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
@@ -851,8 +866,8 @@ fpDrawStyle. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    197    ----
-   CONSTANT SIZE    =    136    ----
+   CODE SIZE        =    238    ----
+   CONSTANT SIZE    =    122    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       3

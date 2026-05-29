@@ -46,7 +46,7 @@ compiling Main.c...
 ..\..\..\Kernel\udsf_tinyframe.h(320): warning C322: unknown identifier
 ..\..\..\Kernel\Main.c(54): warning C259: pointer: different mspace
 ..\..\..\Kernel\Main.c(84): warning C206: 'OsdGetStartIndexAddr': missing function-prototype
-..\..\..\Kernel\Main.c(463): warning C206: 'SaveSetting': missing function-prototype
+..\..\..\Kernel\Main.c(493): warning C206: 'SaveSetting': missing function-prototype
 compiling Global.c...
 compiling GetSysMsg.c...
 compiling Delay.c...
@@ -134,10 +134,6 @@ linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?POS_GETUSERINPUTMSG?GETSYSMSG
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETSIGNALMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?POS_GETCOLORSYSMSG?GETSYSMSG
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?POS_GETTIMEMSG?GETSYSMSG
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?POS_GETBATTERYADCMSG?GETSYSMSG
@@ -145,10 +141,6 @@ linking...
     SEGMENT: ?PR?POS_GETUSERDEFINEDMSG?GETSYSMSG
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_OSDMSGHANDLE?EVENTHANDLE
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SIGNALMSGHANDLE?EVENTHANDLE
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_COLORSYSMSGHANDLE?EVENTHANDLE
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_TIMEMSGHANDLE?EVENTHANDLE
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
@@ -173,7 +165,7 @@ linking...
     SEGMENT: ?PR?_IRQPUTSTR?DEBUG
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_IRQPRINTF?DEBUG
-Program Size: data=112.3 xdata=1186 code=46004
+Program Size: data=111.1 xdata=1189 code=45814
 creating hex file from "..\Hex\AMT_DB_HEX"...
 User command #1: ..\..\..\PC Tool\18X9_Function_Location "\\List"
 AMT Function Location Start...
@@ -181,7 +173,7 @@ Invalid file handle. Error is 2
 M51File List is 
 the Using M51File is 
 Can't Find .M51 File
-"..\Hex\AMT_DB_HEX" - 0 Error(s), 61 Warning(s).
+"..\Hex\AMT_DB_HEX" - 0 Error(s), 57 Warning(s).
 Build Time Elapsed:  00:00:07
 </pre>
 </body>

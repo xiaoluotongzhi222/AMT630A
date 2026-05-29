@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 1   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UDSF_TINYFRAME
@@ -62,7 +62,7 @@ line level    source
   45          
   46          #define _NOOP()
   47          #define WRITENUM(type, num)       WRITENUM_BASE(type, num, _NOOP())
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 2   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 2   
 
   48          #define WRITENUM_CKSUM(type, num) WRITENUM_BASE(type, num, CKSUM_ADD(cksum, b))
   49          
@@ -126,7 +126,7 @@ line level    source
  107   1          (void)cksum; 
 *** WARNING C275 IN LINE 107 OF ..\..\..\Kernel\udsf_tinyframe.c: expression with possibly no effect
  108   1          CKSUM_RESET(cksum);
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 3   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 3   
 
  109   1          if (msg->is_response) { id = msg->frame_id; } 
  110   1          else {
@@ -190,7 +190,7 @@ line level    source
  166   1          tf->soft_lock = false;
  167   1      }
  168          #endif
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 4   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 4   
 
  169          
  170          // 这些函数需要先定义，因为 SendFrame 会用到
@@ -254,7 +254,7 @@ line level    source
  226   3                  if (tf->state != TFState_SOF)
  227   3                  {
  228   4                      udsf_TF_ResetParser(tf);
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 5   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 5   
 
  229   4                      TF_Error("Parser timeout");
  230   4                  }
@@ -318,7 +318,7 @@ line level    source
  288   5                          tf->state = TFState_DATA; tf->rxi = 0;
  289   5                          CKSUM_RESET(tf->cksum); 
  290   5                      }
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 6   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 6   
 
  291   4                      if (tf->len > TF_MAX_PAYLOAD_RX) {
  292   5                          tf->discard_data = true; result = -9;
@@ -382,7 +382,7 @@ line level    source
  350   3                  RADAR_COLLECT_NUMBER(tf->id, TF_ID) {
  351   4                      tf->state = TFState_LEN; tf->rxi = 0; result = 2;
  352   4                  } else { result = -2; }
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 7   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 7   
 
  353   3                  break;
  354   3              case TFState_LEN:
@@ -446,7 +446,7 @@ line level    source
  412   5                          else { TF_Error("Body cksum mismatch"); result = -10; }
  413   5                      }
  414   4                      RADAR_TF_ResetParser(tf);
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 8   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 8   
 
  415   4                  } else { result = -7; }
  416   3                  break;
@@ -498,7 +498,7 @@ line level    source
  461   1      }
  462          
  463          #endif
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 9   
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -561,7 +561,7 @@ TinyFrame. . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  362
   parser_timeout_ticks . . . . . . . .  MEMBER   -----  U_INT    000BH  2
   addr . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000DH  1
   id . . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000EH  2
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 10  
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -624,7 +624,7 @@ TF_Msg . . . . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  17
   frame_id . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0000H  2
   is_response. . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
   type . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0003H  2
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 11  
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -687,7 +687,7 @@ TinyFrame_Radar_ . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  361
   len. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    000FH  2
   payload. . . . . . . . . . . . . . .  MEMBER   -----  ARRAY    0011H  256
   rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0111H  2
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 12  
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -750,7 +750,7 @@ _udsf_TF_ComposeHead . . . . . . . . .  STATIC   CODE   PROC     0000H  -----
 TFState_LEN. . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 BIT. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  BIT      -----  1
 TinyFrame_Radar. . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  361
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 13  
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -813,7 +813,7 @@ TinyFrame_ . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  362
   rxi. . . . . . . . . . . . . . . . .  MEMBER   -----  U_INT    0112H  2
   cksum. . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0114H  1
   ref_cksum. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0115H  1
-C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/25/2026 18:00:56 PAGE 14  
+C51 COMPILER V9.60.7.0   UDSF_TINYFRAME                                                    03/29/2026 17:21:36 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====

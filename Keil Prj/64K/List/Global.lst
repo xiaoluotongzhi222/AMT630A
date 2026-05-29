@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 1   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GLOBAL
@@ -62,7 +62,7 @@ line level    source
   48          *history:
   49                                          
   50          ************************************************************/
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 2   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 2   
 
   51          void ConfigMcuCtrl(void)
   52          {
@@ -126,7 +126,7 @@ line level    source
  110   1           g_ucAdjustBrightnessVal = 0XFF;
  111   1           g_ucAdjustContrastVal = 0XFF;
  112   1           g_ucAdjustSaturationVal = 0XFF;
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 3   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 3   
 
  113   1           g_ucBatteryAdcLev = BatterAdc_Lev0;
  114   1           g_uiInitDianWeiQiCH0Val = NULL_KEY;
@@ -190,7 +190,7 @@ line level    source
  172   1        #ifdef SpiInitPannelEn
                   SPI_TM035KDH08_Pannel_Initial(_24BIT_RGB_DEN,0x75);//interface:24BIT_RGB_DEN(default),default VcomVal:
              -0x75
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 4   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 4   
 
                   #endif
  175   1      
@@ -254,14 +254,14 @@ line level    source
  233   1      
  234   1        InitARKChip();
  235   1      
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 5   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 5   
 
  236   1        PrjVersionMsg();
  237   1      
  238   1      }
  239          
  240          
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 6   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 6   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -324,7 +324,7 @@ _KeyInfor. . . . . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  2
   KeyMsg . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   PressTime. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
 PAL_N. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 7   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 7   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -387,7 +387,7 @@ TIME_15MS. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ConfigMcuCtrl. . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
 IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
 BULGARIAN. . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 8   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 8   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -450,7 +450,7 @@ UINT32 . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_LONG   -----  4
 Osd_QuicklyBrightnessMenu. . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RUSSIAN. . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 MSG_OSD_STORAGE. . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 9   
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 9   
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -513,7 +513,7 @@ DrawOptionType . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  14
   XPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0000H  1
   YPos . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0001H  1
   ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0002H  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 10  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 10  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -576,7 +576,7 @@ MenuPageType . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  38
   ForeColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0009H  1
   BackColor. . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000AH  1
   OsdBlockId . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   000BH  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 11  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 11  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -639,7 +639,7 @@ PowerInfoType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  2
 TIME_200MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 TIME_110MS . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 PAL60. . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 12  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 12  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -702,7 +702,7 @@ _VideoSettingInfo. . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
   saturation . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0005H  1
   tint . . . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0006H  1
   nosiceSw . . . . . . . . . . . . . .  MEMBER   -----  U_CHAR   0007H  1
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 13  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 13  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -765,7 +765,7 @@ UserInputType. . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  3
 Osd_QuicklyContrastMenu. . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 RED. . . . . . . . . . . . . . . . . .  E_CONST  -----  CHAR     -----  1
 OsdInfoType. . . . . . . . . . . . . .  TYPEDEF  -----  STRUCT   -----  9
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 14  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 14  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -828,7 +828,7 @@ MSG. . . . . . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 LOGO5. . . . . . . . . . . . . . . . .  E_CONST  -----  U_CHAR   -----  1
 ColorSysType . . . . . . . . . . . . .  TYPEDEF  -----  CHAR     -----  1
 _sysMsg. . . . . . . . . . . . . . . .  * TAG *  -----  ENUM     -----  -----
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 15  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 15  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
@@ -891,7 +891,7 @@ _OsdSettingInfo. . . . . . . . . . . .  * TAG *  -----  STRUCT   -----  9
 UINT8. . . . . . . . . . . . . . . . .  TYPEDEF  -----  U_CHAR   -----  1
 PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
 fpDrawStyle. . . . . . . . . . . . . .  TYPEDEF  -----  PTR      -----  3
-C51 COMPILER V9.60.7.0   GLOBAL                                                            03/25/2026 18:00:55 PAGE 16  
+C51 COMPILER V9.60.7.0   GLOBAL                                                            03/29/2026 17:21:35 PAGE 16  
 
 NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
 ====                                    =====   ======  ====    ======  ====
